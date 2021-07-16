@@ -3,7 +3,7 @@ MODULE shared
 USE double
 IMPLICIT NONE
 LOGICAL :: RSF
-INTEGER, PARAMETER :: nyr_spin_clm = 1 ! 10 ! No. years of spin-up climate to read.
+INTEGER, PARAMETER :: nyr_spin_clm = 1 ! 10
 INTEGER, PARAMETER :: nyr_spin = 1 ! 120
 INTEGER, PARAMETER :: syr_trans = 1901
 INTEGER, PARAMETER :: eyr_trans = 1900 ! 2019
