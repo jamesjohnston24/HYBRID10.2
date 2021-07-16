@@ -15,12 +15,12 @@ SRC = \
 
 OBJ = $(SRC:.f90=.o)
 
-dev.exe : $(OBJ)
-	$(F90) $(FFLAGS) -o dev.exe $(OBJ) $(LDFLAGS)
+HYBRID10.2.exe : $(OBJ)
+	$(F90) $(FFLAGS) -o HYBRID10.2.exe $(OBJ) $(LDFLAGS)
 
 # Main routine.
-dev.o : RSF_In.o get_clm.o advance.o Diag_Global.o double.o shared.o dev.f90
-	$(F90) $(FFLAGS) -c dev.f90
+HYBRID10.2.o : RSF_In.o get_clm.o advance.o Diag_Global.o double.o shared.o HYBRID10.2.f90
+	$(F90) $(FFLAGS) -c HYBRID10.2.f90
 	
 # Subroutines.
 RSF_In.o : shared.o RSF_In.f90
