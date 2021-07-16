@@ -1,7 +1,5 @@
 # HYBRID10.2
 
-N.B the following will not work just yet...I need to create a driver file and change the code to read it.
-
 To run HYBRID10.2:
 
 1. Put the source code and makefile in the same directory
@@ -11,15 +9,16 @@ To run HYBRID10.2:
 To run in batch mode:
 
 3. Edit the file slurm_submit.peta4-skylake, changing, if necessary:
-  3.1 Project to be charged.
-  3.2 Nodes and ntasks
-  3.3 Wallclock time
-  3.4 mail_user
-  3.5 Path to application executable
+    Project to be charged.
+    Nodes and ntasks
+    Wallclock time
+    mail_user
+    Path to application executable
+  Edit 'shared.f90' ntasks to equal the ntasks in the slurm file
 Then to run submit: "sbatch slurm_submit.peta4-skylake"
 
 To run interactively:
 
-4. Edit ntasks in 'shared.f90'  to = 4.
-5. Make sure the run will only last up to about 1 min. by limiting the no. years in 'shared.f90'.
-6. "time nice -19 mpirun -n 4 ./dev.exe" will run it.
+4. Edit ntasks in 'shared.f90' to = 4.
+5. Make sure the run will only last up to about 1 min. by limiting the no. years in 'shared.f90' (I just did a 1 yr run, which took 50 s).
+6. "time nice -19 mpirun -n 4 ./dev.exe" will run it. Restart files are produced that can be used for a new run by changing the RSF logical to .TRUE. in 'dev.f90', and making sure the path in 'RSF_In.f90' is the one you want.
