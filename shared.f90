@@ -5,8 +5,6 @@ IMPLICIT NONE
 LOGICAL :: RSF_In, RSF_Out
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 80000 ! nland = 67420
-INTEGER, PARAMETER :: nland_chunk = nland / ntasks
-INTEGER, PARAMETER :: size = ntimes * nland / ntasks
 INTEGER, PARAMETER :: nplots = 1 ! 1 ! 50
 INTEGER, PARAMETER :: root = 1
 INTEGER :: myrank
@@ -16,15 +14,17 @@ INTEGER :: nyr_spin
 INTEGER :: syr_trans
 INTEGER :: eyr_trans
 INTEGER :: ntasks
+INTEGER :: nland_chunk
+INTEGER :: size
 INTEGER :: nyr_run
 INTEGER :: kyr_off
 REAL, DIMENSION (ntimes,nland) :: source ! 0.4 GB
-REAL, DIMENSION (ntimes,nland/ntasks) :: result ! 0.1 GB
 REAL, DIMENSION (nland) :: source_lat
 REAL, DIMENSION (nland) :: source_larea ! km2
 REAL, DIMENSION (nlon,nlat,ntimes) :: clm_in ! 1.5 GB
-REAL, DIMENSION (nland/ntasks) :: lon_chunk ! 
-REAL, DIMENSION (nland/ntasks) :: lat_chunk !
+REAL, ALLOCATABLE, DIMENSION (:,:) :: result ! 0.1 GB
+REAL, ALLOCATABLE, DIMENSION (:) :: lon_chunk
+REAL, ALLOCATABLE, DIMENSION (:) :: lat_chunk
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: tmp ! K ! 0.59 (30 yr over 20 processes)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: pre ! mm 6-hr-1
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: spfh ! kg kg-1

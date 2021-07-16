@@ -60,6 +60,11 @@ READ (10,*) eyr_trans
 READ (10,*) ntasks
 CLOSE (10)
 nyr_run = nyr_spin + (eyr_trans - syr_trans) + 1
+nland_chunk = nland / ntasks
+size = ntimes * nland / ntasks
+ALLOCATE (result (ntimes,nland/ntasks))
+ALLOCATE (lon_chunk(nland/ntasks))
+ALLOCATE (lat_chunk(nland/ntasks))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
