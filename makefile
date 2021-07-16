@@ -5,7 +5,7 @@ FFLAGS = -O2
 LDFLAGS = -lnetcdff -lnetcdf
 
 SRC = \
-	dev.f90 \
+	HYBRID10.2.f90 \
 	RSF_In.f90 \
 	get_clm.f90 \
 	advance.f90 \
