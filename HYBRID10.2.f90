@@ -58,6 +58,7 @@ READ (10,*) nyr_spin
 READ (10,*) syr_trans
 READ (10,*) eyr_trans
 READ (10,*) ntasks
+READ (10,*) nplots
 CLOSE (10)
 nyr_run = nyr_spin + (eyr_trans - syr_trans) + 1
 nland_chunk = nland / ntasks

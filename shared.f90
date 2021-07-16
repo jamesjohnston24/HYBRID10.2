@@ -5,7 +5,6 @@ IMPLICIT NONE
 LOGICAL :: RSF_In, RSF_Out
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 80000 ! nland = 67420
-INTEGER, PARAMETER :: nplots = 1 ! 1 ! 50
 INTEGER, PARAMETER :: root = 1
 INTEGER :: myrank
 INTEGER :: error
@@ -14,6 +13,7 @@ INTEGER :: nyr_spin
 INTEGER :: syr_trans
 INTEGER :: eyr_trans
 INTEGER :: ntasks
+INTEGER :: nplots
 INTEGER :: nland_chunk
 INTEGER :: size
 INTEGER :: nyr_run
