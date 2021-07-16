@@ -3,7 +3,6 @@ MODULE shared
 USE double
 IMPLICIT NONE
 LOGICAL :: RSF_In, RSF_Out
-INTEGER, PARAMETER :: nyr_spin_clm
 INTEGER, PARAMETER :: nyr_spin = 1 ! 120
 INTEGER, PARAMETER :: syr_trans = 1901
 INTEGER, PARAMETER :: eyr_trans = 1900 ! 2019
@@ -16,7 +15,8 @@ INTEGER, PARAMETER :: nplots = 1 ! 1 ! 50
 INTEGER, PARAMETER :: root = 1
 INTEGER :: myrank
 INTEGER :: error
-INTEGER :: nyr_run = nyr_spin + (eyr_trans - syr_trans) + 1
+INTEGER :: nyr_spin_clm
+INTEGER :: nyr_run
 INTEGER :: kyr_off
 REAL, DIMENSION (ntimes,nland) :: source ! 0.4 GB
 REAL, DIMENSION (ntimes,nland/ntasks) :: result ! 0.1 GB

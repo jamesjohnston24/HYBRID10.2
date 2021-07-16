@@ -55,6 +55,7 @@ READ (10,*) RSF_In       ! Input from restart files?
 READ (10,*) RSF_Out      ! Output to restart files?
 READ (10,*) nyr_spin_clm ! No. years of spin-up climate.
 CLOSE (10)
+nyr_run = nyr_spin + (eyr_trans - syr_trans) + 1
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
