@@ -3,11 +3,7 @@ MODULE shared
 USE double
 IMPLICIT NONE
 LOGICAL :: RSF_In, RSF_Out
-INTEGER, PARAMETER :: nyr_spin = 1 ! 120
-INTEGER, PARAMETER :: syr_trans = 1901
-INTEGER, PARAMETER :: eyr_trans = 1900 ! 2019
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
-INTEGER, PARAMETER :: ntasks = 4 ! 4 ! 32
 INTEGER, PARAMETER :: nland = 80000 ! nland = 67420
 INTEGER, PARAMETER :: nland_chunk = nland / ntasks
 INTEGER, PARAMETER :: size = ntimes * nland / ntasks
@@ -16,6 +12,10 @@ INTEGER, PARAMETER :: root = 1
 INTEGER :: myrank
 INTEGER :: error
 INTEGER :: nyr_spin_clm
+INTEGER :: nyr_spin
+INTEGER :: syr_trans
+INTEGER :: eyr_trans
+INTEGER :: ntasks
 INTEGER :: nyr_run
 INTEGER :: kyr_off
 REAL, DIMENSION (ntimes,nland) :: source ! 0.4 GB
