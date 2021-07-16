@@ -3,7 +3,7 @@ PROGRAM HYBRID10_2
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-! Global model of terretrial carbon fluxes. Runs using TRENDY climate
+! Global model of terrestrial carbon fluxes. Runs using TRENDY climate
 ! and land cover.
 !----------------------------------------------------------------------!
 
@@ -17,8 +17,10 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER :: nprocs, namelen
 INTEGER :: ncid, varid, varidW, varidB, varidSOM
-INTEGER :: syr, kyr, i, j, k, l, z, zt, ii, jj, kyr_spin, kyr_clm, nyr_clm_alloc
-INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, vector_dimid, plot_dimid
+INTEGER :: syr, kyr, i, j, k, l, z, zt, ii, jj
+INTEGER :: kyr_spin, kyr_clm, nyr_clm_alloc
+INTEGER :: lon_varid, lat_varid
+INTEGER :: lon_dimid, lat_dimid, vector_dimid, plot_dimid
 INTEGER, DIMENSION (2) :: dimids_plots
 INTEGER, DIMENSION (2) :: dimids_two
 CHARACTER(LEN=MPI_MAX_PROCESSOR_NAME) :: procname
@@ -57,11 +59,14 @@ CLOSE (10)
 IF (.NOT. (RSF)) kyr_off = 0
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 source = 0.0
 result = 0.0
 source_lat = 0.0
 source_larea = 0.0
+!----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 CALL MPI_Init ( error )
 CALL MPI_Comm_size(MPI_COMM_WORLD,nprocs,error)
 before_all = MPI_Wtime()
@@ -75,12 +80,18 @@ CALL MPI_Get_processor_name(procname,namelen,error)
 ! &    I1,' processes running on processor ',A)")    &
 ! myrank,nprocs,procname(1:namelen)
 
+!----------------------------------------------------------------------!
+! For diagnostics on root:
+! Read quarter-degree areas and static cover fractions of ice/water and
+! aggregate both to half-degree grid-boxes. Also allocate all grid-box
+! diagnostic variables on root.
+!----------------------------------------------------------------------!
 IF (myrank == root) THEN
- allocate (icwtr_qd (2*nlon,2*nlat)) ! QD ice/water            (fraction)
- allocate (larea_qd (2*nlon,2*nlat)) ! QD grid-box area             (km2)
+ allocate (icwtr_qd (2*nlon,2*nlat)) ! QD ice/water           (fraction)
+ allocate (larea_qd (2*nlon,2*nlat)) ! QD grid-box area            (km2)
  file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
  &LUH2_new/staticData_quarterdeg.nc'
-! write (*, *) 'Reading from ', trim (file_name)
+ ! write (*, *) 'Reading from ', trim (file_name)
  call check (nf90_open (trim (file_name), nf90_nowrite, ncid))
  varid = 7
  call check (nf90_get_var (ncid, varid, icwtr_qd))
@@ -103,8 +114,17 @@ IF (myrank == root) THEN
  ALLOCATE (B_grid(nlon,nlat))
  ALLOCATE (SOM_grid(nlon,nlat))
 END IF
+!----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Set number of climate years for climate on each processor.
+!----------------------------------------------------------------------!
 nyr_clm_alloc = MAX (1, nyr_spin_clm)
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Allocate climate variables on each processor.
+!----------------------------------------------------------------------!
 ALLOCATE (tmp(ntimes,nyr_clm_alloc,nland/ntasks))
 ALLOCATE (pre(ntimes,nyr_clm_alloc,nland/ntasks))
 ALLOCATE (spfh(ntimes,nyr_clm_alloc,nland/ntasks))
@@ -114,6 +134,11 @@ ALLOCATE (pres(ntimes,nyr_clm_alloc,nland/ntasks))
 ALLOCATE (tmax(ntimes,nyr_clm_alloc,nland/ntasks))
 ALLOCATE (tmin(ntimes,nyr_clm_alloc,nland/ntasks))
 ALLOCATE (ws(ntimes,nyr_clm_alloc,nland/ntasks))
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Allocate state variables on each processor.
+!----------------------------------------------------------------------!
 ALLOCATE (soilW_plot(nplots,nland_chunk))
 ALLOCATE (soilW_gbox(nland_chunk))
 ALLOCATE (soilW_fin(nland))
