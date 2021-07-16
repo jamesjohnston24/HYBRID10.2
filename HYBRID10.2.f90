@@ -51,8 +51,9 @@ REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
 
 !----------------------------------------------------------------------!
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
-READ (10,*) RSF_In       ! Input from restart files?
 READ (10,*) RSF_Out      ! Output to restart files?
+READ (10,*) RSF_In       ! Input from restart files?
+READ (10,*) RSF_In_file_name
 READ (10,*) nyr_spin_clm ! No. years of spin-up climate.
 READ (10,*) nyr_spin
 READ (10,*) syr_trans

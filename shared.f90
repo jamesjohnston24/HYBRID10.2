@@ -2,6 +2,7 @@ MODULE shared
 
 USE double
 IMPLICIT NONE
+CHARACTER(LEN=200) :: RSF_In_file_name
 LOGICAL :: RSF_In, RSF_Out
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 80000 ! nland = 67420
