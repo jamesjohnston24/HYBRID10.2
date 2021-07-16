@@ -40,7 +40,7 @@ OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
 READ (10,*) RSF
 CLOSE (10)
 
-RSF = .FALSE.
+!RSF = .FALSE.
 !RSF = .TRUE.
 IF (.NOT. (RSF)) kyr_off = 0
 
