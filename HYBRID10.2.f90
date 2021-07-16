@@ -52,6 +52,7 @@ REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
 !----------------------------------------------------------------------!
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
 READ (10,*) RSF_Out      ! Output to restart files?
+READ (10,*) RSF_Out_file_name
 READ (10,*) RSF_In       ! Input from restart files?
 READ (10,*) RSF_In_file_name
 READ (10,*) nyr_spin_clm ! No. years of spin-up climate.
@@ -409,7 +410,7 @@ CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
 ! Write restart binaries if requested.
 !----------------------------------------------------------------------!
 IF (RSF_out) THEN
- WRITE (file_name, "(A9,I0.4,A4)") "RSF_plots", myrank, ".bin"
+ WRITE (file_name, "(A,I0.4,A4)") RSF_Out_file_name, myrank, ".bin"
  OPEN (22,FILE=file_name,FORM='UNFORMATTED')
  WRITE (22) kyr_off + nyr_run
  WRITE (22) soilW_plot
