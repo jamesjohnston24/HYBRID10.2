@@ -3,12 +3,12 @@ MODULE shared
 USE double
 IMPLICIT NONE
 LOGICAL :: RSF
-INTEGER, PARAMETER :: nyr_spin_clm = 30 ! 10
-INTEGER, PARAMETER :: nyr_spin = 130 ! 120
+INTEGER, PARAMETER :: nyr_spin_clm = 1 ! 10
+INTEGER, PARAMETER :: nyr_spin = 1 ! 120
 INTEGER, PARAMETER :: syr_trans = 1901
 INTEGER, PARAMETER :: eyr_trans = 1900 ! 2019
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
-INTEGER, PARAMETER :: ntasks = 32 ! 4 ! 32
+INTEGER, PARAMETER :: ntasks = 4 ! 4 ! 32
 INTEGER, PARAMETER :: nland = 80000 ! nland = 67420
 INTEGER, PARAMETER :: nland_chunk = nland / ntasks
 INTEGER, PARAMETER :: size = ntimes * nland / ntasks
