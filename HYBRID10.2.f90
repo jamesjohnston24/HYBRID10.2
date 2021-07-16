@@ -1,4 +1,4 @@
-PROGRAM dev
+PROGRAM HYBRID10.2
 
 USE double
 USE netcdf
@@ -35,6 +35,9 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: fcover_in
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: fcover
 REAL, ALLOCATABLE, DIMENSION (:,:) :: trans_in
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
+
+OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+CLOSE (10)
 
 RSF = .FALSE.
 !RSF = .TRUE.
@@ -378,4 +381,4 @@ CONTAINS
  END SUBROUTINE check
 !----------------------------------------------------------------------!
 
-END PROGRAM dev
+END PROGRAM HYBRID4.2
