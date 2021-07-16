@@ -8,13 +8,18 @@ To run HYBRID10.2:
 
 2. "make" will compile the code
 
+To run in batch mode:
+
 3. Edit the file slurm_submit.peta4-skylake, changing, if necessary:
   3.1 Project to be charged.
   3.2 Nodes and ntasks
   3.3 Wallclock time
   3.4 mail_user
   3.5 Path to application executable
-  
-You should not need to change anything else.
+Then to run submit: "sbatch slurm_submit.peta4-skylake"
 
-4. Then to run in batch mode: "sbatch slurm_submit.peta4-skylake"
+To run interactively:
+
+4. Edit ntasks in 'shared.f90'  to = 4.
+5. Make sure the run will only last up to about 1 min. by limiting the no. years in 'shared.f90'.
+6. "make time nice -19 mpirun -n 4 ./dev.exe" will run it.
