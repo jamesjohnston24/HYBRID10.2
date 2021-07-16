@@ -1,4 +1,4 @@
-PROGRAM HYBRID10.2
+PROGRAM HYBRID10_2
 
 USE double
 USE netcdf
@@ -382,4 +382,4 @@ CONTAINS
  END SUBROUTINE check
 !----------------------------------------------------------------------!
 
-END PROGRAM HYBRID10.2
+END PROGRAM HYBRID10_2
