@@ -90,12 +90,12 @@ IF (myrank == root) THEN
  allocate (larea_qd (2*nlon,2*nlat)) ! QD grid-box area            (km2)
  file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
  &LUH2_new/staticData_quarterdeg.nc'
- call check (nf90_open (trim (file_name), nf90_nowrite, ncid))
+ CALL CHECK (nf90_open (trim (file_name), nf90_nowrite, ncid))
  varid = 7
- call check (nf90_get_var (ncid, varid, icwtr_qd))
+ CALL CHECK (nf90_get_var (ncid, varid, icwtr_qd))
  varid = 9
- call check (nf90_get_var (ncid, varid, larea_qd))
- call check (nf90_close (ncid))
+ CALL CHECK (nf90_get_var (ncid, varid, larea_qd))
+ CALL CHECK (NF90_close (ncid))
  ALLOCATE (icwtr(nlon,nlat))
  ALLOCATE (larea(nlon,nlat))
  jj = 1
@@ -175,9 +175,9 @@ IF (myrank == root) THEN
              &LUH2_new/states_half.nc'
  CALL CHECK(NF90_OPEN (TRIM(file_name), NF90_NOWRITE, ncid))
  DO z = 1, 14
-  CALL check(nf90_inquire_variable(ncid,z+3,var_name))
+  CALL CHECK(nf90_inquire_variable(ncid,z+3,var_name))
   !WRITE (*,*) z,var_name
-  CALL check(nf90_inq_varid(ncid, TRIM(var_name), varid))
+  CALL CHECK(nf90_inq_varid(ncid, TRIM(var_name), varid))
   CALL CHECK(nf90_get_var(ncid, varid, fcover_in, &
                       !start = (/   1,    1, 1700-850+1/), &
                       start = (/   1,    1, 1/), &
@@ -186,16 +186,16 @@ IF (myrank == root) THEN
    fcover (z,:,j) = fcover_in (:,nlat-j+1)
   END DO
  END DO
- CALL check(nf90_close(ncid))
+ CALL CHECK(NF90_close(ncid))
  ALLOCATE (trans_in(nlon,nlat))
  ALLOCATE (trans(118,nlon,nlat))
  file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
              &LUH2_new/transitions_half.nc'
  CALL CHECK(NF90_OPEN (TRIM(file_name), NF90_NOWRITE, ncid))
  DO zt = 1, 118
-  CALL check(nf90_inquire_variable(ncid,zt+3,var_name))
+  CALL CHECK(nf90_inquire_variable(ncid,zt+3,var_name))
   !WRITE (*,*) zt,var_name
-  CALL check(nf90_inq_varid(ncid, TRIM(var_name), varid))
+  CALL CHECK(nf90_inq_varid(ncid, TRIM(var_name), varid))
   CALL CHECK(nf90_get_var(ncid, varid, trans_in, &
                       !start = (/   1,    1, 1700-850+1/), &
                       start = (/   1,    1, 1/), &
@@ -204,7 +204,7 @@ IF (myrank == root) THEN
    trans (zt,:,j) = trans_in (:,nlat-j+1)
   END DO
  END DO
- CALL CHECK(NF90_CLOSE(ncid))
+ CALL CHECK(NF90_close(ncid))
  i = NINT (0.0 + 360.0)
  j = NINT (90.0+52.0)*2
  !write(*,*)trans(:,i,j)
@@ -244,7 +244,7 @@ IF (myrank == root) THEN
    ENDIF
   END DO
  END DO
- CALL CHECK ( NF90_CLOSE ( ncid ))
+ CALL CHECK ( NF90_close ( ncid ))
  k = 1
  DO j = 1, nlat
   DO i = 1, nlon
@@ -406,26 +406,11 @@ IF (RSF_out) THEN
 END IF
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Compute and output global fields of state variables.
+!----------------------------------------------------------------------!
 CALL MPI_Barrier ( MPI_COMM_WORLD, error )
 IF (myrank == root) THEN
-! file_name = "RSF_plots.bin"
-! call check (nf90_create (trim (file_name), cmode = nf90_clobber, &
-!             ncid = ncid))
-! call check (nf90_def_dim (ncid, "vector", nland, vector_dimid))
-! call check (nf90_def_dim (ncid, "plot", nplots, plot_dimid))
-! dimids_plots = (/ plot_dimid, vector_dimid /)
-! call check (nf90_def_var (ncid, "Soil_Water", nf90_float, &
-!             dimids_plot, varidW))
-! call check (nf90_def_var (ncid, "Living_Biomass", nf90_float, &
-!             dimids_plot, varidB))
-! call check (nf90_def_var (ncid, "Soil_Organic_Matter", nf90_float, &
-!             dimids_plot, varidSOM))
-! call check (nf90_enddef (ncid))
-! call check (nf90_put_var (ncid, varidW, soilW_plot))
-! call check (nf90_put_var (ncid, varidB, B_plot))
-! call check (nf90_put_var (ncid, varidSOM, SOM_plot))
-! call check (nf90_close (ncid))
-
  k = 1
  DO j = 1, nlat
   DO i = 1, nlon
@@ -443,40 +428,43 @@ IF (myrank == root) THEN
  END DO
  file_name = "fields_grid.nc"
 ! write (*, *) 'Writing to ', trim (file_name)
- call check (nf90_create (trim (file_name), cmode = nf90_clobber, &
+ CALL CHECK (NF90_CREATE (trim (file_name), cmode = nf90_clobber, &
              ncid = ncid))
- call check (nf90_def_dim (ncid, "longitude", nlon, lon_dimid))
- call check (nf90_def_dim (ncid, "latitude" , nlat, lat_dimid))
- call check (nf90_def_var (ncid, "longitude", nf90_float, lon_dimid, &
+ CALL CHECK (NF90_DEF_DIM (ncid, "longitude", nlon, lon_dimid))
+ CALL CHECK (NF90_DEF_DIM (ncid, "latitude" , nlat, lat_dimid))
+ CALL CHECK (NF90_DEF_VAR (ncid, "longitude", nf90_float, lon_dimid, &
              lon_varid))
- call check (nf90_def_var (ncid, "latitude" , nf90_float, lat_dimid, &
+ CALL CHECK (NF90_DEF_VAR (ncid, "latitude" , nf90_float, lat_dimid, &
              lat_varid))
  dimids_two = (/ lon_dimid, lat_dimid /)
- call check (nf90_put_att (ncid, lon_varid, "units", "degrees_east"))
- call check (nf90_put_att (ncid, lat_varid, "units", "degrees_north"))
- call check (nf90_def_var (ncid, "Soil_Water", nf90_float, &
+ CALL CHECK (NF90_PUT_ATT (ncid, lon_varid, "units", "degrees_east"))
+ CALL CHECK (NF90_PUT_ATT (ncid, lat_varid, "units", "degrees_north"))
+ CALL CHECK (NF90_DEF_VAR (ncid, "Soil_Water", nf90_float, &
              dimids_two, varidW))
- call check (nf90_def_var (ncid, "Living_Biomass", nf90_float, &
+ CALL CHECK (NF90_DEF_VAR (ncid, "Living_Biomass", nf90_float, &
              dimids_two, varidB))
- call check (nf90_def_var (ncid, "Soil_Organic_Matter", nf90_float, &
+ CALL CHECK (NF90_DEF_VAR (ncid, "Soil_Organic_Matter", nf90_float, &
              dimids_two, varidSOM))
- call check (nf90_put_att (ncid, varidW, "units", "m"))
- call check (nf90_put_att (ncid, varidB, "units", "kg[DM] m-2"))
- call check (nf90_put_att (ncid, varidSOM, "units", "kg[DM] m-2"))
- call check (nf90_put_att (ncid, varidW, "_FillValue", fillvalue))
- call check (nf90_put_att (ncid, varidB, "_FillValue", fillvalue))
- call check (nf90_put_att (ncid, varidSOM, "_FillValue", fillvalue))
- call check (nf90_enddef (ncid))
- call check (nf90_put_var (ncid, lon_varid, lon))
- call check (nf90_put_var (ncid, lat_varid, lat))
- call check (nf90_put_var (ncid,     varidW, soilW_grid))
- call check (nf90_put_var (ncid,     varidB, B_grid))
- call check (nf90_put_var (ncid,     varidSOM, SOM_grid))
- call check (nf90_close (ncid))
+ CALL CHECK (NF90_PUT_ATT (ncid, varidW, "units", "m"))
+ CALL CHECK (NF90_PUT_ATT (ncid, varidB, "units", "kg[DM] m-2"))
+ CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "units", "kg[DM] m-2"))
+ CALL CHECK (NF90_PUT_ATT (ncid, varidW, "_FillValue", fillvalue))
+ CALL CHECK (NF90_PUT_ATT (ncid, varidB, "_FillValue", fillvalue))
+ CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "_FillValue", fillvalue))
+ CALL CHECK (NF90_ENDDEF (ncid))
+ CALL CHECK (NF90_PUT_VAR (ncid, lon_varid, lon))
+ CALL CHECK (NF90_PUT_VAR (ncid, lat_varid, lat))
+ CALL CHECK (NF90_PUT_VAR (ncid,     varidW, soilW_grid))
+ CALL CHECK (NF90_PUT_VAR (ncid,     varidB, B_grid))
+ CALL CHECK (NF90_PUT_VAR (ncid,     varidSOM, SOM_grid))
+ CALL CHECK (NF90_close (ncid))
  CLOSE (21) ! global_means.txt
 END IF ! myrank == root
+!----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 CALL MPI_Finalize ( error )
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 CONTAINS
