@@ -37,6 +37,7 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: trans_in
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
 
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+READ (10,*) RSF
 CLOSE (10)
 
 RSF = .FALSE.
