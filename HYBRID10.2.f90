@@ -76,9 +76,7 @@ IF (size*nprocs /= ntimes*nland) THEN
 END IF
 CALL MPI_Comm_rank(MPI_COMM_WORLD,myrank,error)
 CALL MPI_Get_processor_name(procname,namelen,error)
-!WRITE (*,"('This is process ',I1,' in a communicator of ',    &
-! &    I1,' processes running on processor ',A)")    &
-! myrank,nprocs,procname(1:namelen)
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 ! For diagnostics on root:
@@ -91,7 +89,6 @@ IF (myrank == root) THEN
  allocate (larea_qd (2*nlon,2*nlat)) ! QD grid-box area            (km2)
  file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
  &LUH2_new/staticData_quarterdeg.nc'
- ! write (*, *) 'Reading from ', trim (file_name)
  call check (nf90_open (trim (file_name), nf90_nowrite, ncid))
  varid = 7
  call check (nf90_get_var (ncid, varid, icwtr_qd))
@@ -139,20 +136,27 @@ ALLOCATE (ws(ntimes,nyr_clm_alloc,nland/ntasks))
 !----------------------------------------------------------------------!
 ! Allocate state variables on each processor.
 !----------------------------------------------------------------------!
-ALLOCATE (soilW_plot(nplots,nland_chunk))
+ALLOCATE (soilW_plot(nplots,nland_chunk)) ! Soil water               (m)
+ALLOCATE (B_plot    (nplots,nland_chunk)) ! Biomass         (kg[DM] m-2)
+ALLOCATE (SOM_plot  (nplots,nland_chunk)) ! SOM             (kg[DM] m-2)
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Allocate grid-box diagnostic variables on each processor.
+!----------------------------------------------------------------------!
 ALLOCATE (soilW_gbox(nland_chunk))
-ALLOCATE (soilW_fin(nland))
-ALLOCATE (NPP_gbox(nland_chunk))
-ALLOCATE (NPP_fin(nland))
-ALLOCATE (Rh_gbox(nland_chunk))
-ALLOCATE (Rh_fin(nland))
-ALLOCATE (NEE_gbox(nland_chunk))
-ALLOCATE (NEE_fin(nland))
-ALLOCATE (B_plot(nplots,nland_chunk))
 ALLOCATE (B_gbox(nland_chunk))
-ALLOCATE (B_fin(nland))
-ALLOCATE (SOM_plot(nplots,nland_chunk))
+ALLOCATE (NPP_gbox(nland_chunk))
+ALLOCATE (Rh_gbox(nland_chunk))
+ALLOCATE (NEE_gbox(nland_chunk))
 ALLOCATE (SOM_gbox(nland_chunk))
+!----------------------------------------------------------------------!
+
+ALLOCATE (soilW_fin(nland))
+ALLOCATE (NPP_fin(nland))
+ALLOCATE (Rh_fin(nland))
+ALLOCATE (NEE_fin(nland))
+ALLOCATE (B_fin(nland))
 ALLOCATE (SOM_fin(nland))
 
 IF (myrank == root) THEN
@@ -400,11 +404,8 @@ IF (myrank == root) THEN
  call check (nf90_put_var (ncid,     varidB, B_grid))
  call check (nf90_put_var (ncid,     varidSOM, SOM_grid))
  call check (nf90_close (ncid))
-END IF
-
-IF (myrank == root) THEN
  CLOSE (21) ! global_means.txt
-END IF
+END IF ! myrank == root
 
 CALL MPI_Finalize ( error )
 
