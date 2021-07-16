@@ -155,14 +155,18 @@ ALLOCATE (NEE_gbox  (nland_chunk)) ! NEE               (kg[DM] m-2 yr-1)
 !----------------------------------------------------------------------!
 ! Allocate global diagnostic vectors.
 !----------------------------------------------------------------------!
-ALLOCATE (soilW_fin(nland))
-ALLOCATE (B_fin(nland))
-ALLOCATE (SOM_fin(nland))
-ALLOCATE (NPP_fin(nland))
-ALLOCATE (Rh_fin(nland))
-ALLOCATE (NEE_fin(nland))
+ALLOCATE (soilW_fin(nland)) ! Soil water                             (m)
+ALLOCATE (B_fin    (nland)) ! Biomass                       (kg[DM] m-2)
+ALLOCATE (SOM_fin  (nland)) ! SOM                           (kg[DM] m-2)
+ALLOCATE (NPP_fin  (nland)) ! NPP                      (kg[DM] m-2 yr-1)
+ALLOCATE (Rh_fin   (nland)) ! Rh                       (kg[DM] m-2 yr-1)
+ALLOCATE (NEE_fin  (nland)) ! NEE                      (kg[DM] m-2 yr-1)
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Read cover fractions and transitions in CE 850.
+! Currently not used.
+!----------------------------------------------------------------------!
 IF (myrank == root) THEN
  ALLOCATE (fcover_in(nlon,nlat))
  ALLOCATE (fcover(14,nlon,nlat))
@@ -204,11 +208,14 @@ IF (myrank == root) THEN
  j = NINT (90.0+52.0)*2
  !write(*,*)trans(:,i,j)
 END IF
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-! Set land, source_larea
-! Read and scatter source_lon, source_lat
-! Get these from files above?
+! Set global land array.
+! Read lon and lat, and set source_lon and source_lon global vectors.
+! Set source_larea global vector.
+! Could perhaps get these from files above?
+!----------------------------------------------------------------------!
 IF (myrank == root) THEN
  clm_in = 0.0
  kyr_clm = 1901
@@ -249,33 +256,50 @@ IF (myrank == root) THEN
   END DO ! i
  END DO ! j
 END IF ! root
-CALL MPI_Scatter (source_lon,nland_chunk,MPI_REAL, &
-                  lon_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
-CALL MPI_Scatter (source_lat,nland_chunk,MPI_REAL, &
-                  lat_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
 !----------------------------------------------------------------------!
-!IF (myrank == root) THEN
- IF (RSF) THEN
-  CALL RSF_In
- ELSE
-  soilW_plot = 0.0
-  B_plot = 0.0
-  SOM_plot = 0.0
- END IF
-!END IF
+
+!----------------------------------------------------------------------!
+! Scatter lon and lat to all processors.
+!----------------------------------------------------------------------!
+CALL MPI_Scatter (source_lon,nland_chunk,MPI_REAL, &
+               lon_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Scatter (source_lat,nland_chunk,MPI_REAL, &
+               lat_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! If required, read state variables from restart file for each
+! processor, else initialise them at zero.
+!----------------------------------------------------------------------!
+IF (RSF) THEN
+ CALL RSF_In
+ELSE
+ soilW_plot = 0.0
+ B_plot     = 0.0
+ SOM_plot   = 0.0
+END IF
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Initialise diagnostic file of global mean annual values.
+!----------------------------------------------------------------------!
 IF (myrank == root) THEN
  WRITE (file_name, "(A12,I0.5,A4)") "global_means", kyr_off, ".txt"
  OPEN (21, FILE = file_name, STATUS = 'UNKNOWN')
  WRITE (21,"('kyr kyr_clm NPP Rh NEE B SOM')")
 END IF
+!----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 ! Read all spin-up climate and scatter to all processors.
+!----------------------------------------------------------------------!
 syr = 1901
 kyr = 1
 DO kyr_clm = syr, syr + nyr_spin_clm - 1
  CALL get_clm (kyr_clm, kyr)
  kyr = kyr + 1
 END DO ! kyr
+!----------------------------------------------------------------------!
 
 ! Perform spin-up.
 kyr = 1
