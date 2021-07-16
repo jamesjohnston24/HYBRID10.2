@@ -392,17 +392,19 @@ CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
 ! after_all-before_all,myrank
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Write restart binaries if requested.
+!----------------------------------------------------------------------!
 IF (RSF_out) THEN
  WRITE (file_name, "(A9,I0.4,A4)") "RSF_plots", myrank, ".bin"
-!ELSE
-! WRITE (file_name, "(A10,I2,A4)") "RSF_plots_", myrank, ".bin"
-!END IF
-OPEN (22,FILE=file_name,FORM='UNFORMATTED')
-WRITE (22) kyr_off + nyr_run
-WRITE (22) soilW_plot
-WRITE (22) B_plot
-WRITE (22) SOM_plot
-CLOSe (22)
+ OPEN (22,FILE=file_name,FORM='UNFORMATTED')
+ WRITE (22) kyr_off + nyr_run
+ WRITE (22) soilW_plot
+ WRITE (22) B_plot
+ WRITE (22) SOM_plot
+ CLOSE (22)
+END IF
+!----------------------------------------------------------------------!
 
 CALL MPI_Barrier ( MPI_COMM_WORLD, error )
 IF (myrank == root) THEN
