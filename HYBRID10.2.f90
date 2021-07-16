@@ -1,10 +1,20 @@
+!======================================================================!
 PROGRAM HYBRID10_2
+!----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Global model of terretrial carbon fluxes. Runs using TRENDY climate
+! and land cover.
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
 USE double
 USE netcdf
 USE mpi
 USE shared
+!----------------------------------------------------------------------!
 IMPLICIT NONE
+!----------------------------------------------------------------------!
 INTEGER :: nprocs, namelen
 INTEGER :: ncid, varid, varidW, varidB, varidSOM
 INTEGER :: syr, kyr, i, j, k, l, z, zt, ii, jj, kyr_spin, kyr_clm, nyr_clm_alloc
@@ -35,14 +45,17 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: fcover_in
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: fcover
 REAL, ALLOCATABLE, DIMENSION (:,:) :: trans_in
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
+!----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
-READ (10,*) RSF
+READ (10,*) RSF ! Input from restart files?
 CLOSE (10)
+!----------------------------------------------------------------------!
 
-!RSF = .FALSE.
-!RSF = .TRUE.
+!----------------------------------------------------------------------!
 IF (.NOT. (RSF)) kyr_off = 0
+!----------------------------------------------------------------------!
 
 source = 0.0
 result = 0.0
