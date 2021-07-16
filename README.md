@@ -22,4 +22,4 @@ To run interactively:
 
 4. Edit ntasks in 'shared.f90'  to = 4.
 5. Make sure the run will only last up to about 1 min. by limiting the no. years in 'shared.f90'.
-6. "make time nice -19 mpirun -n 4 ./dev.exe" will run it.
+6. "time nice -19 mpirun -n 4 ./dev.exe" will run it.
