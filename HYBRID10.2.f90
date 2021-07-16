@@ -51,12 +51,13 @@ REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
 
 !----------------------------------------------------------------------!
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
-READ (10,*) RSF ! Input from restart files?
+READ (10,*) RSF_In  ! Input from restart files?
+READ (10,*) RSF_Out ! Output to restart files?
 CLOSE (10)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-IF (.NOT. (RSF)) kyr_off = 0
+IF (.NOT. (RSF_In)) kyr_off = 0
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -69,7 +70,7 @@ source_larea = 0.0
 !----------------------------------------------------------------------!
 CALL MPI_Init ( error )
 CALL MPI_Comm_size(MPI_COMM_WORLD,nprocs,error)
-before_all = MPI_Wtime()
+!before_all = MPI_Wtime()
 IF (size*nprocs /= ntimes*nland) THEN
  PRINT *, 'Invalid number of processors',nprocs,size*nprocs,nland
  CALL MPI_Abort(MPI_COMM_WORLD,1,error)
@@ -271,8 +272,8 @@ CALL MPI_Scatter (source_lat,nland_chunk,MPI_REAL, &
 ! If required, read state variables from restart file for each
 ! processor, else initialise them at zero.
 !----------------------------------------------------------------------!
-IF (RSF) THEN
- CALL RSF_In
+IF (RSF_In) THEN
+ CALL Get_RSF
 ELSE
  soilW_plot = 0.0
  B_plot     = 0.0
@@ -337,35 +338,61 @@ DO kyr_spin = 1, nyr_spin
 END DO ! kyr_spin
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 ! Perform transient, if requested.
+!----------------------------------------------------------------------!
 kyr = 1
 DO kyr_clm = syr_trans, eyr_trans
  NPP_gbox = 0.0
- Rh_gbox = 0.0
+ Rh_gbox  = 0.0
  NEE_gbox = 0.0
+ !---------------------------------------------------------------------!
+ ! Read climate if required.
+ !---------------------------------------------------------------------!
  IF (kyr_clm > (1901+nyr_spin_clm-1)) CALL get_clm (kyr_clm, kyr)
+ !---------------------------------------------------------------------!
  ! Advance state variables by one year.
+ !---------------------------------------------------------------------!
  CALL advance (kyr)
+ !---------------------------------------------------------------------!
+ ! Output annual diagnostics.
+ !---------------------------------------------------------------------!
  CALL Diag_Global (kyr+kyr_off+nyr_spin, kyr_clm)
+ !---------------------------------------------------------------------!
  kyr = kyr + 1
+ !---------------------------------------------------------------------!
 END DO
+!----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Calculate mean grid-box state variables.
+!----------------------------------------------------------------------!
 DO k = 1, nland_chunk
  soilW_gbox (k) = SUM ( soilW_plot(:,k) ) / FLOAT (nplots)
- B_gbox (k) = SUM ( B_plot(:,k) ) / FLOAT (nplots)
- SOM_gbox (k) = SUM ( SOM_plot(:,k) ) / FLOAT (nplots)
+ B_gbox     (k) = SUM ( B_plot    (:,k) ) / FLOAT (nplots)
+ SOM_gbox   (k) = SUM ( SOM_plot  (:,k) ) / FLOAT (nplots)
 END DO
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Gather together all mean grid-box state variables from the
+! processors into global land vectors.
+!----------------------------------------------------------------------!
 CALL MPI_Gather(soilW_gbox,nland_chunk,MPI_REAL, &
                 soilW_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
 CALL MPI_Gather(B_gbox,nland_chunk,MPI_REAL, &
                 B_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
 CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
                 SOM_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
-after_all = MPI_Wtime()
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+!after_all = MPI_Wtime()
 !WRITE (*,"('All took ',F0.4,' seconds on ',I0)") &
 ! after_all-before_all,myrank
+!----------------------------------------------------------------------!
 
-!IF (myrank <10) THEN
+IF (RSF_out) THEN
  WRITE (file_name, "(A9,I0.4,A4)") "RSF_plots", myrank, ".bin"
 !ELSE
 ! WRITE (file_name, "(A10,I2,A4)") "RSF_plots_", myrank, ".bin"
