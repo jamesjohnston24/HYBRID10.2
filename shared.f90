@@ -2,7 +2,7 @@ MODULE shared
 
 USE double
 IMPLICIT NONE
-LOGICAL :: RSF
+LOGICAL :: RSF_In, RSF_Out
 INTEGER, PARAMETER :: nyr_spin_clm = 1 ! 10
 INTEGER, PARAMETER :: nyr_spin = 1 ! 120
 INTEGER, PARAMETER :: syr_trans = 1901
