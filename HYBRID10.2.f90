@@ -301,31 +301,43 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
 END DO ! kyr
 !----------------------------------------------------------------------!
 
-! Perform spin-up.
+!----------------------------------------------------------------------!
+! Perform spin-up, if requested.
+!----------------------------------------------------------------------!
 kyr = 1
 kyr_clm = syr
 DO kyr_spin = 1, nyr_spin
  NPP_gbox = 0.0
- Rh_gbox = 0.0
+ Rh_gbox  = 0.0
  NEE_gbox = 0.0
+ !---------------------------------------------------------------------!
  IF (ntasks == 4) THEN
-  WRITE (*,"('Running ',I0,' of ',I0,' spin-up years on processor ', I0)") &
-   kyr_spin, nyr_spin, myrank
+  WRITE (*,"('Running ',I0,' of ',I0,' spin-up years on processor ', &
+   &I0)") kyr_spin, nyr_spin, myrank
  END IF
+ !---------------------------------------------------------------------!
  ! Advance state variables by one year.
+ !---------------------------------------------------------------------!
  CALL advance (kyr)
- ! Write global fields each 10 yr.
+ !---------------------------------------------------------------------!
+ ! Write global fields each yr.
+ !---------------------------------------------------------------------!
  !IF (MOD (kyr_spin, 10) == 0) CALL Diag_Global (kyr, kyr_clm)
  CALL Diag_Global (kyr_spin+kyr_off, kyr_clm)
+ !---------------------------------------------------------------------!
+ ! Advance year counts.
+ !---------------------------------------------------------------------!
  kyr = kyr + 1
  kyr_clm = kyr_clm + 1
  IF (kyr > nyr_spin_clm) THEN
   kyr = 1
   kyr_clm = syr
  END IF
+ !---------------------------------------------------------------------!
 END DO ! kyr_spin
+!----------------------------------------------------------------------!
 
-! Perform transient.
+! Perform transient, if requested.
 kyr = 1
 DO kyr_clm = syr_trans, eyr_trans
  NPP_gbox = 0.0
