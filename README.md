@@ -1,4 +1,7 @@
 # HYBRID10.2
+
+N.B the following will not work just yet...I need to create a driver file and change the code to read it.
+
 To run HYBRID10.2:
 
 1. Put the source code and makefile in the same directory
