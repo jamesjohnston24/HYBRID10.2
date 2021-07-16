@@ -1,2 +1,3 @@
-.FALSE.
-.TRUE.
+.FALSE. ! RSF_In
+ .TRUE. ! RSF_Out
+      1 ! nyr_spin_clm
