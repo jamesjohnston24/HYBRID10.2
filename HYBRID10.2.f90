@@ -410,7 +410,8 @@ CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
 ! Write restart binaries if requested.
 !----------------------------------------------------------------------!
 IF (RSF_out) THEN
- WRITE (file_name, "(A,I0.4,A4)") RSF_Out_file_name, myrank, ".bin"
+write(*,*)RSF_Out_file_name
+ WRITE (file_name, "(A,I0.4,A4)") TRIM(RSF_Out_file_name), myrank, ".bin"
 write(*,*)file_name
  OPEN (22,FILE=file_name,FORM='UNFORMATTED')
  WRITE (22) kyr_off + nyr_run
