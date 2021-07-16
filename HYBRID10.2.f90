@@ -144,20 +144,24 @@ ALLOCATE (SOM_plot  (nplots,nland_chunk)) ! SOM             (kg[DM] m-2)
 !----------------------------------------------------------------------!
 ! Allocate grid-box diagnostic variables on each processor.
 !----------------------------------------------------------------------!
-ALLOCATE (soilW_gbox(nland_chunk))
-ALLOCATE (B_gbox(nland_chunk))
-ALLOCATE (NPP_gbox(nland_chunk))
-ALLOCATE (Rh_gbox(nland_chunk))
-ALLOCATE (NEE_gbox(nland_chunk))
-ALLOCATE (SOM_gbox(nland_chunk))
+ALLOCATE (soilW_gbox(nland_chunk)) ! Soil water                      (m)
+ALLOCATE (B_gbox    (nland_chunk)) ! Biomass                (kg[DM] m-2)
+ALLOCATE (SOM_gbox  (nland_chunk)) ! SOM                    (kg[DM] m-2)
+ALLOCATE (NPP_gbox  (nland_chunk)) ! NPP               (kg[DM] m-2 yr-1)
+ALLOCATE (Rh_gbox   (nland_chunk)) ! Rh                (kg[DM] m-2 yr-1)
+ALLOCATE (NEE_gbox  (nland_chunk)) ! NEE               (kg[DM] m-2 yr-1)
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Allocate global diagnostic vectors.
+!----------------------------------------------------------------------!
 ALLOCATE (soilW_fin(nland))
+ALLOCATE (B_fin(nland))
+ALLOCATE (SOM_fin(nland))
 ALLOCATE (NPP_fin(nland))
 ALLOCATE (Rh_fin(nland))
 ALLOCATE (NEE_fin(nland))
-ALLOCATE (B_fin(nland))
-ALLOCATE (SOM_fin(nland))
+!----------------------------------------------------------------------!
 
 IF (myrank == root) THEN
  ALLOCATE (fcover_in(nlon,nlat))
