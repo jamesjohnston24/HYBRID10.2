@@ -1,7 +1,7 @@
 .TRUE. ! RSF_Out
 "RSF_plots1_" ! RSF_Out_file_name
 .FALSE. ! RSF_In
-"RUN2/SAVE5/RSF_plots" ! RSF_In_file_name
+"RSF_plots1_" ! RSF_In_file_name
       1 ! nyr_spin_clm
       1 ! nyr_spin
    1901 ! syr_trans (min. is 1901)
