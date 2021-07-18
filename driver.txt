@@ -1,10 +1,10 @@
 .TRUE. ! RSF_Out
 "RSF_plots1_" ! RSF_Out_file_name
 .TRUE. ! RSF_In
-"RSF_plots1_" ! RSF_In_file_name
-      0 ! nyr_spin_clm
-      0 ! nyr_spin
-   1902 ! syr_trans (min. is 1901)
-   1902 ! eyr_trans (max. is 2019)
+"/home/adf10/HYBRID10/RUN3/SAVE1/RSF_plots" ! RSF_In_file_name
+      1 ! nyr_spin_clm
+      1 ! nyr_spin
+   1901 ! syr_trans (min. is 1901)
+   1900 ! eyr_trans (max. is 2019)
       4 ! ntasks (4 for interactive run)
       1 ! nplots
