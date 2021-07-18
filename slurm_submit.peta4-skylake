@@ -61,7 +61,7 @@ module load netcdf-fortran-4.4.4-intel-17.0.4-cesnirf netcdf-4.4.1.1-intel-17.0.
 #! Insert additional module load commands after this line if needed:
 
 #! Full path to application executable: 
-application="/home/adf10/HYBRID10/dev.exe"
+application="/home/adf10/HYBRID10.2/HYBRID10.2.exe"
 
 #! Run options for the application:
 options=""
