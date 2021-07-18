@@ -1,5 +1,5 @@
 .TRUE. ! RSF_Out
-"/home/adf10/HYBRID10/RUN4/SAVE1/RSF_plots" ! RSF_Out_file_name
+"/home/adf10/HYBRID10.2/RUN4/SAVE1/RSF_plots" ! RSF_Out_file_name
 .TRUE. ! RSF_In
 "/home/adf10/HYBRID10/RUN3/SAVE1/RSF_plots" ! RSF_In_file_name
       1 ! nyr_spin_clm
