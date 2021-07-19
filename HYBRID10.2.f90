@@ -310,6 +310,7 @@ END IF
 !----------------------------------------------------------------------!
 syr = 1901
 kyr = 1
+before_all = MPI_Wtime()
 DO kyr_clm = syr, syr + nyr_spin_clm - 1
  !CALL get_clm (kyr_clm, kyr)
  !---------------------------------------------------------------------!
@@ -347,6 +348,9 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
  !----------------------------------------------------------------------!
  kyr = kyr + 1
 END DO ! kyr
+after_all = MPI_Wtime()
+WRITE (*,"('All took ',F0.4,' seconds on ',I0)") &
+ after_all-before_all,myrank
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -443,9 +447,7 @@ CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
 ! Write restart binaries if requested.
 !----------------------------------------------------------------------!
 IF (RSF_out) THEN
-write(*,*)RSF_Out_file_name
  WRITE (file_name, "(A,I0.4,A4)") TRIM(RSF_Out_file_name), myrank, ".bin"
-write(*,*)file_name
  OPEN (22,FILE=file_name,FORM='UNFORMATTED')
  WRITE (22) kyr_off + nyr_run
  WRITE (22) soilW_plot
