@@ -319,6 +319,14 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
   myrank, ".bin"
  OPEN (20,FILE=file_name,FORM='UNFORMATTED')
  WRITE (20) tmp
+ WRITE (20) pre
+ WRITE (20) spfh
+ WRITE (20) dswrf
+ WRITE (20) dlwrf
+ WRITE (20) pres
+ WRITE (20) tmax
+ WRITE (20) tmin
+ WRITE (20) ws
  CLOSe (20)
  !----------------------------------------------------------------------!
  kyr = kyr + 1
