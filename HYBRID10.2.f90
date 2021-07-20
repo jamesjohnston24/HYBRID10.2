@@ -312,7 +312,7 @@ syr = 1901
 kyr = 1
 before_all = MPI_Wtime()
 DO kyr_clm = syr, syr + nyr_spin_clm - 1
- !CALL get_clm (kyr_clm, kyr)
+ CALL get_clm (kyr_clm, kyr)
  !---------------------------------------------------------------------!
  ! Write climate binaries if requested.
  !---------------------------------------------------------------------!
