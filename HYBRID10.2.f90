@@ -312,39 +312,39 @@ syr = 1901
 kyr = 1
 before_all = MPI_Wtime()
 DO kyr_clm = syr, syr + nyr_spin_clm - 1
- CALL get_clm (kyr_clm, kyr)
+ !CALL get_clm (kyr_clm, kyr)
  !---------------------------------------------------------------------!
  ! Write climate binaries if requested.
+ !---------------------------------------------------------------------!
+ !WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64/Climate_64", &
+ ! kyr_clm, '_', myrank, ".bin"
+ !OPEN (20,FILE=file_name,FORM='UNFORMATTED')
+ !WRITE (20) tmp
+ !WRITE (20) pre
+ !WRITE (20) spfh
+ !WRITE (20) dswrf
+ !WRITE (20) dlwrf
+ !WRITE (20) pres
+ !WRITE (20) tmax
+ !WRITE (20) tmin
+ !WRITE (20) ws
+ !CLOSE (20)
+ !---------------------------------------------------------------------!
+ ! Read climate binaries if requested.
  !---------------------------------------------------------------------!
  WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64/Climate_64", &
   kyr_clm, '_', myrank, ".bin"
  OPEN (20,FILE=file_name,FORM='UNFORMATTED')
- WRITE (20) tmp
- WRITE (20) pre
- WRITE (20) spfh
- WRITE (20) dswrf
- WRITE (20) dlwrf
- WRITE (20) pres
- WRITE (20) tmax
- WRITE (20) tmin
- WRITE (20) ws
+ READ (20) tmp
+ READ (20) pre
+ READ (20) spfh
+ READ (20) dswrf
+ READ (20) dlwrf
+ READ (20) pres
+ READ (20) tmax
+ READ (20) tmin
+ READ (20) ws
  CLOSE (20)
- !---------------------------------------------------------------------!
- ! Read climate binaries if requested.
- !---------------------------------------------------------------------!
- !WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64", kyr_clm, '_', &
- ! myrank, ".bin"
- !OPEN (20,FILE=file_name,FORM='UNFORMATTED')
- !READ (20) tmp
- !READ (20) pre
- !READ (20) spfh
- !READ (20) dswrf
- !READ (20) dlwrf
- !READ (20) pres
- !READ (20) tmax
- !READ (20) tmin
- !READ (20) ws
- !CLOSE (20)
  !---------------------------------------------------------------------!
  kyr = kyr + 1
 END DO ! kyr
