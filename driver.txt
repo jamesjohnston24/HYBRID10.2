@@ -6,5 +6,5 @@
       1 ! nyr_spin
    1901 ! syr_trans (min. is 1901)
    1900 ! eyr_trans (max. is 2019)
-     32 ! ntasks (4 for interactive run)
+     64 ! ntasks (4 for interactive run)
       1 ! nplots
