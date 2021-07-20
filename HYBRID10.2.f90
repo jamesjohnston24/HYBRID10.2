@@ -322,7 +322,7 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
  !WRITE (20) tmp
  !WRITE (20) pre
  !WRITE (20) spfh
- !WRITE (20) dswr
+ !WRITE (20) dswrf
  !WRITE (20) dlwrf
  !WRITE (20) pres
  !WRITE (20) tmax
