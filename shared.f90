@@ -20,10 +20,10 @@ INTEGER :: nland_chunk
 INTEGER :: size
 INTEGER :: nyr_run
 INTEGER :: kyr_off
-REAL, DIMENSION (ntimes,nland) :: source ! 0.4 GB
-REAL, DIMENSION (nland) :: source_lat
-REAL, DIMENSION (nland) :: source_larea ! km2
-REAL, DIMENSION (nlon,nlat,ntimes) :: clm_in ! 1.5 GB
+REAL (DP), DIMENSION (ntimes,nland) :: source ! 0.4 GB
+REAL (DP), DIMENSION (nland) :: source_lat
+REAL (DP), DIMENSION (nland) :: source_larea ! km2
+REAL (DP), DIMENSION (nlon,nlat,ntimes) :: clm_in ! 1.5 GB
 REAL (DP), ALLOCATABLE, DIMENSION (:,:) :: result ! 0.1 GB
 REAL, ALLOCATABLE, DIMENSION (:) :: lon_chunk
 REAL, ALLOCATABLE, DIMENSION (:) :: lat_chunk
