@@ -15,7 +15,7 @@ USE shared
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER :: nprocs, namelen
+INTEGER :: nprocs, namelen, file_handle
 INTEGER :: ncid, varid, varidW, varidB, varidSOM
 INTEGER :: syr, kyr, i, j, k, l, z, zt, ii, jj
 INTEGER :: kyr_spin, kyr_clm, nyr_clm_alloc
