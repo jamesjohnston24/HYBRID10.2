@@ -76,7 +76,7 @@ IF (.NOT. (RSF_In)) kyr_off = 0
 
 !----------------------------------------------------------------------!
 source = 0.0
-result = 0.0
+result = 0.0_DP
 source_lat = 0.0
 source_larea = 0.0
 !----------------------------------------------------------------------!
@@ -345,8 +345,6 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
-
- tmp = result
 
 ! WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64/Climate_64_", &
 !  kyr_clm, '_', myrank, ".bin"
