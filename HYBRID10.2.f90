@@ -75,10 +75,10 @@ IF (.NOT. (RSF_In)) kyr_off = 0
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-source = 0.0
+source = 0.0_DP
 result = 0.0_DP
-source_lat = 0.0
-source_larea = 0.0
+source_lat = 0.0_DP
+source_larea = 0.0_DP
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -116,7 +116,7 @@ IF (myrank == root) THEN
  do j = 1, nlat
   ii = 1
   do i = 1, nlon
-   icwtr (i, nlat-j+1) = sum (icwtr_qd (ii:ii+1, jj:jj+1)) / 4.0
+   icwtr (i, nlat-j+1) = sum (icwtr_qd (ii:ii+1, jj:jj+1)) / 4.0_DP
    larea (i, nlat-j+1) = sum (larea_qd (ii:ii+1, jj:jj+1))
    ii = ii + 2
   end do
@@ -232,7 +232,7 @@ END IF
 ! Could perhaps get these from files above?
 !----------------------------------------------------------------------!
 IF (myrank == root) THEN
- clm_in = 0.0
+ clm_in = 0.0_DP
  kyr_clm = 1901
  var_name = 'tmp'
  WRITE (char_year, '(I4)') kyr_clm
@@ -252,9 +252,9 @@ IF (myrank == root) THEN
  DO j = 1, nlat
   DO i = 1, nlon
    IF (clm_in (i,j,1) /= fillvalue) THEN
-    land (i,j) = 1.0
+    land (i,j) = 1.0_DP
    ELSE
-    land (i,j) = 0.0
+    land (i,j) = 0.0_DP
    ENDIF
   END DO
  END DO
@@ -262,7 +262,7 @@ IF (myrank == root) THEN
  k = 1
  DO j = 1, nlat
   DO i = 1, nlon
-   IF (clm_in (i,j,1) < 1.0E10) THEN
+   IF (clm_in (i,j,1) < 1.0D10) THEN
     source_lon (k) = lon (i)
     source_lat (k) = lat (j)
     source_larea (k) = larea (i, j)
@@ -276,10 +276,10 @@ END IF ! root
 !----------------------------------------------------------------------!
 ! Scatter lon and lat to all processors.
 !----------------------------------------------------------------------!
-CALL MPI_Scatter (source_lon,nland_chunk,MPI_REAL, &
-               lon_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
-CALL MPI_Scatter (source_lat,nland_chunk,MPI_REAL, &
-               lat_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Scatter (source_lon,nland_chunk,MPI_DOUBLE_PRECISION, &
+               lon_chunk,nland_chunk,MPI_DOUBLE_PRECISION,root,MPI_COMM_WORLD,error)
+CALL MPI_Scatter (source_lat,nland_chunk,MPI_DOUBLE_PRECISION, &
+               lat_chunk,nland_chunk,MPI_DOUBLE_PRECISION,root,MPI_COMM_WORLD,error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -289,9 +289,9 @@ CALL MPI_Scatter (source_lat,nland_chunk,MPI_REAL, &
 IF (RSF_In) THEN
  CALL Get_RSF
 ELSE
- soilW_plot = 0.0
- B_plot     = 0.0
- SOM_plot   = 0.0
+ soilW_plot = 0.0_DP
+ B_plot     = 0.0_DP
+ SOM_plot   = 0.0_DP
 END IF
 !----------------------------------------------------------------------!
 
@@ -373,9 +373,9 @@ WRITE (*,"('All took ',F0.4,' seconds on ',I0)") &
 kyr = 1
 kyr_clm = syr
 DO kyr_spin = 1, nyr_spin
- NPP_gbox = 0.0
- Rh_gbox  = 0.0
- NEE_gbox = 0.0
+ NPP_gbox = 0.0_DP
+ Rh_gbox  = 0.0_DP
+ NEE_gbox = 0.0_DP
  !---------------------------------------------------------------------!
  IF (ntasks == 4) THEN
   WRITE (*,"('Running ',I0,' of ',I0,' spin-up years on processor ', &
@@ -408,9 +408,9 @@ END DO ! kyr_spin
 !----------------------------------------------------------------------!
 kyr = 1
 DO kyr_clm = syr_trans, eyr_trans
- NPP_gbox = 0.0
- Rh_gbox  = 0.0
- NEE_gbox = 0.0
+ NPP_gbox = 0.0_DP
+ Rh_gbox  = 0.0_DP
+ NEE_gbox = 0.0_DP
  !---------------------------------------------------------------------!
  ! Read climate if required.
  !---------------------------------------------------------------------!
@@ -443,12 +443,12 @@ END DO
 ! Gather together all mean grid-box state variables from the
 ! processors into global land vectors.
 !----------------------------------------------------------------------!
-CALL MPI_Gather(soilW_gbox,nland_chunk,MPI_REAL, &
-                soilW_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
-CALL MPI_Gather(B_gbox,nland_chunk,MPI_REAL, &
-                B_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
-CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
-                SOM_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Gather(soilW_gbox,nland_chunk,MPI_, &
+                soilW_fin,nland_chunk,MPI_DOUBLE_PRECISION,root,MPI_COMM_WORLD,error)
+CALL MPI_Gather(B_gbox,nland_chunk,MPI_DOUBLE_PRECISION, &
+                B_fin,nland_chunk,MPI_DOUBLE_PRECISION,root,MPI_COMM_WORLD,error)
+CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_DOUBLE_PRECISION, &
+                SOM_fin,nland_chunk,MPI_DOUBLE_PRECISION,root,MPI_COMM_WORLD,error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -479,10 +479,10 @@ IF (myrank == root) THEN
  k = 1
  DO j = 1, nlat
   DO i = 1, nlon
-   IF (land (i,j) > 0.0) THEN
-    soilW_grid (i,j) = (1.0 - icwtr (i,j)) * soilW_fin (k)
-    B_grid (i,j) = (1.0 - icwtr (i,j)) * B_fin (k)
-    SOM_grid (i,j) = (1.0 - icwtr (i,j)) * SOM_fin (k)
+   IF (land (i,j) > 0.0_DP) THEN
+    soilW_grid (i,j) = (1.0_DP - icwtr (i,j)) * soilW_fin (k)
+    B_grid (i,j) = (1.0_DP - icwtr (i,j)) * B_fin (k)
+    SOM_grid (i,j) = (1.0_DP - icwtr (i,j)) * SOM_fin (k)
     k = k + 1
    ELSE
     soilW_grid (i,j) = fillvalue
