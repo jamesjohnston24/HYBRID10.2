@@ -43,14 +43,14 @@ DO t = 1, ntimes
    ! http://mgebrekiros.github.io/IntroductoryHydrology/EvaporationAndTranspiration.pdf
    evap = (eas - ea) * 0.622_DP * 0.4_DP ** 2 * &
           (29.0D-3 / (R * tmp (t,kyr,k))) * ws (t,kyr,k) / &
-          (997.0 * (log (2.0 / 0.0003)) ** 2)
+          (997.0_DP * (log (2.0_DP / 0.0003_DP)) ** 2)
    evap = MIN (evap, soilW_plot (kp,k) / dt)
    dsoilW = win - evap
    BL = B_plot (kp,k) / (12.5_DP * 365.0_DP * 86400.0_DP)
    Tc = tmp (t,kyr,k) - tf ! degC
-   fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
-        (1.0 + EXP (0.3 * (0.0 - Tc))))
-   NPP = (soilW_plot (kp,k) / 0.5) * fT * 3.0_DP / (1460.0_DP * dt)
+   fT = 2.0_DP ** (0.1_DP * (Tc - 25.0_DP)) / ((1.0_DP + EXP (0.3_DP * (Tc - 36.0_DP))) * &
+        (1.0_DP + EXP (0.3_DP * (0.0_DP - Tc))))
+   NPP = (soilW_plot (kp,k) / 0.5_DP) * fT * 3.0_DP / (1460.0_DP * dt)
    dB = NPP - BL
    Tsoil = Tc
    IF (Tsoil > EPS) then
