@@ -346,6 +346,8 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
 
+ tmp = result
+
 ! WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64/Climate_64_", &
 !  kyr_clm, '_', myrank, ".bin"
 ! OPEN (20,FILE=file_name,FORM='UNFORMATTED')
