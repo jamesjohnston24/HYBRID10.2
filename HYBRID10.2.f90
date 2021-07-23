@@ -29,24 +29,24 @@ CHARACTER(LEN=4) :: char_year
 CHARACTER(LEN=30) :: var_name
 REAL(KIND=DP) :: before_all, after_all, before_in, after_in
 REAL(KIND=DP) :: before_scatter, after_scatter
-REAL, PARAMETER :: fillvalue = 1.0E20
-REAL, DIMENSION (nlon) :: lon
-REAL, DIMENSION (nlat) :: lat
-REAL, DIMENSION (nland) :: source_lon !
-REAL, ALLOCATABLE, DIMENSION (:) :: soilW_gbox
-REAL, ALLOCATABLE, DIMENSION (:) :: soilW_fin
-REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
-REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
-REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
-REAL, ALLOCATABLE, DIMENSION (:,:) :: land
-REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr_qd
-REAL, ALLOCATABLE, DIMENSION (:,:) :: larea_qd
-REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr
-REAL, ALLOCATABLE, DIMENSION (:,:) :: larea
-REAL, ALLOCATABLE, DIMENSION (:,:) :: fcover_in
-REAL, ALLOCATABLE, DIMENSION (:,:,:) :: fcover
-REAL, ALLOCATABLE, DIMENSION (:,:) :: trans_in
-REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
+REAL(KIND=DP), PARAMETER :: fillvalue = 1.0D20
+REAL(KIND=DP), DIMENSION (nlon) :: lon
+REAL(KIND=DP), DIMENSION (nlat) :: lat
+REAL(KIND=DP), DIMENSION (nland) :: source_lon !
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:) :: soilW_gbox
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:) :: soilW_fin
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: B_grid
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: land
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: icwtr_qd
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: larea_qd
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: icwtr
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: larea
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: fcover_in
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: fcover
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: trans_in
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: trans
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
