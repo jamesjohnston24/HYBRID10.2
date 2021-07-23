@@ -68,6 +68,10 @@ size = ntimes * nland / ntasks
 ALLOCATE (result (ntimes,nland/ntasks))
 ALLOCATE (lon_chunk(nland/ntasks))
 ALLOCATE (lat_chunk(nland/ntasks))
+ALLOCATE (source(ntimes,nland))
+ALLOCATE (source_lat(nland))
+ALLOCATE (source_larea(nland))
+ALLOCATE (clm_in(nlon,nlat,ntimes))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
