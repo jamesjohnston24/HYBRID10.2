@@ -20,11 +20,11 @@ INTEGER :: nland_chunk
 INTEGER :: size
 INTEGER :: nyr_run
 INTEGER :: kyr_off
-REAL ((KIND=DP)), DIMENSION (ntimes,nland) :: source ! 0.4 GB
-REAL ((KIND=DP)), DIMENSION (nland) :: source_lat
-REAL ((KIND=DP)), DIMENSION (nland) :: source_larea ! km2
-REAL ((KIND=DP)), DIMENSION (nlon,nlat,ntimes) :: clm_in ! 1.5 GB
-REAL ((KIND=DP)), ALLOCATABLE, DIMENSION (:,:) :: result ! 0.1 GB
+REAL (KIND=DP), DIMENSION (ntimes,nland) :: source ! 0.4 GB
+REAL (KIND=DP), DIMENSION (nland) :: source_lat
+REAL (KIND=DP), DIMENSION (nland) :: source_larea ! km2
+REAL (KIND=DP), DIMENSION (nlon,nlat,ntimes) :: clm_in ! 1.5 GB
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: result ! 0.1 GB
 REAL, ALLOCATABLE, DIMENSION (:) :: lon_chunk
 REAL, ALLOCATABLE, DIMENSION (:) :: lat_chunk
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: tmp ! K ! 0.59 (30 yr over 20 processes)
