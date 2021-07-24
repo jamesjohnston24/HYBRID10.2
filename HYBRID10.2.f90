@@ -316,7 +316,7 @@ syr = 1901
 kyr = 1
 before_all = MPI_Wtime()
 DO kyr_clm = syr, syr + nyr_spin_clm - 1
- !CALL get_clm (kyr_clm, kyr)
+ CALL get_clm (kyr_clm, kyr)
  !---------------------------------------------------------------------!
  ! Write climate binaries if requested.
  !---------------------------------------------------------------------!
@@ -336,19 +336,19 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
  !---------------------------------------------------------------------!
  ! Read climate binaries if requested.
  !---------------------------------------------------------------------!
- ! Read separate file for each core
- !(from https://warwick.ac.uk/research/rtp/sc/rse/training/advancedmpi/
- !04_mpi-io.pdf).
- WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64/Climate_64_", &
-  kyr_clm, '_', myrank, ".bin"
- ! Open the file for reading.
- CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
-  MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
- ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, result, size, &
-  MPI_REAL, MPI_STATUS_IGNORE, error)
- ! Close the file.
- CALL MPI_File_Close(file_handle, error)
+! ! Read separate file for each core
+! !(from https://warwick.ac.uk/research/rtp/sc/rse/training/advancedmpi/
+! !04_mpi-io.pdf).
+! WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64/Climate_64_", &
+!  kyr_clm, '_', myrank, ".bin"
+! ! Open the file for reading.
+! CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+!  MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
+! ! MPI_IO is binary output format.
+! CALL MPI_File_read(file_handle, result, size, &
+!  MPI_REAL, MPI_STATUS_IGNORE, error)
+! ! Close the file.
+! CALL MPI_File_Close(file_handle, error)
 
 ! WRITE (file_name, "(A,I0.4,A,I0.4,A4)") "Climate_64/Climate_64_", &
 !  kyr_clm, '_', myrank, ".bin"
@@ -369,6 +369,8 @@ END DO ! kyr
 after_all = MPI_Wtime()
 WRITE (*,"('All took ',F0.4,' seconds on ',I0)") &
  after_all-before_all,myrank
+write (*,*) myrank,tmp(20,1,30)
+stop
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
