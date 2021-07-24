@@ -1,5 +1,7 @@
 SUBROUTINE get_clm (kyr_clm, kyr)
 
+! CRUJRA climate data are SP real, so read in as such.
+
 use netcdf
 USE mpi
 USE shared
