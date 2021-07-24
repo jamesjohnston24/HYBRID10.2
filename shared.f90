@@ -20,7 +20,7 @@ INTEGER :: nland_chunk
 INTEGER :: size
 INTEGER :: nyr_run
 INTEGER :: kyr_off
-REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: source ! 0.4 GB
+REAL (KIND=SP), ALLOCATABLE, DIMENSION (:,:) :: source ! 0.4 GB
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: source_lat
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: source_larea ! km2
 REAL (KIND=SP), ALLOCATABLE, DIMENSION (:,:,:) :: clm_in ! 1.5 GB
