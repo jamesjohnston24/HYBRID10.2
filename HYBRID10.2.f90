@@ -29,8 +29,7 @@ CHARACTER(LEN=4) :: char_year
 CHARACTER(LEN=30) :: var_name
 REAL(KIND=DP) :: before_all, after_all, before_in, after_in
 REAL(KIND=DP) :: before_scatter, after_scatter
-
-REAL(KIND=DP), PARAMETER :: fillvalue = 1.0D20
+REAL(KIND=SP), PARAMETER :: fillvalue = 1.0E20
 REAL(KIND=DP), DIMENSION (nlon) :: lon
 REAL(KIND=DP), DIMENSION (nlat) :: lat
 REAL(KIND=DP), DIMENSION (nland) :: source_lon !
