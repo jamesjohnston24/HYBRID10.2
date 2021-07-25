@@ -522,7 +522,7 @@ IF (myrank == root) THEN
  CALL CHECK (NF90_PUT_ATT (ncid, varidB, "_FillValue", fillvalue))
  CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "_FillValue", fillvalue))
  CALL CHECK (NF90_ENDDEF (ncid))
- !CALL CHECK (NF90_PUT_VAR (ncid, lon_varid, lon))
+ CALL CHECK (NF90_PUT_VAR (ncid, lon_varid, lon))
  !CALL CHECK (NF90_PUT_VAR (ncid, lat_varid, lat))
  !CALL CHECK (NF90_PUT_VAR (ncid,     varidW, soilW_grid))
  !CALL CHECK (NF90_PUT_VAR (ncid,     varidB, B_grid))
