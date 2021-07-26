@@ -16,12 +16,12 @@
 #! How many whole nodes should be allocated?
 #! nodes: 2   8   32
 #! cpus: 64 256 1024
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #! How many (MPI) tasks will there be in total? (<= nodes*32)
 #! The skylake/skylake-himem nodes have 32 CPUs (cores) each.
-#SBATCH --ntasks=64
+#SBATCH --ntasks=1
 #! How much wallclock time will be required?
-#SBATCH --time=00:01:00
+#SBATCH --time=00:00:01
 #! What types of email messages do you wish to receive?
 #SBATCH --mail-user=adf10@cam.ac.uk
 #SBATCH --mail-type=ALL
