@@ -332,7 +332,7 @@ DO kyr_clm = syr, syr + nyr_spin_clm - 1
  !WRITE (20) tmax
  !WRITE (20) tmin
  !WRITE (20) ws
- !CLOSE (20)
+ !CLOSE (20
  !---------------------------------------------------------------------!
  ! Read climate binaries if requested.
  !---------------------------------------------------------------------!
