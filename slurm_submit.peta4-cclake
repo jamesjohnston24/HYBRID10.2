@@ -23,7 +23,7 @@
 #! How much wallclock time will be required?
 #SBATCH --time=00:01:00
 #! What types of email messages do you wish to receive?
-#SBATCH --mail-type=adf10@cam.ac.uk
+#SBATCH --mail-user=adf10@cam.ac.uk
 #SBATCH --mail-type=ALL
 #! Uncomment this to prevent the job from being requeued (e.g. if
 #! interrupted by node failure or system downtime):
