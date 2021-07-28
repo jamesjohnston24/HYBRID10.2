@@ -6,7 +6,7 @@ CHARACTER(LEN=200) :: RSF_Out_file_name
 CHARACTER(LEN=200) :: RSF_In_file_name
 LOGICAL :: RSF_In, RSF_Out
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
-INTEGER, PARAMETER :: nland = 67424 ! nland = 67420
+INTEGER, PARAMETER :: nland = 67456 ! nland = 67420
 INTEGER, PARAMETER :: root = 1
 INTEGER :: myrank
 INTEGER :: error
