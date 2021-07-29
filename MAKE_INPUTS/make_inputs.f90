@@ -15,13 +15,18 @@ USE double
 IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
-INTEGER :: kyr_clm, ncid, varid
+INTEGER, PARAMETER :: nland = 67420
+INTEGER :: kyr_clm, ncid, varid, i, j, k
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: source
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 ALLOCATE (clm_in (nlon, nlat, ntimes))
+ALLOCATE (source (ntimes, nland))
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 kyr_clm = 2020
@@ -36,7 +41,18 @@ varid = 4
 ! Origin at IDL and SP.
 CALL CHECK ( NF90_GET_VAR ( ncid, varid, clm_in ))
 CALL CHECK ( NF90_CLOSE ( ncid ))
+k = 1
+DO j = 1, nlat
+ DO i = 1, nlon
+  IF (clm_in (i,j,1) < 1.0D10) THEN
+   source (:,k) = clm_in (i,j,:)
+   k = k + 1
+  END IF
+ END DO ! i
+END DO ! j
 !----------------------------------------------------------------------!
+
+WRITE (*,*) clm_in (
 
 !----------------------------------------------------------------------!
 CONTAINS
