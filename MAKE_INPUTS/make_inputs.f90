@@ -19,6 +19,7 @@ INTEGER, PARAMETER :: nland = 67420
 INTEGER :: kyr_clm, ncid, varid, i, j, k
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: source
+REAL (KIND=dp), ALLOCATABLE, DIMENSION (:,:) :: larea_qd
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
@@ -26,6 +27,15 @@ CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
 ALLOCATE (clm_in (nlon, nlat, ntimes))
 ALLOCATE (source (ntimes, nland))
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+ALLOCATE (larea_qd (2*nlon, 2*nlat))
+file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
+CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
+CALL CHECK (NF90_CLOSE (ncid))
+DEALLOCATE (larea_qd)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -53,6 +63,8 @@ END DO ! j
 !----------------------------------------------------------------------!
 
 WRITE (*,*) source (1, 1)
+DEALLOCATE (clm_in)
+DEALLOVATE (source)
 
 !----------------------------------------------------------------------!
 CONTAINS
