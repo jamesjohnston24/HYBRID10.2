@@ -25,12 +25,12 @@ CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-ALLOCATE (clm_in (ntimes, nlat, nlon))
+ALLOCATE (clm_in (nlon, nlat, ntimes)) ! Reverse order from netCDF file
 ALLOCATE (source (ntimes, nland))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-ALLOCATE (carea (2*nlat, 2*nlon))
+ALLOCATE (carea (2*nlon, 2*nlat)) ! Reverse order from net CDF file
 file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
 CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
@@ -56,8 +56,8 @@ CALL CHECK ( NF90_CLOSE ( ncid ))
 k = 1
 DO j = 1, nlat
  DO i = 1, nlon
-  IF (clm_in (1,j,i) < 1.0D10) THEN
-   source (:,k) = clm_in (:,j,i)
+  IF (clm_in (i,j,1) < 1.0D10) THEN
+   source (:,k) = clm_in (i,j,:)
    k = k + 1
   END IF
  END DO ! i
