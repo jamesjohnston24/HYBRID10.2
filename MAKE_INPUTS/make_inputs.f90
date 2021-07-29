@@ -7,10 +7,13 @@ PROGRAM MAKE_INPUTS
 !----------------------------------------------------------------------!
 
 IMPLICIT NONE
+INTEGER :: kyr_clm
 CHARACTER(LEN=200) :: file_name, var_name
-CHARACTER(LEN=4) :: car_year
+CHARACTER(LEN=4) :: char_year
 
+kyr_clm = 2020
 var_name = 'tmp'
+WRITE (char_year, '(I4)') kyr_clm
 file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//char_year//&
  &'.365d.noc.nc'
