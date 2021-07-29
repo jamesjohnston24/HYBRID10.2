@@ -8,15 +8,20 @@ PROGRAM MAKE_INPUTS
 
 !----------------------------------------------------------------------!
 USE netcdf
+USE double
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER :: kyr_clm, ncid
+INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
+INTEGER :: kyr_clm, ncid, varid
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
+
+ALLOCATE (clm_in (nlon, nlat, ntimes))
 
 !----------------------------------------------------------------------!
 kyr_clm = 2020
@@ -27,6 +32,9 @@ file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &char_year//'.365d.noc.nc'
 WRITE (*,*) 'Opening file: ',file_name
 CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
+varid = 4
+! Origin at IDL and SP.
+CALL CHECK ( NF90_GET_VAR ( ncid, varid, clm_in ))
 CALL CHECK ( NF90_CLOSE ( ncid ))
 !----------------------------------------------------------------------!
 
