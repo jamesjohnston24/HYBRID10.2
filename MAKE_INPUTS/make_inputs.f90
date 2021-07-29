@@ -19,21 +19,23 @@ INTEGER, PARAMETER :: nland = 67420
 INTEGER :: kyr_clm, ncid, varid, i, j, k
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: source
-REAL (KIND=dp), ALLOCATABLE, DIMENSION (:,:) :: larea_qd
+REAL (KIND=dp), ALLOCATABLE, DIMENSION (:,:) :: carea
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-ALLOCATE (clm_in (nlon, nlat, ntimes))
+ALLOCATE (clm_in (ntimes, nlat, nlon))
 ALLOCATE (source (ntimes, nland))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-ALLOCATE (larea_qd (2*nlon, 2*nlat))
+ALLOCATE (carea (2*nlat, 2*nlon))
 file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
 CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
+varid = 9
+CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
 CALL CHECK (NF90_CLOSE (ncid))
 DEALLOCATE (larea_qd)
 !----------------------------------------------------------------------!
@@ -54,8 +56,8 @@ CALL CHECK ( NF90_CLOSE ( ncid ))
 k = 1
 DO j = 1, nlat
  DO i = 1, nlon
-  IF (clm_in (i,j,1) < 1.0D10) THEN
-   source (:,k) = clm_in (i,j,:)
+  IF (clm_in (1,j,i) < 1.0D10) THEN
+   source (:,k) = clm_in (:,j,i)
    k = k + 1
   END IF
  END DO ! i
