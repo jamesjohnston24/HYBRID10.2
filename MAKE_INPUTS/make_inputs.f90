@@ -37,7 +37,7 @@ CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
 varid = 9
 CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
 CALL CHECK (NF90_CLOSE (ncid))
-DEALLOCATE (larea_qd)
+DEALLOCATE (carea)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
