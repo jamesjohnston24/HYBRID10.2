@@ -37,6 +37,8 @@ CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
 varid = 5
 CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
 CALL CHECK (NF90_CLOSE (ncid))
+write (*,*) carea (10,10),carea(11,10)
+write (*,*) carea (11,11),carea(11,12)
 DEALLOCATE (carea)
 stop
 !----------------------------------------------------------------------!
