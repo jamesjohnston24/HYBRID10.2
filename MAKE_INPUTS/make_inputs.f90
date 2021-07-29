@@ -64,7 +64,7 @@ END DO ! j
 
 WRITE (*,*) source (1, 1)
 DEALLOCATE (clm_in)
-DEALLOVATE (source)
+DEALLOCATE (source)
 
 !----------------------------------------------------------------------!
 CONTAINS
