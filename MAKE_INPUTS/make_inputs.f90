@@ -26,7 +26,7 @@ REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
 REAL, ALLOCATABLE, DIMENSION (:,:) :: source
-REAL, ALLOCATABLE, DIMENSION (:,:) :: buffer
+REAL, ALLOCATABLE, DIMENSION (:,:) :: clm_buffer
 REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
@@ -148,14 +148,14 @@ DO kyr_clm = 1911, 1920
   ! Send data to each processor as 'buffer'.
   DO dest = 1, nprocs-1
     i = dest * nland / nprocs + 1
-    buffer (:,:) = source (:,i:i+nland/nprocs-1)
-    CALL MPI_SEND ( buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
+    clm_buffer (:,:) = source (:,i:i+nland/nprocs-1)
+    CALL MPI_SEND ( clm_buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
   END DO
-  ! Set 'buffer' for root as well.
-  buffer (:,:) = source (:,1:size)
+  ! Set 'clm_buffer' for root as well.
+  clm_buffer (:,:) = source (:,1:size)
  ELSE
   WRITE (*,*) 'Receiving by myrank = ',myrank
-  CALL MPI_RECV ( buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
+  CALL MPI_RECV ( clm_buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
                   MPI_STATUS_IGNORE, error)
  END IF
  !---------------------------------------------------------------------!
@@ -175,7 +175,7 @@ DO kyr_clm = 1911, 1920
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
  ! MPI_IO is binary output format. Write using individual file pointer.
- CALL MPI_File_write(file_handle, buffer, size, &
+ CALL MPI_File_write(file_handle, clm_buffer, size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
