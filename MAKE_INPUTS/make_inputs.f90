@@ -99,8 +99,8 @@ Tmean = 0.0 ! Mean land temperature (oC)
 DO j = 1, nlat
  DO i = 1, nlon
   IF (clm_in (i,j,1) /= clm_fill) THEN
-   Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j)
-   Aland = Aland + larea (i,j)
+   Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j) * fwice (i,j)
+   Aland = Aland + larea (i,j) * fwice (i,j)
   END IF
  END DO ! i
 END DO ! j
