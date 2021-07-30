@@ -3,7 +3,8 @@ USE mpi
 IMPLICIT NONE
 
 INTEGER :: nland = 67420
-INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk, error
+INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
+INTEGER :: error
 CHARACTER(LEN=200) :: var_name, file_name
 REAL :: TB
 REAL, ALLOCATABLE, DIMENSION (:) :: B
