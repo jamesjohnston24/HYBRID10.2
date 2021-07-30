@@ -18,10 +18,11 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
 INTEGER, PARAMETER :: root = 0
+INTEGER, PARAMETER :: size = ntimes * nland
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: clm_fill = 1.0E20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
-INTEGER :: error, nprocs, myrank
+INTEGER :: error, nprocs, myrank, file_handle
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
