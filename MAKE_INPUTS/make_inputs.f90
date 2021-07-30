@@ -126,6 +126,8 @@ WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 
 !----------------------------------------------------------------------!
 ! Send data to processors.
+! Play with this if want different grid-box distributions.
+! Here just in order of k, evenly.
 !----------------------------------------------------------------------!
 IF (MOD (nland, nprocs) /= 0.0) THEN
  WRITE (*,*) 'Problem, stopping, nland, nprocs = ', nland, nprocs
@@ -150,7 +152,7 @@ END IF
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-! Write input files for each core.
+! Write input files for each processor.
 !----------------------------------------------------------------------!
 WRITE (char_nprocs, '(I4)') nprocs
 WRITE (char_myrank, '(I4)') myrank
@@ -164,7 +166,7 @@ WRITE (*,*) 'Writing to ', TRIM(file_name)
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
 ! MPI_IO is binary output format. Write using individual file pointer.
-CALL MPI_File_write(file_handle, source, size, &
+CALL MPI_File_write(file_handle, buffer, size, &
  MPI_REAL, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
