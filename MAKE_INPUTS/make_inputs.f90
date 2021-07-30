@@ -49,6 +49,7 @@ CALL CHECK (NF90_GET_VAR (ncid, varid, icwtr))
 CALL CHECK (NF90_CLOSE (ncid))
 ! Aggregate from QD to HD.
 ALLOCATE (larea(nlon,nlat))
+ALLOCATE (fwice(nlon,nlat))
 jj = 1
 DO j = 1, nlat
  ii = 1
