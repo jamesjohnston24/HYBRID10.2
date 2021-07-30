@@ -78,6 +78,8 @@ DEALLOCATE (carea)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
+size = ntimes * nland / nprocs
+ALLOCATE (buffer (ntimes,nland/nprocs))
 DO kyr_clm = 1901, 1910
 
 !kyr_clm = 2020
@@ -106,7 +108,7 @@ DO kyr_clm = 1901, 1910
   END DO ! j
   !--------------------------------------------------------------------!
 
-  WRITE (*,*) source (1, 1)
+  WRITE (*,*) kyr_clm, source (1, 1)
   !DEALLOCATE (clm_in)
   !DEALLOCATE (source)
 
@@ -142,8 +144,6 @@ DO kyr_clm = 1901, 1910
   WRITE (*,*) 'Problem, stopping, nland, nprocs = ', nland, nprocs
   CALL MPI_ABORT (MPI_COMM_WORLD, errcode, error)
  END IF
- size = ntimes * nland / nprocs
- ALLOCATE (buffer (ntimes,nland/nprocs))
  IF (myrank == root) THEN
   ! Send data to each processor as 'buffer'.
   DO dest = 1, nprocs-1
