@@ -80,7 +80,7 @@ DEALLOCATE (carea)
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
 ALLOCATE (clm_buffer (ntimes,nland/nprocs))
-DO kyr_clm = 1911, 1920
+DO kyr_clm = 1901, 1910
 
 !kyr_clm = 2020
  var_name = 'tmp'
