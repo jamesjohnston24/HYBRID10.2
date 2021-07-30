@@ -16,17 +16,17 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
-REAL (KIND=DP), PARAMETER :: tf = 273.15
+REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: clm_fill = 1.0E20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
-REAL (KIND=DP) :: Aland ! Total land area (km^2)
-REAL (KIND=DP) :: Tmean ! Global mean annual surface temperature (oC)
+REAL :: Aland ! Total land area (km^2)
+REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
-REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: source
-REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
-REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
-REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
-REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
+REAL, ALLOCATABLE, DIMENSION (:,:) :: source
+REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
+REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
+REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
+REAL, ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
@@ -74,9 +74,7 @@ CALL CHECK ( NF90_CLOSE ( ncid ))
 k = 1
 DO j = 1, nlat
  DO i = 1, nlon
-write (*,*) clm_in(i,j,1)
-stop
-  IF (clm_in (i,j,1) < 1.0D10) THEN
+  IF (clm_in (i,j,1) \= clm_fill) THEN
    source (:,k) = clm_in (i,j,:)
    k = k + 1
   END IF
@@ -91,19 +89,17 @@ DEALLOCATE (source)
 !----------------------------------------------------------------------!
 ! Compute global mean annual land surface temperature (oC).
 !----------------------------------------------------------------------!
-Aland = 0.0_DP ! Total land area (km^2)
-Tmean = 0.0_DP ! Mean land temperature (oC)
+Aland = 0.0 ! Total land area (km^2)
+Tmean = 0.0 ! Mean land temperature (oC)
 DO j = 1, nlat
  DO i = 1, nlon
-write (*,*)clm_in(i,j,1),clm_fill
-stop
   IF (clm_in (i,j,1) /= clm_fill) THEN
    Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j)
    Aland = Aland + larea (i,j)
   END IF
  END DO ! i
 END DO ! j
-Tmean = Tmean / (DBLE (ntimes) * Aland) - tf
+Tmean = Tmean / (FLOAT (ntimes) * Aland) - tf
 WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
 WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
