@@ -1,0 +1,17 @@
+F90 = mpif90 -I/usr/local/Cluster-Apps/intel/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/include
+
+FFLAGS = -check -traceback
+#FFLAGS = -O2
+LDFLAGS = -lnetcdff -lnetcdf
+
+SRC = \
+	make_process.f90
+
+OBJ = $(SRC:.f90=.o)
+
+make_process.exe : $(OBJ)
+	$(F90) $(FFLAGS) -o make_process.exe $(OBJ) $(LDFLAGS)
+
+# Main routine.
+make_process.o : make_process.f90
+	$(F90) $(FFLAGS) -c make_process.f90
