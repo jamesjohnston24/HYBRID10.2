@@ -131,7 +131,7 @@ WRITE (char_nprocs, '(I4)') nprocs
 WRITE (char_myrank, '(I4)') myrank
 WRITE (file_name, "(A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
-&"CPUs_",myrank,".bin"
+&"CPUs/",myrank,".bin"
 ! Delete existing file.
 CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 WRITE (*,*) 'Writing to ', TRIM(file_name)
