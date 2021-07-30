@@ -22,7 +22,7 @@ INTEGER, PARAMETER :: size = ntimes * nland
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: clm_fill = 1.0E20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
-INTEGER :: error, nprocs, myrank, file_handle
+INTEGER :: error, nprocs, myrank, file_handle, dest
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
@@ -125,9 +125,11 @@ WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
 
 IF (myrank == root) THEN
- CALL MPI_SEND ( source, size, MPI_FLOAT, 1, 1, MPI_COMM_WORLD, error)
+ DO dest = 1, nprocs
+   CALL MPI_SEND ( source, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
+ END DO
 ELSE
- CALL MPI_RECV ( source, size, MPI_FLOAT, 0, 1, MPI_COMM_WORLD, &
+ CALL MPI_RECV ( source, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
                  MPI_STATUS_IGNORE, error)
 END IF
 
@@ -147,7 +149,7 @@ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
 ! MPI_IO is binary output format. Write using individual file pointer.
 CALL MPI_File_write(file_handle, source, size, &
- MPI_FLOAT, MPI_STATUS_IGNORE, error)
+ MPI_REAL, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
