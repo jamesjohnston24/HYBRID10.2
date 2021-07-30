@@ -17,10 +17,13 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
+REAL (KIND=DP) :: Aland ! Total land area (km^2)
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: source
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
@@ -35,7 +38,7 @@ ALLOCATE (carea (2*nlon, 2*nlat)) ! Reverse order from net CDF file
 file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
 CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
-varid = 5 ! QD area, km2
+varid = 5 ! QD area, km^2
 CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
 CALL CHECK (NF90_CLOSE (ncid))
 ! Aggregate from QD to HD.
@@ -44,14 +47,12 @@ jj = 1
 DO j = 1, nlat
  ii = 1
  DO i = 1, nlon
-  larea (i,j) = SUM ( carea (ii:ii+1,jj:jj+1) )
+  larea (i,j) = SUM ( carea (ii:ii+1,jj:jj+1) ) ! km^2
   ii = ii + 2
  END DO
  jj = jj + 2
 END DO ! j
-write (*,*) carea (1,360)
 DEALLOCATE (carea)
-write (*,*) larea (448,180)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -81,6 +82,18 @@ END DO ! j
 WRITE (*,*) source (1, 1)
 DEALLOCATE (clm_in)
 DEALLOCATE (source)
+
+!----------------------------------------------------------------------!
+! Compute global mean land surface temperature (oC).
+!----------------------------------------------------------------------!
+Aland = 0.0_DP ! Total land area (km^2).
+DO j = 1, nlat
+ DO i = 1, nlon
+  Aland = Aland + larea (i,j)
+ END DO ! i
+END DO ! j
+WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 CONTAINS
