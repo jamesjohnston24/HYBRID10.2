@@ -14,6 +14,7 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: error, nprocs, myrank, file_handle, buffer, size
+REAL, ALLOCATABLE, DIMENSION (:,:) :: buffer
 CHARACTER(LEN=200) :: file_name
 !----------------------------------------------------------------------!
 
