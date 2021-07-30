@@ -49,6 +49,7 @@ DO j = 1, nlat
  END DO
  jj = jj + 2
 END DO ! j
+write (*,*) carea (1,360)
 DEALLOCATE (carea)
 write (*,*) larea (10,10),larea(11,10)
 write (*,*) larea (11,11),larea(11,12)
