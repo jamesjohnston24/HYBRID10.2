@@ -17,10 +17,11 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
+INTEGER, PARAMETER :: root = 0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: clm_fill = 1.0E20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
-INTEGER :: error, nproce, myrank
+INTEGER :: error, nprocs, myrank
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
@@ -120,6 +121,23 @@ END DO ! j
 Tmean = Tmean / (FLOAT (ntimes) * Aland) - tf
 WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
 WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Write input files for each core.
+!----------------------------------------------------------------------!
+WRITE (file_name, "(A,I0,A)") '/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_'//nprocs//'CPUs'
+! Delete existing file.
+CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+! Open the file for writing.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_write(file_handle, source, size, &
+ MPI_FLOAT, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
