@@ -126,7 +126,7 @@ WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
 ! Send data to processors.
 !----------------------------------------------------------------------!
-IF (MOD (nland, ntasks) /= 0.0) THEN
+IF (MOD (nland, nprocs) /= 0.0) THEN
  WRITE (*,*) 'Problem, stopping, nland, ntasks = ', nland, ntasks
  CALL MPI_ABORT (MPI_COMM_WORLD, errcode, error)
 END IF
