@@ -129,9 +129,9 @@ WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
 WRITE (char_nprocs, '(I4)') nprocs
 WRITE (char_myrank, '(I4)') myrank
-WRITE (file_name, "(A,I0,A)") '/home/adf10/rds/rds-mb425-geogscratch/&
-&adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_'//TRIM(char_nprocs)//&
-&'CPUs_//TRIM(char_myrank)//.bin'
+WRITE (file_name, "(A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
+&"CPUs_",myrank,".bin"
 ! Delete existing file.
 CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 WRITE (*,*) 'Writing to ', TRIM(file_name)
