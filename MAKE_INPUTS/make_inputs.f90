@@ -20,7 +20,7 @@ INTEGER, PARAMETER :: nland = 67420
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: clm_fill = 1.0E20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
-INTEGER :: error
+INTEGER :: error, nproce, myrank
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
@@ -35,6 +35,11 @@ CHARACTER(LEN=4) :: char_year
 
 !----------------------------------------------------------------------!
 CALL MPI_INIT ( error )
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+CALL MPI_Comm_size (MPI_COMM_WORLD,nprocs,error)
+CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
