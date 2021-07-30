@@ -14,7 +14,7 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
-REAL, ALLOCATABLE, DIMENSION (:,:) :: buffer
+REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp
 CHARACTER(LEN=200) :: file_name, var_name
 !----------------------------------------------------------------------!
 
@@ -31,7 +31,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 ! Read input data for this processor.
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
-ALLOCATE (buffer(ntimes,nland/nprocs))
+ALLOCATE (tmp(ntimes,nland/nprocs))
 DO kyr_clm = 1901, 1920
 
  var_name = 'tmp'
@@ -42,13 +42,13 @@ DO kyr_clm = 1901, 1920
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, buffer, size, &
+ CALL MPI_File_read(file_handle, tmp, size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
 
- write (*,*) kyr_clm, myrank, buffer (1,1)
+ write (*,*) kyr_clm, myrank, tmp (1,1)
 
 END DO ! kyr_clm = 1901, 1910
 
