@@ -32,7 +32,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
 ALLOCATE (buffer(ntimes,nland/nprocs))
-DO kyr_clm = 1901, 1910
+DO kyr_clm = 1901, 1920
 
  var_name = 'tmp'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
