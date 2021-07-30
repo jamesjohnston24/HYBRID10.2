@@ -26,6 +26,7 @@ REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
 REAL, ALLOCATABLE, DIMENSION (:,:) :: source
+REAL, ALLOCATABLE, DIMENSION (:,:) :: buffer
 REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
@@ -131,13 +132,16 @@ IF (MOD (nland, nprocs) /= 0.0) THEN
  CALL MPI_ABORT (MPI_COMM_WORLD, errcode, error)
 END IF
 size = ntimes * nland / nprocs
+ALLOCATE (buffer (ntimes,nland/nprocs))
 IF (myrank == root) THEN
- DO dest = 1, nprocs-1
-   CALL MPI_SEND ( source, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
+ DO dest = 0, nprocs-1
+   i = size * dest + 1
+   buffer (:,:) = source (:,i:i+size-1)
+   CALL MPI_SEND ( buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
  END DO
 ELSE
  WRITE (*,*) 'Receiving by myrank = ',myrank
- CALL MPI_RECV ( source, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
+ CALL MPI_RECV ( buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
                  MPI_STATUS_IGNORE, error)
 END IF
 !----------------------------------------------------------------------!
