@@ -93,6 +93,8 @@ Aland = 0.0_DP ! Total land area (km^2)
 Tmean = 0.0_DP ! Mean land temperature (oC)
 DO j = 1, nlat
  DO i = 1, nlon
+write (*,*)clm_in(i,j,1),clm_fill
+stop
   IF (clm_in (i,j,1) /= clm_fill) THEN
    Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j)
    Aland = Aland + larea (i,j)
