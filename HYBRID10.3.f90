@@ -13,8 +13,13 @@ USE mpi
 IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
+INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
+REAL :: dB, NPP, BL, fT, Tc
+REAL, PARAMETER :: dt = 21600.0
+REAL, PARAMETER :: tf = 273.15
 REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp
+REAL, ALLOCATABLE, DIMENSION (:) :: B
 CHARACTER(LEN=200) :: file_name, var_name
 !----------------------------------------------------------------------!
 
@@ -25,6 +30,12 @@ CALL MPI_INIT ( error )
 !----------------------------------------------------------------------!
 CALL MPI_Comm_size (MPI_COMM_WORLD,nprocs,error)
 CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+nland_chunk = nland / nprocs
+ALLOCATE (B(nland_chunk))
+B = 0.0
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -48,7 +59,19 @@ DO kyr_clm = 1901, 1920
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
 
- write (*,*) kyr_clm, myrank, tmp (1,1)
+ write (*,*) kyr_clm, myrank, tmp (1,1), B(1,1)
+
+ DO t = 1, ntimes
+  DO k = 1, nland_chunk
+   Tc = tmp (t,k) - tf
+   fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
+        (1.0 + EXP (0.3 * (0.0 - Tc))))
+   NPP = fT * 3.0 / (1460.0 * dt)
+   BL = B (k) / (12.5 * 365.0 * 86400.0)
+   dB = NPP - BL
+   B (k) = B (k) + dt * dB
+  END DO ! k = 1, nland_chunk
+ END DO ! t = 1, ntimes
 
 END DO ! kyr_clm = 1901, 1910
 
