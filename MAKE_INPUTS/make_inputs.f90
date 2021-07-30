@@ -17,6 +17,7 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
 REAL (KIND=DP), PARAMETER :: tf = 273.15
+REAL (KIND=DP), PARAMETER :: clm_fill = 1.0D20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
 REAL (KIND=DP) :: Aland ! Total land area (km^2)
 REAL (KIND=DP) :: Tmean ! Global mean annual surface temperature (oC)
@@ -66,7 +67,7 @@ file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &char_year//'.365d.noc.nc'
 WRITE (*,*) 'Opening file: ',file_name
 CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
-varid = 4
+varid = 4 ! Temperature (K)
 ! Origin at IDL and SP.
 CALL CHECK ( NF90_GET_VAR ( ncid, varid, clm_in ))
 CALL CHECK ( NF90_CLOSE ( ncid ))
@@ -92,8 +93,10 @@ Aland = 0.0_DP ! Total land area (km^2)
 Tmean = 0.0_DP ! Mean land temperature (oC)
 DO j = 1, nlat
  DO i = 1, nlon
-  Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j)
-  Aland = Aland + larea (i,j)
+  IF (clm_in (i,j,1) /= clm_fill) THEN
+   Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j)
+   Aland = Aland + larea (i,j)
+  END IF
  END DO ! i
 END DO ! j
 Tmean = Tmean / (DBLE (ntimes) * Aland) - tf
