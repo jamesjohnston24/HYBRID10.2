@@ -13,9 +13,9 @@ USE mpi
 IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
-INTEGER :: error, nprocs, myrank, file_handle, size
+INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
 REAL, ALLOCATABLE, DIMENSION (:,:) :: buffer
-CHARACTER(LEN=200) :: file_name
+CHARACTER(LEN=200) :: file_name var_name
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -30,6 +30,8 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 ! Read input data for this processor.
 !----------------------------------------------------------------------!
+kyr_clm = 2020
+var_name = 'tmp'
 size = ntimes * nland / nprocs
 ALLOCATE (buffer(ntimes,nland/nprocs))
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
