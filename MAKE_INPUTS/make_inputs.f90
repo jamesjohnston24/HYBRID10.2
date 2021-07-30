@@ -124,6 +124,13 @@ WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
 WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
 
+IF (myrank == root) THEN
+ CALL MPI_SEND ( source, size, MPI_FLOAT, 1, 1, MPI_COMM_WORLD, error)
+ELSE
+ CALL MPI_RECV ( source, size, MPI_FLOAT, 0, 1, MPI_COMM_WORLD, &
+                 MPI_STATUS_IGNORE, error)
+END IF
+
 !----------------------------------------------------------------------!
 ! Write input files for each core.
 !----------------------------------------------------------------------!
