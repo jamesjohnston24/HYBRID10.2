@@ -78,105 +78,111 @@ DEALLOCATE (carea)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-kyr_clm = 2020
-var_name = 'tmp'
+DO kyr_clm = 1901, 1910
 
-IF (myrank == root) THEN
+!kyr_clm = 2020
+ var_name = 'tmp'
 
- WRITE (char_year, '(I4)') kyr_clm
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
-  &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
-  &char_year//'.365d.noc.nc'
- WRITE (*,*) 'Opening file: ',file_name
- CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
- varid = 4 ! Temperature (K)
- ! Origin at IDL and SP.
- CALL CHECK ( NF90_GET_VAR ( ncid, varid, clm_in ))
- CALL CHECK ( NF90_CLOSE ( ncid ))
- k = 1
- DO j = 1, nlat
-  DO i = 1, nlon
-   IF (clm_in (i,j,1) /= clm_fill) THEN
-    source (:,k) = clm_in (i,j,:)
-    k = k + 1
-   END IF
-  END DO ! i
- END DO ! j
- !---------------------------------------------------------------------!
+ IF (myrank == root) THEN
 
- WRITE (*,*) source (1, 1)
- !DEALLOCATE (clm_in)
- !DEALLOCATE (source)
-
- !---------------------------------------------------------------------!
- ! Compute global mean annual land surface temperature (oC).
- !---------------------------------------------------------------------!
- Aland = 0.0 ! Total land area (km^2)
- Tmean = 0.0 ! Mean land temperature (oC)
- DO j = 1, nlat
-  DO i = 1, nlon
-   IF (clm_in (i,j,1) /= clm_fill) THEN
-    Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j) * &
-            (1.0 - fwice (i,j))
-    Aland = Aland + larea (i,j) * (1.0 - fwice (i,j))
+  WRITE (char_year, '(I4)') kyr_clm
+  file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
+   &char_year//'.365d.noc.nc'
+  WRITE (*,*) 'Opening file: ',file_name
+  CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
+  varid = 4 ! Temperature (K)
+  ! Origin at IDL and SP.
+  CALL CHECK ( NF90_GET_VAR ( ncid, varid, clm_in ))
+  CALL CHECK ( NF90_CLOSE ( ncid ))
+  k = 1
+  DO j = 1, nlat
+   DO i = 1, nlon
+    IF (clm_in (i,j,1) /= clm_fill) THEN
+     source (:,k) = clm_in (i,j,:)
+     k = k + 1
     END IF
-  END DO ! i
- END DO ! j
- Tmean = Tmean / (FLOAT (ntimes) * Aland) - tf
- WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
- WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
+   END DO ! i
+  END DO ! j
+  !--------------------------------------------------------------------!
+
+  WRITE (*,*) source (1, 1)
+  !DEALLOCATE (clm_in)
+  !DEALLOCATE (source)
+
+  !--------------------------------------------------------------------!
+  ! Compute global mean annual land surface temperature (oC).
+  !--------------------------------------------------------------------!
+  Aland = 0.0 ! Total land area (km^2)
+  Tmean = 0.0 ! Mean land temperature (oC)
+  DO j = 1, nlat
+   DO i = 1, nlon
+    IF (clm_in (i,j,1) /= clm_fill) THEN
+     Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j) * &
+             (1.0 - fwice (i,j))
+     Aland = Aland + larea (i,j) * (1.0 - fwice (i,j))
+     END IF
+   END DO ! i
+  END DO ! j
+  Tmean = Tmean / (FLOAT (ntimes) * Aland) - tf
+  WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
+  WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
+  !--------------------------------------------------------------------!
+
+ !---------------------------------------------------------------------!
+ END IF ! myrank == root
+ !---------------------------------------------------------------------!
+
+ !---------------------------------------------------------------------!
+ ! Send data to processors.
+ ! Play with this if want different grid-box distributions.
+ ! Here just in order of k, evenly.
+ !---------------------------------------------------------------------!
+ IF (MOD (nland, nprocs) /= 0.0) THEN
+  WRITE (*,*) 'Problem, stopping, nland, nprocs = ', nland, nprocs
+  CALL MPI_ABORT (MPI_COMM_WORLD, errcode, error)
+ END IF
+ size = ntimes * nland / nprocs
+ ALLOCATE (buffer (ntimes,nland/nprocs))
+ IF (myrank == root) THEN
+  ! Send data to each processor as 'buffer'.
+  DO dest = 1, nprocs-1
+    i = dest * nland / nprocs + 1
+    buffer (:,:) = source (:,i:i+nland/nprocs-1)
+    CALL MPI_SEND ( buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
+  END DO
+  ! Set 'buffer' for root as well.
+  buffer (:,:) = source (:,1:size)
+ ELSE
+  WRITE (*,*) 'Receiving by myrank = ',myrank
+  CALL MPI_RECV ( buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
+                  MPI_STATUS_IGNORE, error)
+ END IF
+ !---------------------------------------------------------------------!
+
+ !---------------------------------------------------------------------!
+ ! Write input files for each processor.
+ !---------------------------------------------------------------------!
+ WRITE (char_nprocs, '(I4)') nprocs
+ WRITE (char_myrank, '(I4)') myrank
+ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+ &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
+ &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+ ! Delete existing file.
+ CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+ WRITE (*,*) 'Writing to ', TRIM(file_name)
+ ! Open the file for writing.
+ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+ ! MPI_IO is binary output format. Write using individual file pointer.
+ CALL MPI_File_write(file_handle, buffer, size, &
+  MPI_REAL, MPI_STATUS_IGNORE, error)
+ ! Close the file.
+ CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-END IF ! myrank == root
-!----------------------------------------------------------------------!
-
-!----------------------------------------------------------------------!
-! Send data to processors.
-! Play with this if want different grid-box distributions.
-! Here just in order of k, evenly.
-!----------------------------------------------------------------------!
-IF (MOD (nland, nprocs) /= 0.0) THEN
- WRITE (*,*) 'Problem, stopping, nland, nprocs = ', nland, nprocs
- CALL MPI_ABORT (MPI_COMM_WORLD, errcode, error)
-END IF
-size = ntimes * nland / nprocs
-ALLOCATE (buffer (ntimes,nland/nprocs))
-IF (myrank == root) THEN
- ! Send data to each processor as 'buffer'.
- DO dest = 1, nprocs-1
-   i = dest * nland / nprocs + 1
-   buffer (:,:) = source (:,i:i+nland/nprocs-1)
-   CALL MPI_SEND ( buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
- END DO
- ! Set 'buffer' for root as well.
- buffer (:,:) = source (:,1:size)
-ELSE
- WRITE (*,*) 'Receiving by myrank = ',myrank
- CALL MPI_RECV ( buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
-                 MPI_STATUS_IGNORE, error)
-END IF
-!----------------------------------------------------------------------!
-
-!----------------------------------------------------------------------!
-! Write input files for each processor.
-!----------------------------------------------------------------------!
-WRITE (char_nprocs, '(I4)') nprocs
-WRITE (char_myrank, '(I4)') myrank
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
-&adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
-&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
-! Delete existing file.
-CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
-WRITE (*,*) 'Writing to ', TRIM(file_name)
-! Open the file for writing.
-CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
- MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
-! MPI_IO is binary output format. Write using individual file pointer.
-CALL MPI_File_write(file_handle, buffer, size, &
- MPI_REAL, MPI_STATUS_IGNORE, error)
-! Close the file.
-CALL MPI_File_Close(file_handle, error)
+END DO ! kyr_clm = 1901, 1910
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
