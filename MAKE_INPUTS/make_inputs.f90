@@ -18,11 +18,10 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
 INTEGER, PARAMETER :: root = 0
-INTEGER, PARAMETER :: size = ntimes * nland
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: clm_fill = 1.0E20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
-INTEGER :: error, nprocs, myrank, file_handle, dest
+INTEGER :: error, nprocs, myrank, file_handle, dest, size, errcode
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
@@ -124,6 +123,14 @@ WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
 WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+! Send data to processors.
+!----------------------------------------------------------------------!
+IF (MOD (nland, ntasks) /= 0.0) THEN
+ WRITE (*,*) 'Problem, stopping, nland, ntasks = ', nland, ntasks
+ CALL MPI_ABORT (MPI_COMM_WORLD, errcode, error)
+END IF
+size = ntimes * nland / nprocs
 IF (myrank == root) THEN
  DO dest = 1, nprocs-1
    CALL MPI_SEND ( source, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
@@ -133,6 +140,7 @@ ELSE
  CALL MPI_RECV ( source, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
                  MPI_STATUS_IGNORE, error)
 END IF
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 ! Write input files for each core.
