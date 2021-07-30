@@ -30,11 +30,11 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 ! Read input data for this processor.
 !----------------------------------------------------------------------!
+size = ntimes * nland / nprocs
+ALLOCATE (buffer(ntimes,nland/nprocs))
 DO kyr_clm = 1901, 1910
 
  var_name = 'tmp'
- size = ntimes * nland / nprocs
- ALLOCATE (buffer(ntimes,nland/nprocs))
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
