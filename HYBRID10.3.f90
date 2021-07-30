@@ -15,7 +15,7 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
 REAL, ALLOCATABLE, DIMENSION (:,:) :: buffer
-CHARACTER(LEN=200) :: file_name var_name
+CHARACTER(LEN=200) :: file_name, var_name
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
