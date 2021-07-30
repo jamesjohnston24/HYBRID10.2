@@ -134,11 +134,14 @@ END IF
 size = ntimes * nland / nprocs
 ALLOCATE (buffer (ntimes,nland/nprocs))
 IF (myrank == root) THEN
- DO dest = 0, nprocs-1
+ ! Send data to each processor as 'buffer'.
+ DO dest = 1, nprocs-1
    i = size * dest + 1
    buffer (:,:) = source (:,i:i+size-1)
    CALL MPI_SEND ( buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
  END DO
+ ! Set 'buffer' for root as well.
+ buffer (:,:) = source (:,1:size)
 ELSE
  WRITE (*,*) 'Receiving by myrank = ',myrank
  CALL MPI_RECV ( buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
