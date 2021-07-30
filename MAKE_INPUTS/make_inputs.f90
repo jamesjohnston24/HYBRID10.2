@@ -16,10 +16,11 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
-INTEGER :: kyr_clm, ncid, varid, i, j, k
+INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: source
-REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: carea
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
 !----------------------------------------------------------------------!
@@ -37,10 +38,18 @@ CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
 varid = 5
 CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
 CALL CHECK (NF90_CLOSE (ncid))
-write (*,*) carea (10,10),carea(11,10)
-write (*,*) carea (11,11),carea(11,12)
+! Aggregate from QD to HD.
+ALLOCATE (larea(nlon,nlat))
+jj = 1
+DO j = 1, nlat
+ ii = 1
+ DO i = 1, nlon
+  larea (i,j) = SUM ( carea (ii:ii+1,jj:jj+1) )
+  ii = ii + 2
+ END DO
+ jj = jj + 2
+END DO ! j
 DEALLOCATE (carea)
-stop
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
