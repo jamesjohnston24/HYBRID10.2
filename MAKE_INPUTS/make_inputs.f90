@@ -104,7 +104,7 @@ DO kyr_clm = 1901, 1910
    DO i = 1, nlon
     IF (clm_in (i,j,1) /= clm_fill) THEN
      source (:,k) = clm_in (i,j,:)
-     larea_k (k) = 
+     larea_k (k) = larea (i,j)
      k = k + 1
     END IF
    END DO ! i
