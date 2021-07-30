@@ -32,9 +32,9 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
 ALLOCATE (buffer(ntimes,nland/nprocs))
-WRITE (file_name, "(A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
-&"CPUs/",myrank,".bin"
+&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Open the file for reading.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
