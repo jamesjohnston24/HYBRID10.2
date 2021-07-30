@@ -103,7 +103,7 @@ END DO ! j
 
 WRITE (*,*) source (1, 1)
 !DEALLOCATE (clm_in)
-DEALLOCATE (source)
+!DEALLOCATE (source)
 
 !----------------------------------------------------------------------!
 ! Compute global mean annual land surface temperature (oC).
