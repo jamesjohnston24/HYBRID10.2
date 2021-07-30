@@ -13,7 +13,7 @@ USE mpi
 IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
-INTEGER :: error, nprocs, myrank, file_handle, buffer, size
+INTEGER :: error, nprocs, myrank, file_handle, size
 REAL, ALLOCATABLE, DIMENSION (:,:) :: buffer
 CHARACTER(LEN=200) :: file_name
 !----------------------------------------------------------------------!
