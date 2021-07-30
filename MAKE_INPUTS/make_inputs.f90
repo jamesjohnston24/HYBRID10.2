@@ -125,10 +125,11 @@ WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
 
 IF (myrank == root) THEN
- DO dest = 1, nprocs
+ DO dest = 1, nprocs-1
    CALL MPI_SEND ( source, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
  END DO
 ELSE
+ WRITE (*,*) 'Receiving by myrank = ',myrank
  CALL MPI_RECV ( source, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
                  MPI_STATUS_IGNORE, error)
 END IF
