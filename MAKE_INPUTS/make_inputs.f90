@@ -31,6 +31,7 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
+REAL, ALLOCATABLE, DIMENSION (:) :: larea_k
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
 !----------------------------------------------------------------------!
@@ -80,6 +81,7 @@ DEALLOCATE (carea)
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
 ALLOCATE (clm_buffer (ntimes,nland/nprocs))
+ALLOCATE (larea_k (nland/nprocs))
 DO kyr_clm = 1901, 1910
 
 !kyr_clm = 2020
@@ -102,6 +104,7 @@ DO kyr_clm = 1901, 1910
    DO i = 1, nlon
     IF (clm_in (i,j,1) /= clm_fill) THEN
      source (:,k) = clm_in (i,j,:)
+     larea_k (k) = 
      k = k + 1
     END IF
    END DO ! i
