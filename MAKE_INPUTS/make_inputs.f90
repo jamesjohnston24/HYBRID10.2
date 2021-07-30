@@ -35,7 +35,7 @@ ALLOCATE (carea (2*nlon, 2*nlat)) ! Reverse order from net CDF file
 file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
 CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
-varid = 5
+varid = 5 ! QD area, km2
 CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
 CALL CHECK (NF90_CLOSE (ncid))
 ! Aggregate from QD to HD.
@@ -52,7 +52,7 @@ END DO ! j
 DEALLOCATE (carea)
 write (*,*) larea (10,10),larea(11,10)
 write (*,*) larea (11,11),larea(11,12)
-write (*,*) larea (360,360)
+write (*,*) larea (448,360)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
