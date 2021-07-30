@@ -54,8 +54,9 @@ jj = 1
 DO j = 1, nlat
  ii = 1
  DO i = 1, nlon
-  larea (i,j) = SUM ( carea (ii:ii+1,jj:jj+1) ) ! km^2
-  fwice (i,j) = SUM ( icwtr (ii:ii+1,jj:jj+1) ) / 4.0 ! area fraction
+  ! Invert as these start at NP, I presume.
+  larea (i,nlat-j+1) = SUM ( carea (ii:ii+1,jj:jj+1) ) ! km^2
+  fwice (i,nlat-j+1) = SUM ( icwtr (ii:ii+1,jj:jj+1) ) / 4.0 ! area fraction
   ii = ii + 2
  END DO
  jj = jj + 2
