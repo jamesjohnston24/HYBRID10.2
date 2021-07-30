@@ -9,6 +9,7 @@ PROGRAM MAKE_INPUTS
 !----------------------------------------------------------------------!
 USE netcdf
 USE double
+USE mpi
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -19,6 +20,7 @@ INTEGER, PARAMETER :: nland = 67420
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: clm_fill = 1.0E20
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
+INTEGER :: error
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
@@ -29,6 +31,10 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+CALL MPI_INIT ( error )
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -95,7 +101,6 @@ DEALLOCATE (source)
 !----------------------------------------------------------------------!
 ! Compute global mean annual land surface temperature (oC).
 !----------------------------------------------------------------------!
-fwice = 0.0
 Aland = 0.0 ! Total land area (km^2)
 Tmean = 0.0 ! Mean land temperature (oC)
 DO j = 1, nlat
@@ -110,6 +115,10 @@ END DO ! j
 Tmean = Tmean / (FLOAT (ntimes) * Aland) - tf
 WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
 WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+CALL MPI_FINALIZE ( error )
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
