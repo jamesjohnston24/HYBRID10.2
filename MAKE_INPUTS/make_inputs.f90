@@ -95,6 +95,7 @@ DEALLOCATE (source)
 !----------------------------------------------------------------------!
 ! Compute global mean annual land surface temperature (oC).
 !----------------------------------------------------------------------!
+fwice = 0.0
 Aland = 0.0 ! Total land area (km^2)
 Tmean = 0.0 ! Mean land temperature (oC)
 DO j = 1, nlat
