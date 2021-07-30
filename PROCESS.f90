@@ -2,9 +2,9 @@ PROGRAM PROCESS
 USE mpi
 IMPLICIT NONE
 
-INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
+INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk, error
 CHARACTER(LEN=200) :: var_name, file_name
-REAL, ALLOCATABLE. DIMENSION (:) :: B
+REAL, ALLOCATABLE, DIMENSION (:) :: B
 
 !----------------------------------------------------------------------!
 CALL MPI_INIT ( error )
