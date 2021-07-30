@@ -134,6 +134,7 @@ WRITE (file_name, "(A,I0,A)") '/home/adf10/rds/rds-mb425-geogscratch/&
 &'CPUs_//TRIM(char_myrank)//.bin'
 ! Delete existing file.
 CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+WRITE (*,*) 'Writing to ', TRIM(file_name)
 ! Open the file for writing.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
