@@ -5,7 +5,7 @@ FFLAGS = -check -traceback
 LDFLAGS = -lnetcdff -lnetcdf
 
 SRC = \
-	HYBRID10.3.f90 \
+	HYBRID10.2.f90 \
 	Get_RSF.f90 \
 	get_clm.f90 \
 	advance.f90 \
@@ -15,12 +15,12 @@ SRC = \
 
 OBJ = $(SRC:.f90=.o)
 
-HYBRID10.3.exe : $(OBJ)
-	$(F90) $(FFLAGS) -o HYBRID10.3.exe $(OBJ) $(LDFLAGS)
+HYBRID10.2.exe : $(OBJ)
+	$(F90) $(FFLAGS) -o HYBRID10.2.exe $(OBJ) $(LDFLAGS)
 
 # Main routine.
-HYBRID10.3.o : Get_RSF.o get_clm.o advance.o Diag_Global.o double.o shared.o HYBRID10.3.f90
-	$(F90) $(FFLAGS) -c HYBRID10.3.f90
+HYBRID10.2.o : Get_RSF.o get_clm.o advance.o Diag_Global.o double.o shared.o HYBRID10.2.f90
+	$(F90) $(FFLAGS) -c HYBRID10.2.f90
 	
 # Subroutines.
 Get_RSF.o : shared.o Get_RSF.f90
