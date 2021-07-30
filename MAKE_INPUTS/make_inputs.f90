@@ -31,7 +31,7 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
 CHARACTER(LEN=200) :: file_name, var_name
-CHARACTER(LEN=4) :: char_year
+CHARACTER(LEN=4) :: char_year, char_nprocs
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -126,8 +126,10 @@ WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
 !----------------------------------------------------------------------!
 ! Write input files for each core.
 !----------------------------------------------------------------------!
+WRITE (char_nprocs, '(I4)') nprocs
 WRITE (file_name, "(A,I0,A)") '/home/adf10/rds/rds-mb425-geogscratch/&
-&adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_'//nprocs//'CPUs'
+&adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_'//TRIM(char_nprocs)//&
+&'CPUs.bin'
 ! Delete existing file.
 CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 ! Open the file for writing.
