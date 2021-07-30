@@ -9,9 +9,9 @@ SRC = \
 
 OBJ = $(SRC:.f90=.o)
 
-process.exe : $(OBJ)
-	$(F90) $(FFLAGS) -o process.exe $(OBJ) $(LDFLAGS)
+PROCESS.exe : $(OBJ)
+	$(F90) $(FFLAGS) -o PROCESS.exe $(OBJ) $(LDFLAGS)
 
 # Main routine.
-process.o : process.f90
+PROCESS.o : PROCESS.f90
 	$(F90) $(FFLAGS) -c PROCESS.f90
