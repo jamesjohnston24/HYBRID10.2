@@ -1,12 +1,13 @@
 PROGRAM PROCESS
 IMPLICIT NONE
 
-INTEGER :: myrank, nprocs, size
+INTEGER :: myrank, nprocs, size, file_handle, kyr_clm
 CHARACTER(LEN=200) :: var_name, file_name
 REAL, DIMENSION () :: B
 
 nprocs = 4
 size = nland / nprocs
+kyr_clm = 1920
 
 DO myrank = 1, nprocs
 
