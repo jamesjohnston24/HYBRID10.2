@@ -38,7 +38,6 @@ CALL MPI_File_Close(file_handle, error)
 
 TB = SUM (B)
 WRITE (*,*) 'TB = ', TB
-write (*,*)B
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
