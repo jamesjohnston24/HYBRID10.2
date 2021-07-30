@@ -136,8 +136,8 @@ ALLOCATE (buffer (ntimes,nland/nprocs))
 IF (myrank == root) THEN
  ! Send data to each processor as 'buffer'.
  DO dest = 1, nprocs-1
-   i = size * dest + 1
-   buffer (:,:) = source (:,i:i+size-1)
+   i = dest * nland / nprocs + 1
+   buffer (:,:) = source (:,i:i+nland/nprocs-1)
    CALL MPI_SEND ( buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
  END DO
  ! Set 'buffer' for root as well.
