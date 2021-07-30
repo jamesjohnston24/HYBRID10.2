@@ -59,7 +59,7 @@ DO kyr_clm = 1901, 1920
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
 
- write (*,*) kyr_clm, myrank, tmp (1,1), B(1,1)
+ write (*,*) kyr_clm, myrank, tmp (1,1), B(1)
 
  DO t = 1, ntimes
   DO k = 1, nland_chunk
