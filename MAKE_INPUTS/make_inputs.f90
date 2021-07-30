@@ -74,7 +74,7 @@ CALL CHECK ( NF90_CLOSE ( ncid ))
 k = 1
 DO j = 1, nlat
  DO i = 1, nlon
-  IF (clm_in (i,j,1) \= clm_fill) THEN
+  IF (clm_in (i,j,1) /= clm_fill) THEN
    source (:,k) = clm_in (i,j,:)
    k = k + 1
   END IF
