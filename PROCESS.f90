@@ -58,8 +58,8 @@ CALL MPI_File_Close(file_handle, error)
 TB = 0.0
 DO k = 1, nland_chunk
  ! (kg[DM] m^2) * (km^2) * (m^2 km^-2)
- !TB = TB + B_k (k) * larea_k (k) * 1000.0 * 1000.0
- TB = TB + larea_k (k) * 1000.0 * 1000.0
+ TB = TB + B_k (k) * larea_k (k) * 1000.0 * 1000.0
+ !TB = TB + larea_k (k) * 1000.0 * 1000.0
 END DO ! k
 WRITE (*,*) 'TB = ', TB, myrank
 
