@@ -2,11 +2,12 @@ PROGRAM PROCESS
 USE mpi
 IMPLICIT NONE
 
+INTEGER, PARAMETER :: root = 0
 INTEGER :: nland = 67420
 INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
 INTEGER :: error, k
 CHARACTER(LEN=200) :: var_name, file_name
-REAL :: TB, TLA
+REAL :: TB, TLA, summary
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
 
 !----------------------------------------------------------------------!
@@ -64,6 +65,9 @@ END DO ! k
 WRITE (*,*) 'TB (Pg[DM]) = ', TB/1.0E15, myrank
 
 ! Combine and produce netCDF output for mapping.
+CALL MPI_Reduce (TB, summary, 1, MPI_REAL, &
+ MPI_SUM, root, MPI_COMM_WORLD, error)
+IF (myrank == root) write (*,*) summary
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
