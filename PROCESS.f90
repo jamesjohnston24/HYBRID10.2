@@ -31,9 +31,14 @@ CALL MPI_INIT ( error )
 !----------------------------------------------------------------------!
 kyr_clm = 1901
 nprocs = 4
-myrank = 0
 nland_chunk = nland / nprocs
+ALLOCATE (soilW_grid(nlon,nlat))
+ALLOCATE (B_grid(nlon,nlat))
+ALLOCATE (SOM_grid(nlon,nlat))
+B_grid = fillvalue
 !----------------------------------------------------------------------!
+
+DO myrank = 0, nprocs-1
 
 !----------------------------------------------------------------------!
 var_name = 'larea'
@@ -104,17 +109,14 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-ALLOCATE (soilW_grid(nlon,nlat))
-ALLOCATE (B_grid(nlon,nlat))
-ALLOCATE (SOM_grid(nlon,nlat))
-B_grid = fillvalue
 DO k = 1, nland_chunk
  i = i_k (k)
  j = j_k (k)
  B_grid (i,j) = B_k (k)
- !write (*,*) i,j,k,B_grid(i,j)
 END DO ! k
 !----------------------------------------------------------------------!
+
+END DO ! myrank
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
