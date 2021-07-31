@@ -12,6 +12,10 @@ CHARACTER(LEN=200) :: var_name, file_name
 REAL :: TB, TLA, summary
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
 
+!----------------------------------------------------------------------!
+CALL MPI_INIT ( error )
+!----------------------------------------------------------------------!
+
 var_name = 'larea'
 nprocs = 4
 myrank = 0
@@ -32,6 +36,8 @@ CALL MPI_File_Close(file_handle, error)
 
 write (*,*) larea_k
 
-stop
+!----------------------------------------------------------------------!
+CALL MPI_FINALIZE ( error )
+!----------------------------------------------------------------------!
 
 END PROGRAM PROCESS
