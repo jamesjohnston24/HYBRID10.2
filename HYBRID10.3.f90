@@ -68,7 +68,6 @@ DO kyr_clm = 1901, 1901
    BL = B (k) / (12.5 * 365.0 * 86400.0)
    dB = NPP - BL
    B (k) = B (k) + dt * dB
-   B (k) = 1.0
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
 
