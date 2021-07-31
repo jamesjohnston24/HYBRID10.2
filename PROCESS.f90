@@ -62,6 +62,8 @@ DO k = 1, nland_chunk
 END DO ! k
 WRITE (*,*) 'TB = ', TB, myrank
 
+! Combine and produce netCDF output for mapping.
+
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
 !----------------------------------------------------------------------!

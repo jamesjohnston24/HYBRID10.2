@@ -43,7 +43,7 @@ B = 0.0
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
 ALLOCATE (tmp(ntimes,nland/nprocs))
-DO kyr_clm = 1901, 1920
+DO kyr_clm = 1901, 1901
 
  var_name = 'tmp'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
@@ -70,10 +70,11 @@ DO kyr_clm = 1901, 1920
    BL = B (k) / (12.5 * 365.0 * 86400.0)
    dB = NPP - BL
    B (k) = B (k) + dt * dB
+   B (k) = 1.0
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
 
-END DO ! kyr_clm = 1901, 1910
+END DO ! kyr_clm
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
