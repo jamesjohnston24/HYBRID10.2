@@ -4,7 +4,7 @@ IMPLICIT NONE
 
 INTEGER :: nland = 67420
 INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
-INTEGER :: error
+INTEGER :: error, k
 CHARACTER(LEN=200) :: var_name, file_name
 REAL :: TB, TLA
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
