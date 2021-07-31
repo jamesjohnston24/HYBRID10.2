@@ -29,7 +29,6 @@ ALLOCATE (larea_k(nland_chunk))
 
 !----------------------------------------------------------------------!
 var_name = 'larea'
-ALLOCATE (larea_k (nland_chunk))
 WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),"_",myrank,".bin"
