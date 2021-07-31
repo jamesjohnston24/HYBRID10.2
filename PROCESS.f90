@@ -175,4 +175,16 @@ END IF ! myrank == root
 CALL MPI_FINALIZE ( error )
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+CONTAINS
+ SUBROUTINE check ( status )
+
+ INTEGER, INTENT ( in ) :: status
+ IF (status /= nf90_noerr) THEN
+  PRINT *, TRIM (NF90_STRERROR( status ))
+  STOP  "Stopped"
+ END IF
+ END SUBROUTINE check
+!----------------------------------------------------------------------!
+
 END PROGRAM PROCESS
