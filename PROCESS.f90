@@ -9,7 +9,7 @@ INTEGER, PARAMETER :: root = 0
 INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
 INTEGER :: error, i, j, k
-INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
+INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid
 INTEGER :: varidW, varidB, varidSOM
 INTEGER, DIMENSION (2) :: dimids_two
 CHARACTER(LEN=200) :: var_name, file_name
@@ -112,7 +112,6 @@ DO k = 1, nland_chunk
  i = i_k (k)
  j = j_k (k)
  B_grid (i,j) = B_k (k)
- write (*,*) i,j,k,B_grid(i,j)
 END DO ! k
 !----------------------------------------------------------------------!
 
@@ -169,18 +168,6 @@ CALL CHECK (NF90_close (ncid))
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
-!----------------------------------------------------------------------!
-
-!----------------------------------------------------------------------!
-CONTAINS
- SUBROUTINE check ( status )
-
- INTEGER, INTENT ( in ) :: status
- IF (status /= nf90_noerr) THEN
-  PRINT *, TRIM (NF90_STRERROR( status ))
-  STOP  "Stopped"
- END IF
- END SUBROUTINE check
 !----------------------------------------------------------------------!
 
 END PROGRAM PROCESS
