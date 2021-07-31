@@ -5,7 +5,7 @@ USE mpi
 IMPLICIT NONE
 
 INTEGER, PARAMETER :: root = 0
-INTEGER :: nland = 67420, nlon = 720, nlat = 360
+INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
 INTEGER :: error, i, j, k
 INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid
