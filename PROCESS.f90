@@ -77,7 +77,7 @@ CALL MPI_File_read(file_handle, j_k, nland_chunk, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
-write (*,*) i_k
+write (*,*) j_k
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
