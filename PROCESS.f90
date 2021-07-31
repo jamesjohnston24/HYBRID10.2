@@ -6,7 +6,7 @@ use netCDF
 IMPLICIT NONE
 
 INTEGER, PARAMETER :: nland = 67420
-INTEGER :: nprocs, error, myrank, nland_chunk, file_handle
+INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k
 CHARACTER(LEN=20) :: var_name
 CHARACTER(LEN=200) :: file_name
