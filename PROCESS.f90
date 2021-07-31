@@ -100,7 +100,7 @@ B_grid = fillvalue
 DO k = 1, nland_chunk
  i = i_k (k)
  j = j_k (k)
- B_grid (i,j) = B (k)
+ B_grid (i,j) = B_k (k)
 END DO ! k
 !----------------------------------------------------------------------!
 
