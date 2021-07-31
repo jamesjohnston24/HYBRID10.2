@@ -84,7 +84,7 @@ DEALLOCATE (carea)
 size = ntimes * nland / nprocs
 ALLOCATE (clm_buffer (ntimes,nland/nprocs))
 ALLOCATE (larea_buffer (nland/nprocs))
-DO kyr_clm = 1901, 1910
+DO kyr_clm = 1901, 1901
 
 !kyr_clm = 2020
  var_name = 'tmp'
@@ -175,6 +175,7 @@ DO kyr_clm = 1901, 1910
  !---------------------------------------------------------------------!
  WRITE (char_nprocs, '(I4)') nprocs
  WRITE (char_myrank, '(I4)') myrank
+ ! Climate
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
@@ -190,9 +191,26 @@ DO kyr_clm = 1901, 1910
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
+ ! larea
+ var_name = 'larea'
+ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+ &adf10/TRENDY2021/input/LUH2_GCB_2021/statis_",nprocs,&
+ &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+ ! Delete existing file.
+ CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+ WRITE (*,*) 'Writing to ', TRIM(file_name)
+ ! Open the file for writing.
+ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+ ! MPI_IO is binary output format. Write using individual file pointer.
+ CALL MPI_File_write(file_handle, larea_buffer, size/ntimes, &
+  MPI_REAL, MPI_STATUS_IGNORE, error)
+ ! Close the file.
+ CALL MPI_File_Close(file_handle, error)
+ !---------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-END DO ! kyr_clm = 1901, 1910
+END DO ! kyr_clm
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
