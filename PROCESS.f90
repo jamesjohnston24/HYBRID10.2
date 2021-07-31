@@ -1,6 +1,7 @@
 PROGRAM PROCESS
 
 USE mpi
+use netCDF
 
 IMPLICIT NONE
 
