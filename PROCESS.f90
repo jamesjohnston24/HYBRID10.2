@@ -19,7 +19,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 
 size = nland / nprocs
-kyr_clm = 1901
+kyr_clm = 1921
 nland_chunk = nland / nprocs
 
 ALLOCATE (larea_k (nland_chunk))
