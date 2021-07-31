@@ -113,7 +113,7 @@ DO kyr_clm = 1901, 1910
   END DO ! j
   !--------------------------------------------------------------------!
 
-  WRITE (*,*) kyr_clm, source (1, 1)
+  WRITE (*,*) kyr_clm, clm_k (1, 1), larea_k (1)
   !DEALLOCATE (clm_in)
   !DEALLOCATE (source)
 
