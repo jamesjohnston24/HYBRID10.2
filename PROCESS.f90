@@ -67,8 +67,12 @@ WRITE (*,*) 'TB (Pg[DM]) = ', TB/1.0E15, myrank
 ! Combine and produce netCDF output for mapping.
 CALL MPI_Reduce (TB, summary, 1, MPI_REAL, &
  MPI_SUM, root, MPI_COMM_WORLD, error)
-IF (myrank == root) write (*,*) 'Total biomass = ', summary/1.0e15, &
- 'Pg[DM]'
+CALL MPI_Gather(B,nland_chunk,MPI_REAL, &
+                B_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+IF (myrank == root) THEN
+ write (*,*) 'Total biomass = ', summary/1.0e15, 'Pg[DM]'
+ file_name = 
+END IF
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
