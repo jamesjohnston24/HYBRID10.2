@@ -13,6 +13,8 @@ INTEGER :: i, j, k
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
+REAL, DIMENSION (nlon) :: lon
+REAL, DIMENSION (nlat) :: lat
 CHARACTER(LEN=20) :: var_name
 CHARACTER(LEN=200) :: file_name
 INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
