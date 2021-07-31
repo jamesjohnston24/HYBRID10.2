@@ -43,7 +43,7 @@ B = 0.0
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
 ALLOCATE (tmp(ntimes,nland/nprocs))
-DO kyr_clm = 1901, 1921
+DO kyr_clm = 1901, 1901
 
  var_name = 'tmp'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
@@ -73,15 +73,13 @@ DO kyr_clm = 1901, 1921
 
  write (*,*) kyr_clm, myrank, tmp (1,1), B(100)
 
-END DO ! kyr_clm
-
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
 !----------------------------------------------------------------------!
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
-&"CPUs/",TRIM(var_name),kyr_clm-1,"_",myrank,".bin"
+&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.
 CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 WRITE (*,*) 'Writing to ', TRIM(file_name)
@@ -94,6 +92,8 @@ CALL MPI_File_write(file_handle, B, size/ntimes, &
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
+
+END DO ! kyr_clm
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
