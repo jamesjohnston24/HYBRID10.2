@@ -117,7 +117,7 @@ DO k = 1, nland_chunk
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 
-IF (myrank == root) THEN
+IF (myrank == 1) THEN
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
