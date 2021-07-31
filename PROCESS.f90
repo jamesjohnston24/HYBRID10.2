@@ -17,7 +17,10 @@ WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratc
  &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),"_",myrank,".bin"
 OPEN (10,FILE=file_name,STATUS='OLD')
+READ (10) larea_k
 CLOSE (10)
+
+write (*,*) larea_k
 
 stop
 
