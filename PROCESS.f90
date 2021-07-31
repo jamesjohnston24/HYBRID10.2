@@ -11,7 +11,9 @@ REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
+REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
+REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
 REAL, DIMENSION (nlon) :: lon
 REAL, DIMENSION (nlat) :: lat
