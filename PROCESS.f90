@@ -55,8 +55,12 @@ CALL MPI_File_read(file_handle, B_k, size, &
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 
-TB = SUM (B_k)
-WRITE (*,*) 'TB = ', TB
+TB = 0.0
+DO k = 1, nland_chunk
+ ! (kg[DM] m^2) * (km^2) * (m^2 km^-2)
+ TB = TB + B_k (k) * larea_k (k) * 1000.0 * 1000.0
+END DO ! k
+WRITE (*,*) 'TB = ', TB, myrank
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
