@@ -35,6 +35,10 @@ nland_chunk = nland / nprocs
 ALLOCATE (soilW_grid(nlon,nlat))
 ALLOCATE (B_grid(nlon,nlat))
 ALLOCATE (SOM_grid(nlon,nlat))
+ALLOCATE (larea_k (nland_chunk))
+ALLOCATE (i_k (nland_chunk))
+ALLOCATE (j_k (nland_chunk))
+ALLOCATE (B_k(nland_chunk))
 B_grid = fillvalue
 !----------------------------------------------------------------------!
 
@@ -42,7 +46,6 @@ DO myrank = 0, nprocs-1
 
 !----------------------------------------------------------------------!
 var_name = 'larea'
-ALLOCATE (larea_k (nland_chunk))
 WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),"_",myrank,".bin"
@@ -59,7 +62,6 @@ CALL MPI_File_Close(file_handle, error)
 
 !----------------------------------------------------------------------!
 var_name = 'i'
-ALLOCATE (i_k (nland_chunk))
 WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),"_",myrank,".bin"
@@ -76,7 +78,6 @@ CALL MPI_File_Close(file_handle, error)
 
 !----------------------------------------------------------------------!
 var_name = 'j'
-ALLOCATE (j_k (nland_chunk))
 WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),"_",myrank,".bin"
@@ -92,7 +93,6 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-ALLOCATE (B_k(nland_chunk))
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
