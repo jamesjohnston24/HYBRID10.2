@@ -8,12 +8,19 @@ INTEGER, PARAMETER :: root = 0
 INTEGER :: nland = 67420, nlon = 720, nlat = 360
 INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
 INTEGER :: error, i, j, k
+INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid
+INTEGER :: varidW, varidB, varidSOM
+INTEGER, DIMENSION (2) :: dimids_two
 CHARACTER(LEN=200) :: var_name, file_name
 REAL :: TB, TLA, summary
 REAL, PARAMETER :: fillvalue = 1.0E20
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
+REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
+REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
+REAL, DIMENSION (nlon) :: lon
+REAL, DIMENSION (nlat) :: lat
 
 !----------------------------------------------------------------------!
 CALL MPI_INIT ( error )
@@ -95,13 +102,66 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
+ALLOCATE (soilW_grid(nlon,nlat))
 ALLOCATE (B_grid(nlon,nlat))
+ALLOCATE (SOM_grid(nlon,nlat))
 B_grid = fillvalue
 DO k = 1, nland_chunk
  i = i_k (k)
  j = j_k (k)
  B_grid (i,j) = B_k (k)
 END DO ! k
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+var_name = 'tmp'
+kyr_clm =1901
+WRITE (char_year, '(I4)') kyr_clm
+file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
+ &char_year//'.365d.noc.nc'
+WRITE (*,*) 'Opening file: ',file_name
+CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
+varid = 2
+CALL CHECK ( NF90_GET_VAR ( ncid, varid, lon ))
+varid = 3
+CALL CHECK ( NF90_GET_VAR ( ncid, varid, lat ))
+CALL CHECK ( NF90_CLOSE ( ncid ))
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+file_name = "fields_grid.nc"
+write (*, *) 'Writing to ', trim (file_name)
+CALL CHECK (NF90_CREATE (trim (file_name), cmode = nf90_clobber, &
+            ncid = ncid))
+CALL CHECK (NF90_DEF_DIM (ncid, "longitude", nlon, lon_dimid))
+CALL CHECK (NF90_DEF_DIM (ncid, "latitude" , nlat, lat_dimid))
+CALL CHECK (NF90_DEF_VAR (ncid, "longitude", nf90_float, lon_dimid, &
+            lon_varid))
+CALL CHECK (NF90_DEF_VAR (ncid, "latitude" , nf90_float, lat_dimid, &
+            lat_varid))
+dimids_two = (/ lon_dimid, lat_dimid /)
+CALL CHECK (NF90_PUT_ATT (ncid, lon_varid, "units", "degrees_east"))
+CALL CHECK (NF90_PUT_ATT (ncid, lat_varid, "units", "degrees_north"))
+CALL CHECK (NF90_DEF_VAR (ncid, "Soil_Water", nf90_float, &
+            dimids_two, varidW))
+CALL CHECK (NF90_DEF_VAR (ncid, "Living_Biomass", nf90_float, &
+            dimids_two, varidB))
+CALL CHECK (NF90_DEF_VAR (ncid, "Soil_Organic_Matter", nf90_float, &
+            dimids_two, varidSOM))
+CALL CHECK (NF90_PUT_ATT (ncid, varidW, "units", "m"))
+CALL CHECK (NF90_PUT_ATT (ncid, varidB, "units", "kg[DM] m-2"))
+CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "units", "kg[DM] m-2"))
+CALL CHECK (NF90_PUT_ATT (ncid, varidW, "_FillValue", fillvalue))
+CALL CHECK (NF90_PUT_ATT (ncid, varidB, "_FillValue", fillvalue))
+CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "_FillValue", fillvalue))
+CALL CHECK (NF90_ENDDEF (ncid))
+CALL CHECK (NF90_PUT_VAR (ncid, lon_varid, lon))
+CALL CHECK (NF90_PUT_VAR (ncid, lat_varid, lat))
+CALL CHECK (NF90_PUT_VAR (ncid,     varidW, soilW_grid))
+CALL CHECK (NF90_PUT_VAR (ncid,     varidB, B_grid))
+CALL CHECK (NF90_PUT_VAR (ncid,     varidSOM, SOM_grid))
+CALL CHECK (NF90_close (ncid))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
