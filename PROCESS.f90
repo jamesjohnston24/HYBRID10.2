@@ -5,6 +5,7 @@ use netCDF
 
 IMPLICIT NONE
 
+INTEGER, PARAMETER :: root = 0
 INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
@@ -17,7 +18,6 @@ CHARACTER(LEN=200) :: file_name
 INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
 INTEGER :: varidW, varidB, varidSOM
 INTEGER, DIMENSION (2) :: dimids_two
-CHARACTER(LEN=200) :: var_name, file_name
 CHARACTER(LEN=4) :: char_year
 
 !----------------------------------------------------------------------!
@@ -113,6 +113,8 @@ DO k = 1, nland_chunk
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 
+IF (myrank == root) THEN
+
 !----------------------------------------------------------------------!
 var_name = 'tmp'
 WRITE (char_year, '(I4)') kyr_clm
@@ -162,6 +164,8 @@ CALL CHECK (NF90_PUT_VAR (ncid,     varidB, B_grid))
 CALL CHECK (NF90_PUT_VAR (ncid,     varidSOM, SOM_grid))
 CALL CHECK (NF90_close (ncid))
 !----------------------------------------------------------------------!
+
+END IF ! myrank == root
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
