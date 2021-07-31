@@ -29,7 +29,7 @@ WRITE (*,*) 'Reading from ', TRIM(file_name)
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error) 
 ! MPI_IO is binary output format. Write using individual file pointer.
-CALL MPI_File_read(file_handle, larea_k, size, &
+CALL MPI_File_read(file_handle, larea_k, nland_chunk, &
  MPI_REAL, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
