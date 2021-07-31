@@ -132,7 +132,7 @@ CALL MPI_Gather (j_k, nland_chunk, MPI_INTEGER, j_k_all, nland_chunk, MPI_INTEGE
 IF (myrank == root) THEN
 
 B_grid = fillvalue
-DO k = 1, nland_chunk
+DO k = 1, nland
  i = i_k_all (k)
  j = j_k_all (k)
  B_grid (i,j) = B_k_all (k)
