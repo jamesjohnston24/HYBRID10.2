@@ -5,7 +5,7 @@ FFLAGS = -check -traceback
 LDFLAGS = -lnetcdff -lnetcdf
 
 SRC = \
-	PROCESS.f90
+	PROCESS.f9
 
 OBJ = $(SRC:.f90=.o)
 
