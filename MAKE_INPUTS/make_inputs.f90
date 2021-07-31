@@ -194,7 +194,7 @@ DO kyr_clm = 1901, 1901
  ! larea
  var_name = 'larea'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
- &adf10/TRENDY2021/input/LUH2_GCB_2021/statis_",nprocs,&
+ &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Delete existing file.
  CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
