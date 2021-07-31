@@ -25,13 +25,14 @@ INTEGER :: error, nprocs, myrank, file_handle, dest, size, errcode
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
-REAL, ALLOCATABLE, DIMENSION (:,:) :: source
+REAL, ALLOCATABLE, DIMENSION (:,:) :: clm_k
 REAL, ALLOCATABLE, DIMENSION (:,:) :: clm_buffer
 REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
 REAL, ALLOCATABLE, DIMENSION (:) :: larea_k
+REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
 !----------------------------------------------------------------------!
@@ -47,7 +48,8 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 ALLOCATE (clm_in (nlon, nlat, ntimes)) ! Reverse order from netCDF file
-ALLOCATE (source (ntimes, nland))
+ALLOCATE (clm_k (ntimes, nland))
+ALLOCATE (larea_k (nland))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -81,7 +83,7 @@ DEALLOCATE (carea)
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
 ALLOCATE (clm_buffer (ntimes,nland/nprocs))
-ALLOCATE (larea_k (nland/nprocs))
+ALLOCATE (larea_buffer (nland/nprocs))
 DO kyr_clm = 1901, 1910
 
 !kyr_clm = 2020
@@ -103,7 +105,7 @@ DO kyr_clm = 1901, 1910
   DO j = 1, nlat
    DO i = 1, nlon
     IF (clm_in (i,j,1) /= clm_fill) THEN
-     source (:,k) = clm_in (i,j,:)
+     clm_k (:,k) = clm_in (i,j,:)
      larea_k (k) = larea (i,j)
      k = k + 1
     END IF
@@ -151,14 +153,19 @@ DO kyr_clm = 1901, 1910
   ! Send data to each processor as 'buffer'.
   DO dest = 1, nprocs-1
     i = dest * nland / nprocs + 1
-    clm_buffer (:,:) = source (:,i:i+nland/nprocs-1)
+    clm_buffer (:,:) = clm_k (:,i:i+nland/nprocs-1)
     CALL MPI_SEND ( clm_buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
+    larea_buffer (:) = larea_k (i:i+nland/nprocs-1)
+    CALL MPI_SEND ( larea_buffer, size/ntimes, MPI_REAL, dest, 2, MPI_COMM_WORLD, error)
   END DO
   ! Set 'clm_buffer' for root as well.
-  clm_buffer (:,:) = source (:,1:size)
+  clm_buffer (:,:) = clm_k (:,1:size)
+  larea_buffer (:) = larea_k (1:size)
  ELSE
   WRITE (*,*) 'Receiving by myrank = ',myrank
   CALL MPI_RECV ( clm_buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
+                  MPI_STATUS_IGNORE, error)
+  CALL MPI_RECV ( larea_buffer, size/ntimes, MPI_REAL, 0, 2, MPI_COMM_WORLD, &
                   MPI_STATUS_IGNORE, error)
  END IF
  !---------------------------------------------------------------------!
