@@ -86,7 +86,6 @@ ALLOCATE (clm_buffer (ntimes,nland/nprocs))
 ALLOCATE (larea_buffer (nland/nprocs))
 DO kyr_clm = 1901, 1901
 
-!kyr_clm = 2020
  var_name = 'tmp'
 
  IF (myrank == root) THEN
@@ -155,17 +154,12 @@ DO kyr_clm = 1901, 1901
     i = dest * nland / nprocs + 1
     clm_buffer (:,:) = clm_k (:,i:i+nland/nprocs-1)
     CALL MPI_SEND ( clm_buffer, size, MPI_REAL, dest, 1, MPI_COMM_WORLD, error)
-    larea_buffer (:) = larea_k (i:i+nland/nprocs-1)
-    CALL MPI_SEND ( larea_buffer, size/ntimes, MPI_REAL, dest, 2, MPI_COMM_WORLD, error)
   END DO
   ! Set 'clm_buffer' for root as well.
   clm_buffer (:,:) = clm_k (:,1:size)
-  larea_buffer (:) = larea_k (1:size)
  ELSE
   WRITE (*,*) 'Receiving by myrank = ',myrank
   CALL MPI_RECV ( clm_buffer, size, MPI_REAL, 0, 1, MPI_COMM_WORLD, &
-                  MPI_STATUS_IGNORE, error)
-  CALL MPI_RECV ( larea_buffer, size/ntimes, MPI_REAL, 0, 2, MPI_COMM_WORLD, &
                   MPI_STATUS_IGNORE, error)
  END IF
  !---------------------------------------------------------------------!
@@ -191,26 +185,42 @@ DO kyr_clm = 1901, 1901
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
- ! larea
- var_name = 'larea'
- WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
- &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
- &"CPUs/",TRIM(var_name),"_",myrank,".bin"
- ! Delete existing file.
- CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
- WRITE (*,*) 'Writing to ', TRIM(file_name)
- ! Open the file for writing.
- CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
-  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
- ! MPI_IO is binary output format. Write using individual file pointer.
- CALL MPI_File_write(file_handle, larea_buffer, size/ntimes, &
-  MPI_REAL, MPI_STATUS_IGNORE, error)
- ! Close the file.
- CALL MPI_File_Close(file_handle, error)
- !---------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 END DO ! kyr_clm
+!----------------------------------------------------------------------!
+
+IF (myrank == root) THEN
+ ! Send data to each processor as 'buffer'.
+ DO dest = 1, nprocs-1
+   i = dest * nland / nprocs + 1
+   larea_buffer (:) = larea_k (i:i+nland/nprocs-1)
+   CALL MPI_SEND ( larea_buffer, size/ntimes, MPI_REAL, dest, 2, MPI_COMM_WORLD, error)
+ END DO
+ ! Set 'larea_buffer' for root as well.
+ larea_buffer (:) = larea_k (1:size)
+ELSE
+ WRITE (*,*) 'Receiving by myrank = ',myrank
+ CALL MPI_RECV ( larea_buffer, size/ntimes, MPI_REAL, 0, 2, MPI_COMM_WORLD, &
+                 MPI_STATUS_IGNORE, error)
+END IF
+!----------------------------------------------------------------------!
+! larea
+var_name = 'larea'
+WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
+&"CPUs/",TRIM(var_name),"_",myrank,".bin"
+! Delete existing file.
+CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+WRITE (*,*) 'Writing to ', TRIM(file_name)
+! Open the file for writing.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_write(file_handle, larea_buffer, size/ntimes, &
+ MPI_REAL, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
