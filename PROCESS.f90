@@ -10,7 +10,7 @@ INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k
-REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
+REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all
 REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
@@ -37,6 +37,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 nland_chunk = nland / nprocs
 kyr_clm = 1901
 ALLOCATE (B_k(nland_chunk))
+ALLOCATE (B_k_all(nland))
 ALLOCATE (larea_k(nland_chunk))
 ALLOCATE (i_k (nland_chunk))
 ALLOCATE (j_k (nland_chunk))
@@ -117,7 +118,10 @@ DO k = 1, nland_chunk
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 
-IF (myrank == 1) THEN
+CALL MPI_Gather (B_k, nland_chunk, MPI_REAL, B_k_all, nland_chunk, MPI_REAL, &
+ root, MPI_COMM_WORLD)
+
+IF (myrank == root) THEN
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
