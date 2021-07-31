@@ -12,7 +12,7 @@ INTEGER :: error, i, j, k
 INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
 INTEGER :: varidW, varidB, varidSOM
 INTEGER, DIMENSION (2) :: dimids_two
-CHARACTER(LEN=200) :: var_name, file_name
+CHARACTER(LEN=300) :: var_name, file_name
 CHARACTER(LEN=4) :: char_year
 REAL :: TB, TLA, summary
 REAL, PARAMETER :: fillvalue = 1.0E20
