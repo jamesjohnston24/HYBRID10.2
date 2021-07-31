@@ -210,9 +210,9 @@ IF (myrank == root) THEN
    CALL MPI_SEND ( j_buffer, size/ntimes, MPI_INTEGER, dest, 4, MPI_COMM_WORLD, error)
  END DO
  ! Set 'larea_buffer' for root as well.
- larea_buffer (:) = larea_k (1:size)
- i_buffer (:) = i_k (1:size)
- j_buffer (:) = j_k (1:size)
+ larea_buffer (:) = larea_k (1:size/ntimes)
+ i_buffer (:) = i_k (1:size/ntimes)
+ j_buffer (:) = j_k (1:size/ntimes)
 ELSE
  WRITE (*,*) 'Receiving by myrank = ',myrank
  CALL MPI_RECV ( larea_buffer, size/ntimes, MPI_REAL, 0, 2, MPI_COMM_WORLD, &
