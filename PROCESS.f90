@@ -9,7 +9,7 @@ INTEGER, PARAMETER :: root = 0
 INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 INTEGER :: myrank, nprocs, size, file_handle, kyr_clm, nland_chunk
 INTEGER :: error, i, j, k
-INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid
+INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
 INTEGER :: varidW, varidB, varidSOM
 INTEGER, DIMENSION (2) :: dimids_two
 CHARACTER(LEN=200) :: var_name, file_name
