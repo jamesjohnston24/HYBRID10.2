@@ -33,10 +33,10 @@ CALL MPI_Comm_size (MPI_COMM_WORLD,nprocs,error)
 CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 
-IF (myrank == root) THEN
+!IF (myrank == root) THEN
 
 !----------------------------------------------------------------------!
-!myrank = 0
+myrank = 0
 kyr_clm = 1901
 nprocs = 4
 nland_chunk = nland / nprocs
@@ -174,7 +174,7 @@ CALL CHECK (NF90_PUT_VAR (ncid,     varidSOM, SOM_grid))
 CALL CHECK (NF90_close (ncid))
 !----------------------------------------------------------------------!
 
-END IF ! myrank == root
+!END IF ! myrank == root
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
