@@ -38,11 +38,12 @@ ALLOCATE (SOM_grid(nlon,nlat))
 ALLOCATE (larea_k (nland_chunk))
 ALLOCATE (i_k (nland_chunk))
 ALLOCATE (j_k (nland_chunk))
-ALLOCATE (B_k(nland_chunk))
+ALLOCATE (B_k (nland_chunk))
 B_grid = fillvalue
+myrank=0
 !----------------------------------------------------------------------!
 
-DO myrank = 0, 0
+!DO myrank = 0, 0
 
 !----------------------------------------------------------------------!
 var_name = 'larea'
@@ -117,7 +118,7 @@ DO k = 1, nland_chunk
 END DO ! k
 !----------------------------------------------------------------------!
 
-END DO ! myrank
+!END DO ! myrank
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
