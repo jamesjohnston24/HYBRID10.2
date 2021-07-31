@@ -14,6 +14,11 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
 CHARACTER(LEN=20) :: var_name
 CHARACTER(LEN=200) :: file_name
+INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
+INTEGER :: varidW, varidB, varidSOM
+INTEGER, DIMENSION (2) :: dimids_two
+CHARACTER(LEN=200) :: var_name, file_name
+CHARACTER(LEN=4) :: char_year
 
 !----------------------------------------------------------------------!
 CALL MPI_INIT ( error )
@@ -105,8 +110,58 @@ DO k = 1, nland_chunk
  i = i_k (k)
  j = j_k (k)
  B_grid (i,j) = B_k (k)
- write(*,*)i,j,k,B_grid(i,j)
+ !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
+
+!----------------------------------------------------------------------!
+var_name = 'tmp'
+WRITE (char_year, '(I4)') kyr_clm
+file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
+ &char_year//'.365d.noc.nc'
+WRITE (*,*) 'Opening file: ',file_name
+CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
+varid = 2
+CALL CHECK ( NF90_GET_VAR ( ncid, varid, lon ))
+varid = 3
+CALL CHECK ( NF90_GET_VAR ( ncid, varid, lat ))
+CALL CHECK ( NF90_CLOSE ( ncid ))
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+file_name = "fields_grid.nc"
+write (*, *) 'Writing to ', trim (file_name)
+CALL CHECK (NF90_CREATE (trim (file_name), cmode = nf90_clobber, &
+            ncid = ncid))
+CALL CHECK (NF90_DEF_DIM (ncid, "longitude", nlon, lon_dimid))
+CALL CHECK (NF90_DEF_DIM (ncid, "latitude" , nlat, lat_dimid))
+CALL CHECK (NF90_DEF_VAR (ncid, "longitude", nf90_float, lon_dimid, &
+            lon_varid))
+CALL CHECK (NF90_DEF_VAR (ncid, "latitude" , nf90_float, lat_dimid, &
+            lat_varid))
+dimids_two = (/ lon_dimid, lat_dimid /)
+CALL CHECK (NF90_PUT_ATT (ncid, lon_varid, "units", "degrees_east"))
+CALL CHECK (NF90_PUT_ATT (ncid, lat_varid, "units", "degrees_north"))
+CALL CHECK (NF90_DEF_VAR (ncid, "Soil_Water", nf90_float, &
+            dimids_two, varidW))
+CALL CHECK (NF90_DEF_VAR (ncid, "Living_Biomass", nf90_float, &
+            dimids_two, varidB))
+CALL CHECK (NF90_DEF_VAR (ncid, "Soil_Organic_Matter", nf90_float, &
+            dimids_two, varidSOM))
+CALL CHECK (NF90_PUT_ATT (ncid, varidW, "units", "m"))
+CALL CHECK (NF90_PUT_ATT (ncid, varidB, "units", "kg[DM] m-2"))
+CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "units", "kg[DM] m-2"))
+CALL CHECK (NF90_PUT_ATT (ncid, varidW, "_FillValue", fillvalue))
+CALL CHECK (NF90_PUT_ATT (ncid, varidB, "_FillValue", fillvalue))
+CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "_FillValue", fillvalue))
+CALL CHECK (NF90_ENDDEF (ncid))
+CALL CHECK (NF90_PUT_VAR (ncid, lon_varid, lon))
+CALL CHECK (NF90_PUT_VAR (ncid, lat_varid, lat))
+CALL CHECK (NF90_PUT_VAR (ncid,     varidW, soilW_grid))
+CALL CHECK (NF90_PUT_VAR (ncid,     varidB, B_grid))
+CALL CHECK (NF90_PUT_VAR (ncid,     varidSOM, SOM_grid))
+CALL CHECK (NF90_close (ncid))
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
