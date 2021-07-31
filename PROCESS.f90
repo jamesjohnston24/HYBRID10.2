@@ -61,7 +61,7 @@ DO k = 1, nland_chunk
  TB = TB + B_k (k) * larea_k (k) * 1000.0 * 1000.0
  !TB = TB + larea_k (k) * 1000.0 * 1000.0
 END DO ! k
-WRITE (*,*) 'TB = ', TB, myrank
+WRITE (*,*) 'TB = ', TB/TLA, myrank
 
 ! Combine and produce netCDF output for mapping.
 
