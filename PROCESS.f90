@@ -40,6 +40,7 @@ nland_chunk = nland / nprocs
 
 !----------------------------------------------------------------------!
 ALLOCATE (B_k(nland_chunk))
+B_k = 20.0
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
