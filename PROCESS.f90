@@ -57,11 +57,11 @@ CALL MPI_File_Close(file_handle, error)
 
 TB = 0.0
 DO k = 1, nland_chunk
- ! (kg[DM] m^2) * (km^2) * (m^2 km^-2)
- TB = TB + B_k (k) * larea_k (k)
+ ! (kg[DM] m^2) * (km^2) * (m^2 km^-2) * (g kg-1)
+ TB = TB + B_k (k) * larea_k (k) * 1000.0 * 1000.0 * 1000.0
  !TB = TB + larea_k (k)
 END DO ! k
-WRITE (*,*) 'TB = ', TB, myrank
+WRITE (*,*) 'TB (Pg[DM]) = ', TB/1.0E15, myrank
 
 ! Combine and produce netCDF output for mapping.
 
