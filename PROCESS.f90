@@ -119,7 +119,7 @@ DO k = 1, nland_chunk
 END DO ! k
 
 CALL MPI_Gather (B_k, nland_chunk, MPI_REAL, B_k_all, nland_chunk, MPI_REAL, &
- root, MPI_COMM_WORLD)
+ root, MPI_COMM_WORLD, error)
 
 IF (myrank == root) THEN
 
