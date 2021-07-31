@@ -56,7 +56,7 @@ CALL MPI_File_read(file_handle, B_k, size, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
-write (*,*) myrank, B_k (10)
+write (*,*) myrank, B_k (10), error
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
