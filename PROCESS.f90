@@ -82,7 +82,7 @@ CALL MPI_Gather(B,nland_chunk,MPI_REAL, &
                 B_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
 IF (myrank == root) THEN
  write (*,*) 'Total biomass = ', summary/1.0e15, 'Pg[DM]'
- file_name = 
+ !file_name = 
 END IF
 
 !----------------------------------------------------------------------!
