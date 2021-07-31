@@ -120,7 +120,7 @@ DO kyr_clm = 1901, 1901
   END DO ! j
   !--------------------------------------------------------------------!
 
-  WRITE (*,*) kyr_clm, clm_k (1, 1), larea_k (1)
+  WRITE (*,*) kyr_clm, clm_k (1, 1), larea_k (1), i_k (1), j_k (1)
   !DEALLOCATE (clm_in)
   !DEALLOCATE (source)
 
@@ -253,7 +253,7 @@ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
 ! MPI_IO is binary output format. Write using individual file pointer.
 CALL MPI_File_write(file_handle, i, size/ntimes, &
- MPI_REAL, MPI_STATUS_IGNORE, error)
+ MPI_INTEGER, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
@@ -270,7 +270,7 @@ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
 ! MPI_IO is binary output format. Write using individual file pointer.
 CALL MPI_File_write(file_handle, j, size/ntimes, &
- MPI_REAL, MPI_STATUS_IGNORE, error)
+ MPI_INTEGER, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
