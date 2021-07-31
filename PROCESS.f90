@@ -36,7 +36,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !IF (myrank == root) THEN
 
 !----------------------------------------------------------------------!
-myrank = 0
+myrank = 1
 kyr_clm = 1901
 nprocs = 4
 nland_chunk = nland / nprocs
