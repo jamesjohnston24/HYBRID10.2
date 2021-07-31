@@ -14,7 +14,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all
 REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
-INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
+INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k, i_k_all, j_k_all
 REAL, DIMENSION (nlon) :: lon
 REAL, DIMENSION (nlat) :: lat
 CHARACTER(LEN=20) :: var_name
@@ -38,6 +38,8 @@ nland_chunk = nland / nprocs
 kyr_clm = 1901
 ALLOCATE (B_k(nland_chunk))
 ALLOCATE (B_k_all(nland))
+ALLOCATE (i_k_all(nland))
+ALLOCATE (j_k_all(nland))
 ALLOCATE (larea_k(nland_chunk))
 ALLOCATE (i_k (nland_chunk))
 ALLOCATE (j_k (nland_chunk))
@@ -118,10 +120,24 @@ DO k = 1, nland_chunk
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 
+! How does this know which order to place stuff in B_k_all?
+! Assume in processor myrank order.
 CALL MPI_Gather (B_k, nland_chunk, MPI_REAL, B_k_all, nland_chunk, MPI_REAL, &
+ root, MPI_COMM_WORLD, error)
+CALL MPI_Gather (i_k, nland_chunk, MPI_INTEGER, i_k_all, nland_chunk, MPI_INTEGER, &
+ root, MPI_COMM_WORLD, error)
+CALL MPI_Gather (j_k, nland_chunk, MPI_INTEGER, j_k_all, nland_chunk, MPI_INTEGER, &
  root, MPI_COMM_WORLD, error)
 
 IF (myrank == root) THEN
+
+B_grid = fillvalue
+DO k = 1, nland_chunk
+ i = i_k_all (k)
+ j = j_k_all (k)
+ B_grid (i,j) = B_k_all (k)
+ !write(*,*)i,j,k,B_grid(i,j)
+END DO ! k
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
