@@ -31,7 +31,7 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
-REAL, ALLOCATABLE, DIMENSION (:) :: larea_k
+REAL, ALLOCATABLE, DIMENSION (:) :: larea_k, i_k, j_k
 REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
@@ -50,6 +50,8 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 ALLOCATE (clm_in (nlon, nlat, ntimes)) ! Reverse order from netCDF file
 ALLOCATE (clm_k (ntimes, nland))
 ALLOCATE (larea_k (nland))
+ALLOCATE (i_k (nland))
+ALLOCATE (j_k (nland))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -106,6 +108,8 @@ DO kyr_clm = 1901, 1901
     IF (clm_in (i,j,1) /= clm_fill) THEN
      clm_k (:,k) = clm_in (i,j,:)
      larea_k (k) = larea (i,j)
+     i_k (k) = i
+     j_k (k) = j
      k = k + 1
     END IF
    END DO ! i
