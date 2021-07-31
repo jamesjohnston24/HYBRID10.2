@@ -59,8 +59,6 @@ DO kyr_clm = 1901, 1901
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
 
- write (*,*) kyr_clm, myrank, tmp (1,1), B(100)
-
  DO t = 1, ntimes
   DO k = 1, nland_chunk
    Tc = tmp (t,k) - tf
@@ -74,6 +72,8 @@ DO kyr_clm = 1901, 1901
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
 
+ write (*,*) kyr_clm, myrank, tmp (1,1), B(100)
+
 END DO ! kyr_clm
 
 !----------------------------------------------------------------------!
@@ -82,7 +82,7 @@ END DO ! kyr_clm
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
-&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+&"CPUs/",TRIM(var_name),kyr_clm-1,"_",myrank,".bin"
 ! Delete existing file.
 CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 WRITE (*,*) 'Writing to ', TRIM(file_name)
