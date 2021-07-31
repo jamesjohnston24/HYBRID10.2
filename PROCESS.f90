@@ -5,9 +5,12 @@ use netCDF
 
 IMPLICIT NONE
 
-INTEGER, PARAMETER :: nland = 67420
+INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
+REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
+INTEGER :: i, j, k
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k
+REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
 CHARACTER(LEN=20) :: var_name
 CHARACTER(LEN=200) :: file_name
@@ -28,6 +31,7 @@ ALLOCATE (B_k(nland_chunk))
 ALLOCATE (larea_k(nland_chunk))
 ALLOCATE (i_k (nland_chunk))
 ALLOCATE (j_k (nland_chunk))
+ALLOCATE (B_grid(nlon,nlat))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -96,6 +100,13 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 write (*,*) myrank, B_k (10), larea_k (10), i_k (10), j_k (10)
+B_grid = fillvalue
+DO k = 1, nland_chunk
+ i = i_k (k)
+ j = j_k (k)
+ B_grid (i,j) = B_k (k)
+ write(*,*)i,j,k,B_grid(i,j)
+END DO ! k
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
