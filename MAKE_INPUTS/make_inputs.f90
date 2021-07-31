@@ -31,8 +31,10 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr ! QD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: larea ! HD
 REAL, ALLOCATABLE, DIMENSION (:,:) :: fwice ! HD
-REAL, ALLOCATABLE, DIMENSION (:) :: larea_k, i_k, j_k
+REAL, ALLOCATABLE, DIMENSION (:) :: larea_k
+INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
 REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
+INTEGER, ALLOCATABLE, DIMENSION (:) :: i_buffer, j_buffer
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
 !----------------------------------------------------------------------!
@@ -86,6 +88,8 @@ DEALLOCATE (carea)
 size = ntimes * nland / nprocs
 ALLOCATE (clm_buffer (ntimes,nland/nprocs))
 ALLOCATE (larea_buffer (nland/nprocs))
+ALLOCATE (i_buffer (nland/nprocs))
+ALLOCATE (j_buffer (nland/nprocs))
 DO kyr_clm = 1901, 1901
 
  var_name = 'tmp'
@@ -199,13 +203,23 @@ IF (myrank == root) THEN
  DO dest = 1, nprocs-1
    i = dest * nland / nprocs + 1
    larea_buffer (:) = larea_k (i:i+nland/nprocs-1)
+   i_buffer (:) = i_k (i:i+nland/nprocs-1)
+   j_buffer (:) = j_k (i:i+nland/nprocs-1)
    CALL MPI_SEND ( larea_buffer, size/ntimes, MPI_REAL, dest, 2, MPI_COMM_WORLD, error)
+   CALL MPI_SEND ( i_buffer, size/ntimes, MPI_INTEGER, dest, 3, MPI_COMM_WORLD, error)
+   CALL MPI_SEND ( j_buffer, size/ntimes, MPI_INTEGER, dest, 4, MPI_COMM_WORLD, error)
  END DO
  ! Set 'larea_buffer' for root as well.
  larea_buffer (:) = larea_k (1:size)
+ i_buffer (:) = i_k (1:size)
+ j_buffer (:) = j_k (1:size)
 ELSE
  WRITE (*,*) 'Receiving by myrank = ',myrank
  CALL MPI_RECV ( larea_buffer, size/ntimes, MPI_REAL, 0, 2, MPI_COMM_WORLD, &
+                 MPI_STATUS_IGNORE, error)
+ CALL MPI_RECV ( i_buffer, size/ntimes, MPI_INTEGER, 0, 3, MPI_COMM_WORLD, &
+                 MPI_STATUS_IGNORE, error)
+ CALL MPI_RECV ( j_buffer, size/ntimes, MPI_INTEGER, 0, 4, MPI_COMM_WORLD, &
                  MPI_STATUS_IGNORE, error)
 END IF
 !----------------------------------------------------------------------!
@@ -222,6 +236,40 @@ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
 ! MPI_IO is binary output format. Write using individual file pointer.
 CALL MPI_File_write(file_handle, larea_buffer, size/ntimes, &
+ MPI_REAL, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
+!----------------------------------------------------------------------!
+! i
+var_name = 'i'
+WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
+&"CPUs/",TRIM(var_name),"_",myrank,".bin"
+! Delete existing file.
+CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+WRITE (*,*) 'Writing to ', TRIM(file_name)
+! Open the file for writing.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_write(file_handle, i, size/ntimes, &
+ MPI_REAL, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
+!----------------------------------------------------------------------!
+! j
+var_name = 'j'
+WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
+&"CPUs/",TRIM(var_name),"_",myrank,".bin"
+! Delete existing file.
+CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+WRITE (*,*) 'Writing to ', TRIM(file_name)
+! Open the file for writing.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_write(file_handle, j, size/ntimes, &
  MPI_REAL, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
