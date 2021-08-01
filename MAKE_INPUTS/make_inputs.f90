@@ -19,7 +19,9 @@ INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 INTEGER, PARAMETER :: nland = 67420
 INTEGER, PARAMETER :: root = 0
 REAL, PARAMETER :: tf = 273.15
-REAL, PARAMETER :: clm_fill = 1.0E20
+REAL, PARAMETER :: tmp_fill = 1.e+20
+REAL, PARAMETER :: pre_fill = 9.96921e+36
+REAL :: clm_fill
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
 INTEGER :: error, nprocs, myrank, file_handle, dest, size, errcode
 REAL :: Aland ! Total land area (km^2)
@@ -93,6 +95,8 @@ ALLOCATE (j_buffer (nland/nprocs))
 DO kyr_clm = 1901, 1901
 
  var_name = 'pre' ! change as wish
+ IF (TRIM(var_name)=='tmp')clm_fill = tmp_fill
+ IF (TRIM(var_name)=='pre')clm_fill = pre_fill
 
  IF (myrank == root) THEN
 
