@@ -37,6 +37,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_buffer, j_buffer
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
+LOGICAL, PARAMETER :: coord = .FALSE.
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -90,11 +91,11 @@ ALLOCATE (clm_buffer (ntimes,nland/nprocs))
 ALLOCATE (larea_buffer (nland/nprocs))
 ALLOCATE (i_buffer (nland/nprocs))
 ALLOCATE (j_buffer (nland/nprocs))
-DO kyr_clm = 1901, 1920
+DO kyr_clm = 1901, 1901
 
- var_name = 'pre'
+ var_name = 'tmp'
 
- IF (myrank == root) THEN
+ IF ((myrank == root) .AND. coord) THEN
 
   WRITE (char_year, '(I4)') kyr_clm
   file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
@@ -198,6 +199,8 @@ DO kyr_clm = 1901, 1920
 END DO ! kyr_clm
 !----------------------------------------------------------------------!
 
+IF (coord) THEN
+
 IF (myrank == root) THEN
  ! Send data to each processor as 'buffer'.
  DO dest = 1, nprocs-1
@@ -221,7 +224,7 @@ ELSE
                  MPI_STATUS_IGNORE, error)
  CALL MPI_RECV ( j_buffer, size/ntimes, MPI_INTEGER, 0, 4, MPI_COMM_WORLD, &
                  MPI_STATUS_IGNORE, error)
-END IF
+END IF ! myrank
 !----------------------------------------------------------------------!
 ! larea
 var_name = 'larea'
@@ -274,6 +277,8 @@ CALL MPI_File_write(file_handle, j_buffer, size/ntimes, &
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
+
+END IF ! coord
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
