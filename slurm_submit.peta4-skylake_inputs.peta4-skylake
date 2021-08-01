@@ -21,7 +21,7 @@
 #! The skylake/skylake-himem nodes have 32 CPUs (cores) each.
 #SBATCH --ntasks=1
 #! How much wallclock time will be required?
-#SBATCH --time=00:20:00
+#SBATCH --time=00:30:00
 #! What types of email messages do you wish to receive?
 #SBATCH --mail-user=adf10@cam.ac.uk
 #SBATCH --mail-type=ALL
@@ -61,7 +61,7 @@ module load netcdf-fortran-4.4.4-intel-17.0.4-cesnirf netcdf-4.4.1.1-intel-17.0.
 #! Insert additional module load commands after this line if needed:
 
 #! Full path to application executable: 
-application="/home/adf10/HYBRID10.2/make_ws.exe"
+application="/home/adf10/HYBRID10.2/make_inputs.exe"
 
 #! Run options for the application:
 options=""
