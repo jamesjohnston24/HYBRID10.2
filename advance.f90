@@ -42,7 +42,7 @@ DO t = 1, ntimes
    ! Potential (aerodynamic) evaporation (m s-1).
    ! http://mgebrekiros.github.io/IntroductoryHydrology/EvaporationAndTranspiration.pdf
    evap = (eas - ea) * 0.622_DP * 0.4_DP ** 2 * &
-          (29.0D-3 / (R * tmp (t,kyr,k))) * wsgrd (t,kyr,k) / &
+          (29.0D-3 / (R * tmp (t,kyr,k))) * ws (t,kyr,k) / &
           (997.0_DP * (log (2.0_DP / 0.0003_DP)) ** 2)
    evap = MIN (evap, soilW_plot (kp,k) / dt)
    dsoilW = win - evap
