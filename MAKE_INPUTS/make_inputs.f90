@@ -37,7 +37,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_buffer, j_buffer
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
-LOGICAL, PARAMETER :: coord = .TRUE. ! make larea, i, j files
+LOGICAL, PARAMETER :: coord = .FALSE. ! make larea, i, j files
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -93,7 +93,7 @@ ALLOCATE (i_buffer (nland/nprocs))
 ALLOCATE (j_buffer (nland/nprocs))
 DO kyr_clm = 1901, 1901
 
- var_name = 'tmp'
+ var_name = 'pre'
 
  IF ((myrank == root) .AND. coord) THEN
 
