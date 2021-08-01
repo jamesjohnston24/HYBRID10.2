@@ -45,7 +45,7 @@ B = 0.0
 size = ntimes * nland / nprocs
 ALLOCATE (tmp(ntimes,nland/nprocs))
 ALLOCATE (pre(ntimes,nland/nprocs))
-DO kyr_clm = 1901, 1920
+DO kyr_clm = 1901, 1901
 
  !---------------------------------------------------------------------!
  var_name = 'tmp'
