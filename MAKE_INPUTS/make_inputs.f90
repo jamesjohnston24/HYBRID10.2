@@ -58,31 +58,33 @@ ALLOCATE (j_k (nland))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-ALLOCATE (carea (2*nlon, 2*nlat)) ! Reverse order from net CDF file
-ALLOCATE (icwtr (2*nlon, 2*nlat)) ! Reverse order from net CDF file
-file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
- &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
-CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
-varid = 5 ! QD area, km^2
-CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
-varid = 6 ! QD ice/water fraction, area fraction
-CALL CHECK (NF90_GET_VAR (ncid, varid, icwtr))
-CALL CHECK (NF90_CLOSE (ncid))
-! Aggregate from QD to HD.
-ALLOCATE (larea(nlon,nlat))
-ALLOCATE (fwice(nlon,nlat))
-jj = 1
-DO j = 1, nlat
- ii = 1
- DO i = 1, nlon
-  ! Invert as these start at NP, I presume.
-  larea (i,nlat-j+1) = SUM ( carea (ii:ii+1,jj:jj+1) ) ! km^2
-  fwice (i,nlat-j+1) = SUM ( icwtr (ii:ii+1,jj:jj+1) ) / 4.0 ! area fraction
-  ii = ii + 2
- END DO
- jj = jj + 2
-END DO ! j
-DEALLOCATE (carea)
+IF (coord) THEN
+ ALLOCATE (carea (2*nlon, 2*nlat)) ! Reverse order from net CDF file
+ ALLOCATE (icwtr (2*nlon, 2*nlat)) ! Reverse order from net CDF file
+ file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+  &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
+ CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
+ varid = 5 ! QD area, km^2
+ CALL CHECK (NF90_GET_VAR (ncid, varid, carea))
+ varid = 6 ! QD ice/water fraction, area fraction
+ CALL CHECK (NF90_GET_VAR (ncid, varid, icwtr))
+ CALL CHECK (NF90_CLOSE (ncid))
+ ! Aggregate from QD to HD.
+ ALLOCATE (larea(nlon,nlat))
+ ALLOCATE (fwice(nlon,nlat))
+ jj = 1
+ DO j = 1, nlat
+  ii = 1
+  DO i = 1, nlon
+   ! Invert as these start at NP, I presume.
+   larea (i,nlat-j+1) = SUM ( carea (ii:ii+1,jj:jj+1) ) ! km^2
+   fwice (i,nlat-j+1) = SUM ( icwtr (ii:ii+1,jj:jj+1) ) / 4.0 ! area fraction
+   ii = ii + 2
+  END DO
+  jj = jj + 2
+ END DO ! j
+ DEALLOCATE (carea)
+END IF ! coord
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
