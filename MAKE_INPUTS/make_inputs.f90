@@ -35,7 +35,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: larea_k
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k
 REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_buffer, j_buffer
-CHARACTER(LEN=200) :: file_name, var_name
+CHARACTER(LEN=200) :: file_name, var_name, somat
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
 !----------------------------------------------------------------------!
 
