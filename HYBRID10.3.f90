@@ -58,7 +58,7 @@ DO kyr_clm = 1901, 1901
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, TRIM(var_name), size, &
+ CALL MPI_File_read(file_handle, tmp, size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
@@ -72,7 +72,7 @@ DO kyr_clm = 1901, 1901
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, TRIM(var_name), size, &
+ CALL MPI_File_read(file_handle, pre, size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
