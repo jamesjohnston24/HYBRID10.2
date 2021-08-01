@@ -93,7 +93,7 @@ DO kyr_clm = 1901, 1901
  END DO ! t = 1, ntimes
  !---------------------------------------------------------------------!
 
- write (*,*) kyr_clm, myrank, tmp (1,1), B(100)
+ write (*,*) kyr_clm, myrank, tmp (1,1), pre (1,1), B(100)
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
