@@ -114,7 +114,8 @@ DO kyr_clm = 1901, 1901
   k = 1
   DO j = 1, nlat
    DO i = 1, nlon
-    IF (clm_in (i,j,1) /= clm_fill) THEN
+    !IF (clm_in (i,j,1) /= clm_fill) THEN
+    IF (clm_in (i,j,1) < 1.0E6) THEN
      !clm_k (:,k) = clm_in (i,j,:)
      !larea_k (k) = larea (i,j)
      !i_k (k) = i
