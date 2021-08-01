@@ -94,8 +94,6 @@ DO kyr_clm = 1901, 1901
 
  var_name = 'tmp' ! change as wish
 
- IF ((myrank == root) .AND. coord) THEN
-
   WRITE (char_year, '(I4)') kyr_clm
   file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
    &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
