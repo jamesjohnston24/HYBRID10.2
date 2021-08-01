@@ -37,7 +37,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_buffer, j_buffer
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
-LOGICAL, PARAMETER :: coord = .FALSE. ! make larea, i, j files
+LOGICAL, PARAMETER :: coord = .TRUE. ! make larea, i, j files
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
