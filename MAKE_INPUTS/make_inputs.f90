@@ -114,18 +114,16 @@ DO kyr_clm = 1901, 1901
   k = 1
   DO j = 1, nlat
    DO i = 1, nlon
-    !IF (clm_in (i,j,1) /= clm_fill) THEN
-    IF (clm_in (i,j,1) < 1.0E6) THEN
-     !clm_k (:,k) = clm_in (i,j,:)
-     !larea_k (k) = larea (i,j)
-     !i_k (k) = i
-     !j_k (k) = j
+    ! nland catch because seems to be one extra if pre!
+    IF ((clm_in (i,j,1) /= clm_fill) .AND. (k <= nland)) THEN
+     clm_k (:,k) = clm_in (i,j,:)
+     larea_k (k) = larea (i,j)
+     i_k (k) = i
+     j_k (k) = j
      k = k + 1
     END IF
    END DO ! i
   END DO ! j
-write (*,*)k
-stop
   !--------------------------------------------------------------------!
 
   WRITE (*,*) kyr_clm, clm_k (1, 1), larea_k (1), i_k (1), j_k (1)
