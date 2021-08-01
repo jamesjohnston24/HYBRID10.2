@@ -6,7 +6,7 @@ USE mpi
 IMPLICIT NONE
 INTEGER, PARAMETER :: ntasks = 1
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
-INTEGER, PARAMETER :: nland = 67420, nyr = 1
+INTEGER, PARAMETER :: nland = 67420, nyr = 50
 INTEGER, PARAMETER :: size = ntimes * nland / ntasks, root = 1
 !INTEGER, PARAMETER :: size = nland / ntasks, root = 1
 INTEGER :: nprocs, namelen, myrank, error
