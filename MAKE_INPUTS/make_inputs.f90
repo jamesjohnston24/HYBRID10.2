@@ -37,7 +37,6 @@ REAL, ALLOCATABLE, DIMENSION (:) :: larea_buffer
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_buffer, j_buffer
 CHARACTER(LEN=200) :: file_name, var_name
 CHARACTER(LEN=4) :: char_year, char_nprocs, char_myrank
-LOGICAL, PARAMETER :: coord = .TRUE. ! make larea, i, j files
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -58,7 +57,6 @@ ALLOCATE (j_k (nland))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-IF (coord) THEN
  ALLOCATE (carea (2*nlon, 2*nlat)) ! Reverse order from net CDF file
  ALLOCATE (icwtr (2*nlon, 2*nlat)) ! Reverse order from net CDF file
  file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
@@ -84,7 +82,6 @@ IF (coord) THEN
   jj = jj + 2
  END DO ! j
  DEALLOCATE (carea)
-END IF ! coord
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -201,8 +198,6 @@ DO kyr_clm = 1901, 1901
 END DO ! kyr_clm
 !----------------------------------------------------------------------!
 
-IF (coord) THEN
-
 IF (myrank == root) THEN
  ! Send data to each processor as 'buffer'.
  DO dest = 1, nprocs-1
@@ -279,8 +274,6 @@ CALL MPI_File_write(file_handle, j_buffer, size/ntimes, &
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
-
-END IF ! coord
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
