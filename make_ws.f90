@@ -83,7 +83,7 @@ DO kyr = syr, syr+nyr-1
  file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
- write (*, *) 'Writing to ', trim (file_name)
+ WRITE (*,"('Writing to file ',A)") TRIM(file_name)
  call check (nf90_create (trim (file_name), cmode = nf90_clobber, &
              ncid = ncid))
  call check (nf90_def_dim (ncid, "longitude", nlon, lon_dimid))
