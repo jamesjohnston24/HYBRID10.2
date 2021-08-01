@@ -93,7 +93,7 @@ ALLOCATE (i_buffer (nland/nprocs))
 ALLOCATE (j_buffer (nland/nprocs))
 DO kyr_clm = 1901, 1920
 
- var_name = 'pre'
+ var_name = 'spfh' ! change as wish
 
  IF ((myrank == root) .AND. coord) THEN
 
