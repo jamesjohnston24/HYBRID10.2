@@ -103,6 +103,7 @@ DO kyr_clm = 1901, 1901
   WRITE (*,*) 'Opening file: ',file_name
   CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
   varid = 4 ! Temperature (K)
+  !varid = Precipitation (mm/6h)
   ! Origin at IDL and SP.
   CALL CHECK ( NF90_GET_VAR ( ncid, varid, clm_in ))
   CALL CHECK ( NF90_CLOSE ( ncid ))
@@ -110,14 +111,16 @@ DO kyr_clm = 1901, 1901
   DO j = 1, nlat
    DO i = 1, nlon
     IF (clm_in (i,j,1) /= clm_fill) THEN
-     clm_k (:,k) = clm_in (i,j,:)
-     larea_k (k) = larea (i,j)
-     i_k (k) = i
-     j_k (k) = j
+     !clm_k (:,k) = clm_in (i,j,:)
+     !larea_k (k) = larea (i,j)
+     !i_k (k) = i
+     !j_k (k) = j
      k = k + 1
     END IF
    END DO ! i
   END DO ! j
+write (*,*)k
+stop
   !--------------------------------------------------------------------!
 
   WRITE (*,*) kyr_clm, clm_k (1, 1), larea_k (1), i_k (1), j_k (1)
