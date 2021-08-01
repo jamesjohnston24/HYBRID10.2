@@ -6,7 +6,7 @@ USE mpi
 IMPLICIT NONE
 INTEGER, PARAMETER :: ntasks = 1
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
-INTEGER, PARAMETER :: nland = 67420, nyr = 50
+INTEGER, PARAMETER :: nland = 67420, nyr = 1
 INTEGER, PARAMETER :: size = ntimes * nland / ntasks, root = 1
 !INTEGER, PARAMETER :: size = nland / ntasks, root = 1
 INTEGER :: nprocs, namelen, myrank, error
@@ -38,13 +38,13 @@ END DO
 CALL MPI_Init ( error )
 before = MPI_Wtime()
 
-syr = 1971
+syr = 1901
 DO kyr = syr, syr+nyr-1
 
  WRITE (char_year, '(I4)') kyr
  var_name = 'ugrd'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
-  &CRUJRA_2.1/CRUJRA2020/'//TRIM(var_name)//'/crujra.v2.1.5d.'&
+ file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+  &input/CRUJRA2021/'//'crujra.v2.2.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
  WRITE (*,"('Reading from file ',A)") TRIM(file_name)
  CALL CHECK ( NF90_OPEN (trim (file_name), NF90_NOWRITE, ncid ))
@@ -59,8 +59,8 @@ DO kyr = syr, syr+nyr-1
  END IF
  CALL CHECK ( NF90_CLOSE ( ncid ))
  var_name = 'vgrd'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
-  &CRUJRA_2.1/CRUJRA2020/'//TRIM(var_name)//'/crujra.v2.1.5d.'&
+ file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+  &input/CRUJRA2021/'//'crujra.v2.2.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
  WRITE (*,"('Reading from file ',A)") TRIM(file_name)
  CALL CHECK ( NF90_OPEN (trim (file_name), NF90_NOWRITE, ncid ))
@@ -80,8 +80,8 @@ DO kyr = syr, syr+nyr-1
  END DO
  
  var_name = 'wsgrd'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
-  &CRUJRA_2.1/CRUJRA2020/'//TRIM(var_name)//'/crujra.v2.1.5d.'&
+ file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+  &input/CRUJRA2021/'//'crujra.v2.2.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
  write (*, *) 'Writing to ', trim (file_name)
  call check (nf90_create (trim (file_name), cmode = nf90_clobber, &
