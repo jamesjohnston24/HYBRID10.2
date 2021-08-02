@@ -198,7 +198,7 @@ WRITE (*,*) 'Writing to ', TRIM(file_name)
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
  MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
 ! MPI_IO is binary output format. Write using individual file pointer.
-CALL MPI_File_write(file_handle, B, size/ntimes, &
+CALL MPI_File_write(file_handle, soilW, size/ntimes, &
  MPI_REAL, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
