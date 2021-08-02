@@ -61,7 +61,7 @@ ALLOCATE (pre(ntimes,nland/nprocs))
 ALLOCATE (spfh(ntimes,nland/nprocs))
 ALLOCATE (pres(ntimes,nland/nprocs))
 ALLOCATE (wsgrd(ntimes,nland/nprocs))
-DO kyr_clm = 1901, 1902
+DO kyr_clm = 1901, 1920
 
  !---------------------------------------------------------------------!
  var_name = 'tmp'
