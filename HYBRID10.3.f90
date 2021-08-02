@@ -15,10 +15,11 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
-REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea
+REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
+REAL, PARAMETER :: R = 8.3144
 REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp ! K
 REAL, ALLOCATABLE, DIMENSION (:,:) :: pre ! mm/6h
 REAL, ALLOCATABLE, DIMENSION (:,:) :: spfh ! kg/kg
@@ -124,6 +125,12 @@ DO kyr_clm = 1901, 1901
          (237.3 + tmp (t,k) - 273.15))
    ! Pa.
    ea = spfh (t,k) * pres (t,k) * 29.0E-3 / 18.0E-3
+   ! Potential (aerodynamic) evaporation (m s-1).
+   ! http://mgebrekiros.github.io/IntroductoryHydrology/EvaporationAndTranspiration.pdf
+   evap = (eas - ea) * 0.622 * 0.4 ** 2 * &
+          (29.0E-3 / (R * tmp (t,k))) * ws (t,k) / &
+          (997.0_DP * (log (2.0_DP / 0.0003_DP)) ** 2)
+   evap = MIN (evap, soilW_plot (kp,k) / dt)
    Tc = tmp (t,k) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
