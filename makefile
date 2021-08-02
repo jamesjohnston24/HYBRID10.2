@@ -1,7 +1,7 @@
 F90 = mpif90 -I/usr/local/Cluster-Apps/intel/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/include
 
-FFLAGS = -check -traceback
-#FFLAGS = -O2
+#FFLAGS = -check -traceback
+FFLAGS = -O2
 LDFLAGS = -lnetcdff -lnetcdf
 
 SRC = \
