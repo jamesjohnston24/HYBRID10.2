@@ -12,8 +12,9 @@ INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k
-REAL :: TA, TB
+REAL :: TA, TB, TW
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
+REAL, ALLOCATABLE, DIMENSION (:) :: soilW_k, soilW_k_all
 REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
@@ -41,6 +42,8 @@ nland_chunk = nland / nprocs
 kyr_clm = 1901
 ALLOCATE (B_k(nland_chunk))
 ALLOCATE (B_k_all(nland))
+ALLOCATE (soilW_k(nland_chunk))
+ALLOCATE (soilW_k_all(nland))
 ALLOCATE (larea_k_all(nland))
 ALLOCATE (i_k_all(nland))
 ALLOCATE (j_k_all(nland))
@@ -99,7 +102,6 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-!B_k = 20.0
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
@@ -115,7 +117,23 @@ CALL MPI_File_read(file_handle, B_k, nland_chunk, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
-write (*,*) myrank, B_k (10), larea_k (10), i_k (10), j_k (10)
+!----------------------------------------------------------------------!
+var_name = 'soilW'
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
+&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+WRITE (*,*) 'Reading from ', TRIM(file_name)
+! Open the file for reading.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_read(file_handle, soilW_k, nland_chunk, &
+ MPI_REAL, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
+!----------------------------------------------------------------------!
+
+write (*,*) myrank, B_k (10), soilW (10), larea_k (10), i_k (10), j_k (10)
 !B_grid = fillvalue
 !DO k = 1, nland_chunk
 ! i = i_k (k)
@@ -128,6 +146,8 @@ write (*,*) myrank, B_k (10), larea_k (10), i_k (10), j_k (10)
 ! Assume in processor myrank order.
 CALL MPI_Gather (B_k, nland_chunk, MPI_REAL, B_k_all, nland_chunk, MPI_REAL, &
  root, MPI_COMM_WORLD, error)
+CALL MPI_Gather (soilW_k, nland_chunk, MPI_REAL, soilW_k_all, nland_chunk, MPI_REAL, &
+ root, MPI_COMM_WORLD, error)
 CALL MPI_Gather (larea_k, nland_chunk, MPI_INTEGER, larea_k_all, nland_chunk, MPI_INTEGER, &
  root, MPI_COMM_WORLD, error)
 CALL MPI_Gather (i_k, nland_chunk, MPI_INTEGER, i_k_all, nland_chunk, MPI_INTEGER, &
@@ -139,17 +159,21 @@ IF (myrank == root) THEN
 
 TA = 0.0
 TB = 0.0
+TW = 0.0
 B_grid = fillvalue
 DO k = 1, nland
  i = i_k_all (k)
  j = j_k_all (k)
  B_grid (i,j) = B_k_all (k)
+ soilW_grid (i,j) = soilW_k_all (k)
  TA = TA + larea_k_all (k)
  TB = TB + B_k_all (k) * larea_k_all (k)
+ TW = TW + soilW_k_all (k) * larea_k_all (k)
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 WRITE (*,*) 'Total land area = ',TA
 WRITE (*,*) 'Total biomass = ',TB/1.0E6
+WRITE (*,*) 'Total water = ',TW
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
