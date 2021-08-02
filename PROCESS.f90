@@ -12,7 +12,7 @@ INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k
-REAL :: TA
+REAL :: TA, TB
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
 REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
@@ -144,9 +144,11 @@ DO k = 1, nland
  j = j_k_all (k)
  B_grid (i,j) = B_k_all (k)
  TA = TA + larea_k_all (k)
+ TB = TB + B_k_all (k) * larea_k_all (k)
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 WRITE (*,*) 'Total land area = ',TA
+WRITE (*,*) 'Total biomass = ',TB/1.0E12
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
