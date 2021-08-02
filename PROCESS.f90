@@ -154,7 +154,7 @@ CALL MPI_File_read(file_handle, SOM_k, nland_chunk, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
-write (*,*) myrank, B_k (10), soilW_k (10), SOM_k (10, larea_k (10), &
+write (*,*) myrank, B_k (10), soilW_k (10), SOM_k (10), larea_k (10), &
 i_k (10), j_k (10)
 !B_grid = fillvalue
 !DO k = 1, nland_chunk
