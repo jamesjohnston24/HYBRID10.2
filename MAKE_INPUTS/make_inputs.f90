@@ -20,7 +20,6 @@ INTEGER, PARAMETER :: nland = 67420
 INTEGER, PARAMETER :: root = 0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: tmp_fill = 1.e+20
-REAL :: clm_fill
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
 INTEGER :: error, nprocs, myrank, file_handle, dest, size, errcode
 REAL :: Aland ! Total land area (km^2)
@@ -150,13 +149,14 @@ DO kyr_clm = 1901, 1901
   !DEALLOCATE (source)
 
   !--------------------------------------------------------------------!
-  ! Compute global mean annual land surface temperature (oC).
+  ! Compute global mean annual land surface temperature (oC),
+  ! or precipitation (mm/6h).
   !--------------------------------------------------------------------!
   Aland = 0.0 ! Total land area (km^2)
   Tmean = 0.0 ! Mean land temperature (oC)
   DO j = 1, nlat
    DO i = 1, nlon
-    IF (clm_in (i,j,1) /= clm_fill) THEN
+    IF (tmp_in (i,j,1) /= tmp_fill) THEN
      Tmean = Tmean + SUM (clm_in (i,j,:)) * larea (i,j) * &
              (1.0 - fwice (i,j))
      Aland = Aland + larea (i,j) * (1.0 - fwice (i,j))
@@ -165,7 +165,7 @@ DO kyr_clm = 1901, 1901
   END DO ! j
   Tmean = Tmean / (FLOAT (ntimes) * Aland) - tf
   WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
-  WRITE (*,"('Land temperature = ',F0.4,' degC')") Tmean
+  WRITE (*,"('Land climate mean = ',F0.4,' degC')") Tmean, TRIM(var_name)
   !--------------------------------------------------------------------!
 
  !---------------------------------------------------------------------!
