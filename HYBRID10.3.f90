@@ -15,7 +15,7 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
-REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap
+REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
@@ -146,12 +146,14 @@ DO kyr_clm = 1901, 1901
           (29.0E-3 / (R * tmp (t,k))) * wsgrd (t,k) / &
           (997.0 * (log (2.0 / 0.0003)) ** 2)
    evap = MIN (evap, soilW (k) / dt)
+   dsoilW = win - evap
    Tc = tmp (t,k) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
-   NPP = fT * 3.0 / (1460.0 * dt)
+   NPP = (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
    BL = B (k) / (12.5 * 365.0 * 86400.0)
    dB = NPP - BL
+   soilW (k) = soilW (k) + dt * dsoilW
    B (k) = B (k) + dt * dB
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
