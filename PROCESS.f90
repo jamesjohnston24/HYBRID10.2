@@ -40,18 +40,18 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
 kyr_clm = 1901
-ALLOCATE (B_k    (nland_chunk))
-ALLOCATE (soilW_k(nland_chunk))
-ALLOCATE (B_grid(nlon,nlat))
-ALLOCATE (B_k_all(nland))
+ALLOCATE (B_k        (nland_chunk))
+ALLOCATE (B_k_all    (nland))
+ALLOCATE (B_grid     (nlon,nlat))
+ALLOCATE (soilW_k    (nland_chunk))
 ALLOCATE (soilW_k_all(nland))
+ALLOCATE (soilW_grid (nlon,nlat))
+ALLOCATE (larea_k    (nland_chunk))
 ALLOCATE (larea_k_all(nland))
-ALLOCATE (i_k_all(nland))
-ALLOCATE (j_k_all(nland))
-ALLOCATE (larea_k(nland_chunk))
-ALLOCATE (i_k (nland_chunk))
-ALLOCATE (j_k (nland_chunk))
-ALLOCATE (soilW_grid(nlon,nlat))
+ALLOCATE (i_k_all    (nland))
+ALLOCATE (j_k_all    (nland))
+ALLOCATE (i_k        (nland_chunk))
+ALLOCATE (j_k        (nland_chunk))
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
