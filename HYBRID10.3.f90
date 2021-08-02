@@ -203,7 +203,7 @@ DO kyr_clm = 1901, 1901
  WRITE (*,*) 'Wmax = ',Wmax
  WRITE (*,*) 'Bmax = ',Bmax
  WRITE (*,*) 'SOMmax = ',SOMmax
- write (*,*) kyr_clm, myrank, tmp (1,1), pre (1,1), B(100)
+ write (*,*) kyr_clm, kyr_spin, myrank, tmp (1,1), pre (1,1), B(100)
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
