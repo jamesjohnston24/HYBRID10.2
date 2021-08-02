@@ -15,12 +15,13 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
-REAL :: dB, NPP, BL, fT, Tc, ro, eas
+REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
 REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp ! K
 REAL, ALLOCATABLE, DIMENSION (:,:) :: pre ! mm/6h
+REAL, ALLOCATABLE, DIMENSION (:,:) :: spfh ! 
 REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 CHARACTER(LEN=200) :: file_name, var_name
@@ -49,6 +50,7 @@ soilW = 0.0
 size = ntimes * nland / nprocs
 ALLOCATE (tmp(ntimes,nland/nprocs))
 ALLOCATE (pre(ntimes,nland/nprocs))
+ALLOCATE (spfh(ntimes,nland/nprocs))
 DO kyr_clm = 1901, 1901
 
  !---------------------------------------------------------------------!
@@ -81,6 +83,20 @@ DO kyr_clm = 1901, 1901
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
+ var_name = 'spfh'
+ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
+ &"/home/adf10/rds/rds-mb425-geogscratch/&
+ &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
+ &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+ ! Open the file for reading.
+ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+  MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
+ ! MPI_IO is binary output format.
+ CALL MPI_File_read(file_handle, spfh, size, &
+  MPI_REAL, MPI_STATUS_IGNORE, error)
+ ! Close the file.
+ CALL MPI_File_Close(file_handle, error)
+ !---------------------------------------------------------------------!
 
  !---------------------------------------------------------------------!
  DO t = 1, ntimes
@@ -91,6 +107,8 @@ DO kyr_clm = 1901, 1901
    ! Pa.
    eas = 611.0 * EXP (17.27 * (tmp (t,k) - 273.15) / &
          (237.3 + tmp (t,k) - 273.15))
+   ! Pa.
+   ea = spfh (t,k) * pres (t,k) * 29.0E-3 / 18.0E-3
    Tc = tmp (t,k) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
