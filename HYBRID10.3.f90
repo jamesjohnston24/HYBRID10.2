@@ -12,7 +12,7 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 10
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
@@ -61,7 +61,7 @@ ALLOCATE (pre(ntimes,nland/nprocs))
 ALLOCATE (spfh(ntimes,nland/nprocs))
 ALLOCATE (pres(ntimes,nland/nprocs))
 ALLOCATE (wsgrd(ntimes,nland/nprocs))
-DO kyr_clm = 1902, 1902
+DO kyr_clm = 1901, 1902
 
  !---------------------------------------------------------------------!
  var_name = 'tmp'
