@@ -12,9 +12,9 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 10
 INTEGER :: t, k, nland_chunk
-INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
+INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax
 REAL, PARAMETER :: dt = 21600.0
@@ -133,6 +133,7 @@ DO kyr_clm = 1901, 1901
  !---------------------------------------------------------------------!
  Wmax = 0.0
  Bmax = 0.0
+ DO kyr_spin = 1, nyr_spin
  DO t = 1, ntimes
   DO k = 1, nland_chunk
    ro = soilW (k) + pre (t,k) / 1.0E3 - swc
@@ -162,6 +163,7 @@ DO kyr_clm = 1901, 1901
    Bmax = MAX (Bmax, B(k))
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
+ END DO ! kyr_spin = 1, nyr_spin
  !---------------------------------------------------------------------!
 
  WRITE (*,*) 'Wmax = ',Wmax
