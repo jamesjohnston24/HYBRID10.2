@@ -149,7 +149,7 @@ DO k = 1, nland
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 WRITE (*,*) 'Total land area = ',TA
-WRITE (*,*) 'Total biomass = ',TB/1.0E12
+WRITE (*,*) 'Total biomass = ',TB/1.0E6
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
