@@ -15,7 +15,7 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
-REAL :: dB, NPP, BL, fT, Tc, ro
+REAL :: dB, NPP, BL, fT, Tc, ro, eas
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
@@ -86,6 +86,11 @@ DO kyr_clm = 1901, 1901
  DO t = 1, ntimes
   DO k = 1, nland_chunk
    ro = soilW (k) + pre (t,k) / 1.0E3 - swc
+   ro = MAX (0.0, ro)
+   win = (pre (t,k) / 1.0e3 - ro) / dt
+   ! Pa.
+   eas = 611.0 * EXP (17.27 * (tmp (t,k) - 273.15) / &
+         (237.3 + tmp (t,k) - 273.15))
    Tc = tmp (t,k) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
