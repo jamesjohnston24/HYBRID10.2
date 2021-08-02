@@ -16,7 +16,7 @@ INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
-REAL :: Wmax
+REAL :: Wmax, Bmax
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
@@ -132,6 +132,7 @@ DO kyr_clm = 1901, 1901
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
  Wmax = 0.0
+ Bmax = 0.0
  DO t = 1, ntimes
   DO k = 1, nland_chunk
    ro = soilW (k) + pre (t,k) / 1.0E3 - swc
@@ -158,11 +159,13 @@ DO kyr_clm = 1901, 1901
    soilW (k) = soilW (k) + dt * dsoilW
    B (k) = B (k) + dt * dB
    Wmax = MAX (Wmax, soilW (k))
+   Bmax = MAX (Bmax, B(k))
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
  !---------------------------------------------------------------------!
 
  WRITE (*,*) 'Wmax = ',Wmax
+ WRITE (*,*) 'Bmax = ',Bmax
  write (*,*) kyr_clm, myrank, tmp (1,1), pre (1,1), B(100)
 
 !----------------------------------------------------------------------!
