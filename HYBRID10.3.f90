@@ -134,6 +134,7 @@ DO kyr_clm = 1901, 1901
  Wmax = 0.0
  Bmax = 0.0
  DO kyr_spin = 1, nyr_spin
+ WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin
  DO t = 1, ntimes
   DO k = 1, nland_chunk
    ro = soilW (k) + pre (t,k) / 1.0E3 - swc
