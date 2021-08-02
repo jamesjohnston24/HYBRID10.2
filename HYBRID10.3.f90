@@ -137,6 +137,8 @@ DO kyr_clm = 1901, 1901
  WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin
  DO t = 1, ntimes
   DO k = 1, nland_chunk
+write(*,*)tmp(t,k)
+stop
    ro = soilW (k) + pre (t,k) / 1.0E3 - swc
    ro = MAX (0.0, ro)
    win = (pre (t,k) / 1.0e3 - ro) / dt
