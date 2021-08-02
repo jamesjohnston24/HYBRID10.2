@@ -114,13 +114,13 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 write (*,*) myrank, B_k (10), larea_k (10), i_k (10), j_k (10)
-B_grid = fillvalue
-DO k = 1, nland_chunk
- i = i_k (k)
- j = j_k (k)
- B_grid (i,j) = B_k (k)
- !write(*,*)i,j,k,B_grid(i,j)
-END DO ! k
+!B_grid = fillvalue
+!DO k = 1, nland_chunk
+! i = i_k (k)
+! j = j_k (k)
+! B_grid (i,j) = B_k (k)
+! !write(*,*)i,j,k,B_grid(i,j)
+!END DO ! k
 
 ! How does this know which order to place stuff in B_k_all?
 ! Assume in processor myrank order.
