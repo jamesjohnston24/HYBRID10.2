@@ -23,7 +23,8 @@ REAL, PARAMETER :: R = 8.3144
 REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp ! K
 REAL, ALLOCATABLE, DIMENSION (:,:) :: pre ! mm/6h
 REAL, ALLOCATABLE, DIMENSION (:,:) :: spfh ! kg/kg
-REAL, ALLOCATABLE, DIMENSION (:,:) :: pres ! 
+REAL, ALLOCATABLE, DIMENSION (:,:) :: pres ! Pa
+REAL, ALLOCATABLE, DIMENSION (:,:) :: wsgrd ! m s-1
 REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 CHARACTER(LEN=200) :: file_name, var_name
@@ -54,6 +55,7 @@ ALLOCATE (tmp(ntimes,nland/nprocs))
 ALLOCATE (pre(ntimes,nland/nprocs))
 ALLOCATE (spfh(ntimes,nland/nprocs))
 ALLOCATE (pres(ntimes,nland/nprocs))
+ALLOCATE (wsgrd(ntimes,nland/nprocs))
 DO kyr_clm = 1901, 1901
 
  !---------------------------------------------------------------------!
@@ -113,7 +115,20 @@ DO kyr_clm = 1901, 1901
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
-
+ !---------------------------------------------------------------------!
+ var_name = 'wsgrd'
+ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
+ &"/home/adf10/rds/rds-mb425-geogscratch/&
+ &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
+ &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+ ! Open the file for reading.
+ CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+  MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
+ ! MPI_IO is binary output format.
+ CALL MPI_File_read(file_handle, wsgrd, size, &
+  MPI_REAL, MPI_STATUS_IGNORE, error)
+ ! Close the file.
+ CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
  DO t = 1, ntimes
   DO k = 1, nland_chunk
@@ -128,8 +143,8 @@ DO kyr_clm = 1901, 1901
    ! Potential (aerodynamic) evaporation (m s-1).
    ! http://mgebrekiros.github.io/IntroductoryHydrology/EvaporationAndTranspiration.pdf
    evap = (eas - ea) * 0.622 * 0.4 ** 2 * &
-          (29.0E-3 / (R * tmp (t,k))) * ws (t,k) / &
-          (997.0_DP * (log (2.0_DP / 0.0003_DP)) ** 2)
+          (29.0E-3 / (R * tmp (t,k))) * wsgrd (t,k) / &
+          (997.0 * (log (2.0 / 0.0003)) ** 2)
    evap = MIN (evap, soilW_plot (kp,k) / dt)
    Tc = tmp (t,k) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
