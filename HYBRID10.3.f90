@@ -16,7 +16,7 @@ INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
-REAL :: Wmax, Bmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh
+REAL :: Wmax, Bmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
@@ -48,6 +48,7 @@ ALLOCATE (B(nland_chunk))
 ALLOCATE (soilW(nland_chunk))
 B = 0.0
 soilW = 0.0
+SOM = 0.0
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -183,11 +184,12 @@ DO kyr_clm = 1901, 1901
    EM = MAX (0.0, EM)
    EM = MIN (1.0, EM)
    EV = ET_SOIL * EM
-   Rh = EV * SOM (k) * (1.0_DP / (6.25_DP * 365.0_DP * 86400.0_DP))
+   Rh = EV * SOM (k) * (1.0 / (6.25 * 365.0 * 86400.0))
    dSOM = BL - Rh
    NEE = NPP - Rh ! For now!
    soilW (k) = soilW (k) + dt * dsoilW
    B (k) = B (k) + dt * dB
+   SOM (k) = SOM (k) + dt * dSOM
    Wmax = MAX (Wmax, soilW (k))
    Bmax = MAX (Bmax, B(k))
   END DO ! k = 1, nland_chunk
