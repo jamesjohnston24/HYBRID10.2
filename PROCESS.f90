@@ -179,8 +179,8 @@ END DO ! k
 WRITE (*,*) 'Total land area = ',TA
 WRITE (*,*) 'Total biomass = ',TB/1.0E6
 WRITE (*,*) 'Total water = ',TW
-WRITE (*,*) 'Wmax = , Wmax
-WRITE (*,*) 'Bmax = , Bmax
+WRITE (*,*) 'Wmax = ', Wmax
+WRITE (*,*) 'Bmax = ', Bmax
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
