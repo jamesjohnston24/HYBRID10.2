@@ -388,7 +388,9 @@ DO kyr_spin = 1, nyr_spin
  !---------------------------------------------------------------------!
  ! Advance state variables by one year.
  !---------------------------------------------------------------------!
-write(*,*)'myrank is here',myrank,tmp(1,kyr,1),lon_chunk(1),lat_chunk(1)
+write(*,*)'myrank is here',myrank,tmp(1,kyr,1),pre(1,kyr,1),&
+spfh(1,kyr,1),pres(1,kyr,1),ws(1,kyr,1),&
+lon_chunk(1),lat_chunk(1)
  CALL advance (kyr)
  !---------------------------------------------------------------------!
  ! Write global fields each yr.
