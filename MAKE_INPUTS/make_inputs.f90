@@ -165,7 +165,8 @@ DO kyr_clm = 1901, 1901
   END DO ! j
   Tmean = Tmean / (FLOAT (ntimes) * Aland) - tf
   WRITE (*,"('Total land area = ',F0.4,' km^2')") Aland
-  WRITE (*,"('Land climate mean = ',F0.4,' degC')") Tmean, TRIM(var_name)
+  WRITE (*,"('Land climate mean = ',F0.4,' degC',A)") &
+   Tmean, TRIM(var_name)
   !--------------------------------------------------------------------!
 
  !---------------------------------------------------------------------!
