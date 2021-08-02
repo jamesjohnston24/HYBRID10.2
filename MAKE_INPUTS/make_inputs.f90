@@ -111,7 +111,7 @@ ALLOCATE (clm_buffer (ntimes,nland/nprocs))
 ALLOCATE (larea_buffer (nland/nprocs))
 ALLOCATE (i_buffer (nland/nprocs))
 ALLOCATE (j_buffer (nland/nprocs))
-DO kyr_clm = 1901, 1901
+DO kyr_clm = 1901, 1901 
 
  var_name = 'wsgrd' ! change as wish
 
