@@ -12,7 +12,7 @@ INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k
-REAL :: TA, TB, TW
+REAL :: TA, TB, TW, Wmax, Bmax
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW_k, soilW_k_all
 REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
@@ -161,6 +161,8 @@ IF (myrank == root) THEN
 TA = 0.0
 TB = 0.0
 TW = 0.0
+Wmax = 0.0
+Bmax = 0.0
 B_grid = fillvalue
 DO k = 1, nland
  i = i_k_all (k)
@@ -170,11 +172,15 @@ DO k = 1, nland
  TA = TA + larea_k_all (k)
  TB = TB + B_k_all (k) * larea_k_all (k)
  TW = TW + soilW_k_all (k) * larea_k_all (k)
+ Wmax = MAX (soilW_k_all (k), Wmax)
+ Bmax = MAX (B_k_all (k), Bmax)
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 WRITE (*,*) 'Total land area = ',TA
 WRITE (*,*) 'Total biomass = ',TB/1.0E6
 WRITE (*,*) 'Total water = ',TW
+WRITE (*,*) 'Wmax = , Wmax
+WRITE (*,*) 'Bmax = , Bmax
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
