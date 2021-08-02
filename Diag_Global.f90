@@ -16,6 +16,7 @@ DO k = 1, nland_chunk
  NEE_gbox (k) = NEE_gbox (k) / FLOAT (nplots)
  ! Mean biomasss of each grid-box over plots (kg[DM] m-2).
  B_gbox (k) = SUM ( B_plot(:,k) ) / FLOAT (nplots)
+write(*,*)'DG',myrank,k,B_gbox(k)
  ! Mean SOM of each grid-box over plots (kg[DM] m-2).
  SOM_gbox (k) = SUM ( SOM_plot(:,k) ) / FLOAT (nplots)
 END DO ! k = 1, nland_chunk
