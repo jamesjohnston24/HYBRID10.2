@@ -86,5 +86,6 @@ DO t = 1, ntimes
   END DO ! nplots
  END DO ! k
 END DO ! t
+write(*,*)'end advance',B_plot(1,1)
 
 END SUBROUTINE advance
