@@ -16,7 +16,7 @@ INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
-REAL :: Wmax, Bmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
+REAL :: Wmax, Bmax, SOMmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
@@ -137,6 +137,7 @@ DO kyr_clm = 1901, 1901
  !---------------------------------------------------------------------!
  Wmax = 0.0
  Bmax = 0.0
+ SOMmax = 0.0
 !write(*,*) 'myrank is here',myrank,tmp(1,1),pre(1,1),spfh(1,1),pres(1,1),wsgrd(1,1)
  DO kyr_spin = 1, nyr_spin
  WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin
@@ -192,7 +193,8 @@ DO kyr_clm = 1901, 1901
    B (k) = B (k) + dt * dB
    SOM (k) = SOM (k) + dt * dSOM
    Wmax = MAX (Wmax, soilW (k))
-   Bmax = MAX (Bmax, B(k))
+   Bmax = MAX (Bmax, B (k))
+   SOMmax = MAX (SOMmax, SOM (k))
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
  END DO ! kyr_spin = 1, nyr_spin
@@ -200,6 +202,7 @@ DO kyr_clm = 1901, 1901
 
  WRITE (*,*) 'Wmax = ',Wmax
  WRITE (*,*) 'Bmax = ',Bmax
+ WRITE (*,*) 'SOMmax = ',SOMmax
  write (*,*) kyr_clm, myrank, tmp (1,1), pre (1,1), B(100)
 
 !----------------------------------------------------------------------!
