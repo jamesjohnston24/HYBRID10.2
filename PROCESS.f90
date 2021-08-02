@@ -12,6 +12,7 @@ INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k
+REAL :: TA
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
 REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
@@ -136,13 +137,16 @@ CALL MPI_Gather (j_k, nland_chunk, MPI_INTEGER, j_k_all, nland_chunk, MPI_INTEGE
 
 IF (myrank == root) THEN
 
+TA = 0.0
 B_grid = fillvalue
 DO k = 1, nland
  i = i_k_all (k)
  j = j_k_all (k)
  B_grid (i,j) = B_k_all (k)
+ TA = TA + larea_k_all (k)
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
+WRITE (*,*) 'Total land area = ',TA
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
