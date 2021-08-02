@@ -30,7 +30,7 @@ DO t = 1, ntimes
 !    CLOSE (20)
 !   END IF
 !  END IF
-write(*,*)tmp(t,kyr,k)
+write(*,*)myrank,tmp(t,kyr,k)
 stop
   DO kp = 1, nplots
    ro = soilW_plot (kp,k) + pre (t,kyr,k) / 1.0D3 - swc
