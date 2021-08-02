@@ -16,11 +16,12 @@ INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
-REAL :: Wmax, Bmax
+REAL :: Wmax, Bmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
 REAL, PARAMETER :: R = 8.3144
+REAL, PARAMETER :: EPS = 1.0E-8
 REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp ! K
 REAL, ALLOCATABLE, DIMENSION (:,:) :: pre ! mm/6h
 REAL, ALLOCATABLE, DIMENSION (:,:) :: spfh ! kg/kg
@@ -28,6 +29,7 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: pres ! Pa
 REAL, ALLOCATABLE, DIMENSION (:,:) :: wsgrd ! m s-1
 REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
+REAL, ALLOCATABLE, DIMENSION (:) :: SOM
 CHARACTER(LEN=200) :: file_name, var_name
 !----------------------------------------------------------------------!
 
@@ -159,6 +161,31 @@ DO kyr_clm = 1901, 1901
    NPP = (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
    BL = B (k) / (12.5 * 365.0 * 86400.0)
    dB = NPP - BL
+   Tsoil = Tc
+   IF (Tsoil > EPS) THEN
+    ET_SOIL = 0.0326 + 0.00351 * Tsoil ** 1.652 - &
+              (0.023953 * Tsoil) ** 7.19
+   ELSE
+    ET_SOIL = 0.0326
+   END IF
+   ET_SOIL = MAX (0.0, ET_SOIL)
+   ET_SOIL = MIN (1.0, ET_SOIL)
+   ! Convert water to %age water-filled pore space from Williams et al.
+   ! Assumes micro-pore space = swc and macro-pore space = 42% of saturation
+   ! content (from TEM for loam).
+   WFPS = 100.0 * soilW (k) / swc
+   WFPS = MIN (100.0, WFPS)
+   IF (WFPS < 60.0) THEN
+    EM = EXP ((WFPS - 60.0) ** 2 / (-800.0))
+   ELSE
+    EM = 0.000371 * WFPS ** 2 - 0.0748 * WFPS + 4.13
+   END IF
+   EM = MAX (0.0, EM)
+   EM = MIN (1.0, EM)
+   EV = ET_SOIL * EM
+   Rh = EV * SOM (k) * (1.0_DP / (6.25_DP * 365.0_DP * 86400.0_DP))
+   dSOM = BL - Rh
+   NEE = NPP - Rh ! For now!
    soilW (k) = soilW (k) + dt * dsoilW
    B (k) = B (k) + dt * dB
    Wmax = MAX (Wmax, soilW (k))
