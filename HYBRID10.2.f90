@@ -274,7 +274,6 @@ IF (myrank == root) THEN
    END IF
   END DO ! i
  END DO ! j
-write(*,*)'nk = ',k-1
 END IF ! root
 !----------------------------------------------------------------------!
 

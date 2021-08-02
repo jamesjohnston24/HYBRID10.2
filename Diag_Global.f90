@@ -37,11 +37,11 @@ IF (myrank == root) THEN
  NEE_total = 0.0_DP
  B_total = 0.0_DP
  SOM_total = 0.0_DP
-write(*,*)'DG',source_larea(1),B_fin(1)
  DO k = 1, nland
   NPP_total = NPP_total + source_larea (k) * NPP_fin (k)
   Rh_total = Rh_total + source_larea (k) * Rh_fin (k)
   NEE_total = NEE_total + source_larea (k) * NEE_fin(k)
+write(*,*)k,source_larea(k),B_fin(k)
   B_total = B_total + source_larea (k) * B_fin (k)
   SOM_total = SOM_total + source_larea (k) * SOM_fin (k)
  END DO ! k = 1, nland
