@@ -46,6 +46,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 nland_chunk = nland / nprocs
 ALLOCATE (B(nland_chunk))
 ALLOCATE (soilW(nland_chunk))
+ALLOCATE (SOM(nland_chunk))
 B = 0.0
 soilW = 0.0
 SOM = 0.0
