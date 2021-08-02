@@ -20,13 +20,13 @@ INTEGER, PARAMETER :: nland = 67420
 INTEGER, PARAMETER :: root = 0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: tmp_fill = 1.e+20
-REAL, PARAMETER :: pre_fill = 9.96921e+36
 REAL :: clm_fill
 INTEGER :: kyr_clm, ncid, varid, i, j, k, ii, jj
 INTEGER :: error, nprocs, myrank, file_handle, dest, size, errcode
 REAL :: Aland ! Total land area (km^2)
 REAL :: Tmean ! Global mean annual surface temperature (oC)
 REAL, ALLOCATABLE, DIMENSION (:,:,:) :: clm_in
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: tmp_in
 REAL, ALLOCATABLE, DIMENSION (:,:) :: clm_k
 REAL, ALLOCATABLE, DIMENSION (:,:) :: clm_buffer
 REAL, ALLOCATABLE, DIMENSION (:,:) :: carea ! QD
@@ -52,10 +52,30 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 ALLOCATE (clm_in (nlon, nlat, ntimes)) ! Reverse order from netCDF file
+ALLOCATE (tmp_in (nlon, nlat, ntimes)) ! Reverse order from netCDF file
 ALLOCATE (clm_k (ntimes, nland))
 ALLOCATE (larea_k (nland))
 ALLOCATE (i_k (nland))
 ALLOCATE (j_k (nland))
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Get tmp for land mask.
+!----------------------------------------------------------------------!
+IF (myrank == root) THEN
+ kyr_clm = 1901
+ var_name = 'tmp'
+ WRITE (char_year, '(I4)') kyr_clm
+ file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+  &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
+  &char_year//'.365d.noc.nc'
+ WRITE (*,*) 'Opening file: ',file_name
+ CALL CHECK ( NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid ))
+ varid = 4 ! Temperature (K)
+ ! Origin at IDL and SP.
+ CALL CHECK ( NF90_GET_VAR ( ncid, varid, tmp_in ))
+ CALL CHECK ( NF90_CLOSE ( ncid ))
+END IF ! myrank == root
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -95,8 +115,6 @@ ALLOCATE (j_buffer (nland/nprocs))
 DO kyr_clm = 1901, 1901
 
  var_name = 'pre' ! change as wish
- IF (TRIM(var_name)=='tmp')clm_fill = tmp_fill
- IF (TRIM(var_name)=='pre')clm_fill = pre_fill
 
  IF (myrank == root) THEN
 
@@ -114,8 +132,9 @@ DO kyr_clm = 1901, 1901
   k = 1
   DO j = 1, nlat
    DO i = 1, nlon
-    ! nland catch because seems to be one extra if pre!
-    IF ((clm_in (i,j,1) /= clm_fill) .AND. (k <= nland)) THEN
+    ! Need to use tmp here to ensure common mask.
+    ! pre has one more box than tmp, for example.
+    IF (tmp_in (i,j,1) /= tmp_fill) THEN
      clm_k (:,k) = clm_in (i,j,:)
      larea_k (k) = larea (i,j)
      i_k (k) = i
