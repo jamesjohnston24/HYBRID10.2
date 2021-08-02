@@ -138,6 +138,7 @@ CALL MPI_Gather (j_k, nland_chunk, MPI_INTEGER, j_k_all, nland_chunk, MPI_INTEGE
 IF (myrank == root) THEN
 
 TA = 0.0
+TB = 0.0
 B_grid = fillvalue
 DO k = 1, nland
  i = i_k_all (k)
