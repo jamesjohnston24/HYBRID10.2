@@ -16,7 +16,7 @@ INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
 INTEGER :: t, k, nland_chunk
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
-REAL :: Wmax, Bmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM
+REAL :: Wmax, Bmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
