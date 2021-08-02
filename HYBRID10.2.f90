@@ -389,6 +389,7 @@ DO kyr_spin = 1, nyr_spin
  !---------------------------------------------------------------------!
  ! Advance state variables by one year.
  !---------------------------------------------------------------------!
+write(*,*)'myrank is here',myrank,tmp(1,kyr,1)
  CALL advance (kyr)
  !---------------------------------------------------------------------!
  ! Write global fields each yr.
@@ -423,7 +424,6 @@ DO kyr_clm = syr_trans, eyr_trans
  !---------------------------------------------------------------------!
  ! Advance state variables by one year.
  !---------------------------------------------------------------------!
-write(*,*)'myrank is here',myrank,tmp(1,kyr,1)
  CALL advance (kyr)
  !---------------------------------------------------------------------!
  ! Output annual diagnostics.
