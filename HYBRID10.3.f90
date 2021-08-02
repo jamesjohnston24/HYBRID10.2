@@ -18,9 +18,11 @@ INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm
 REAL :: dB, NPP, BL, fT, Tc, ro
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
+REAL, PARAMETER :: swc = 0.5
 REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp ! K
 REAL, ALLOCATABLE, DIMENSION (:,:) :: pre ! mm/6h
 REAL, ALLOCATABLE, DIMENSION (:) :: B
+REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 CHARACTER(LEN=200) :: file_name, var_name
 !----------------------------------------------------------------------!
 
@@ -36,7 +38,9 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
 ALLOCATE (B(nland_chunk))
+ALLOCATE (soilW(nland_chunk))
 B = 0.0
+soilW = 0.0
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -81,7 +85,7 @@ DO kyr_clm = 1901, 1901
  !---------------------------------------------------------------------!
  DO t = 1, ntimes
   DO k = 1, nland_chunk
-   ro = pre (t,k)
+   ro = soilW (k) + pre (t,k) / 1.0E3 - swc
    Tc = tmp (t,k) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
