@@ -146,6 +146,7 @@ DO kyr_clm = 1901, 1901
           (29.0E-3 / (R * tmp (t,k))) * wsgrd (t,k) / &
           (997.0 * (log (2.0 / 0.0003)) ** 2)
    evap = MIN (evap, soilW (k) / dt)
+evap = 0.0
    dsoilW = win - evap
    Tc = tmp (t,k) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
