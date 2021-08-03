@@ -19,7 +19,7 @@ INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 INTEGER :: kyr_rsf
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
-REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
+REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NBP
 REAL, DIMENSION (3) :: diag_out
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
@@ -273,7 +273,7 @@ DO kyr_spin = 1, nyr_spin
    EV = ET_SOIL * EM
    Rh = EV * SOM (k) * (1.0 / (6.25 * 365.0 * 86400.0))
    dSOM = BL - Rh
-   NEE = NPP - Rh ! For now!
+   NBP = NPP - Rh ! For now!
    soilW (k) = soilW (k) + dt * dsoilW
    B (k) = B (k) + dt * dB
    SOM (k) = SOM (k) + dt * dSOM
