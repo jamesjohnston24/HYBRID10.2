@@ -14,7 +14,7 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 40
 INTEGER, PARAMETER :: nyr_clm = 20
-INTEGER :: t, k, nland_chunk, iyr
+INTEGER :: t, k, nland_chunk, iyr, kyr_spin
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
@@ -139,16 +139,16 @@ DO kyr_clm = 1901, 1901 + nyr_clm - 1
  !---------------------------------------------------------------------!
 END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
 
-kyr_clm = 1900
-DO iyr = 1, nyr_spin
- kyr_clm = kyr_clm + 1
- if (kyr_clm == 1921) kyr_clm = 1901
+iyr = 0
+DO kyr_spin = 1, nyr_spin
+ iyr = iyr + 1
+ if (iyr == 21) iyr = 1
  Wmax = 0.0
  Bmax = 0.0
  SOMmax = 0.0
 !write(*,*) 'myrank is here',myrank,tmp(1,1),pre(1,1),spfh(1,1),pres(1,1),wsgrd(1,1)
  !DO kyr_spin = 1, nyr_spin
- WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin
+ WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin,iyr
  DO t = 1, ntimes
   DO k = 1, nland_chunk
    ro = soilW (k) + pre (t,k,iyr) / 1.0E3 - swc
@@ -213,7 +213,7 @@ DO iyr = 1, nyr_spin
  WRITE (*,*) 'SOMmax = ',SOMmax
  write (*,*) kyr_clm, kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
-END DO ! iyr = 1, nyr_spin
+END DO ! kyr_spin = 1, nyr_spin
 
 kyr_clm = nyr_spin
 
