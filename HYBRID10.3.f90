@@ -210,19 +210,24 @@ ELSE
 END IF
 !----------------------------------------------------------------------!
 
+aNPP = 0.0
+aRh = 0.0
+aNBP = 0.0
 iyr = 0
 DO kyr_spin = 1, nyr_spin
  iyr = iyr + 1
- if (iyr == 21) iyr = 1
+ if (iyr == 21) THEN
+  iyr = 1
+  aNPP = 0.0
+  aRh = 0.0
+  aNBP = 0.0
+ END IF
  Wmax = 0.0
  Bmax = 0.0
  SOMmax = 0.0
  aNPPmax = 0.0
  aRhmax = 0.0
  aNBPmax = 0.0
- aNPP = 0.0
- aRh = 0.0
- aNBP = 0.0
 !write(*,*) 'myrank is here',myrank,tmp(1,1),pre(1,1),spfh(1,1),pres(1,1),wsgrd(1,1)
  !DO kyr_spin = 1, nyr_spin
  WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin,iyr
@@ -300,6 +305,9 @@ DO kyr_spin = 1, nyr_spin
  write (*,*) kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
 END DO ! kyr_spin = 1, nyr_spin
+aNPP = aNPP / REAL (nyr_clm)
+aRh = aRh / REAL (nyr_clm)
+aNPBP = aNBP / REAL (nyr_clm)
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
