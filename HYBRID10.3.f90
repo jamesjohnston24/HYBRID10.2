@@ -13,7 +13,8 @@ USE mpi
 IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
-INTEGER :: t, k, nland_chunk
+INTEGER, PARAMETER :: nyr_clm = 2
+INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
@@ -22,11 +23,11 @@ REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
 REAL, PARAMETER :: R = 8.3144
 REAL, PARAMETER :: EPS = 1.0E-8
-REAL, ALLOCATABLE, DIMENSION (:,:) :: tmp ! K
-REAL, ALLOCATABLE, DIMENSION (:,:) :: pre ! mm/6h
-REAL, ALLOCATABLE, DIMENSION (:,:) :: spfh ! kg/kg
-REAL, ALLOCATABLE, DIMENSION (:,:) :: pres ! Pa
-REAL, ALLOCATABLE, DIMENSION (:,:) :: wsgrd ! m s-1
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: tmp ! K
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: pre ! mm/6h
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: spfh ! kg/kg
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: pres ! Pa
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: wsgrd ! m s-1
 REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 REAL, ALLOCATABLE, DIMENSION (:) :: SOM
@@ -56,12 +57,13 @@ SOM = 0.0
 ! Read input data for this processor.
 !----------------------------------------------------------------------!
 size = ntimes * nland / nprocs
-ALLOCATE (tmp(ntimes,nland/nprocs))
-ALLOCATE (pre(ntimes,nland/nprocs))
-ALLOCATE (spfh(ntimes,nland/nprocs))
-ALLOCATE (pres(ntimes,nland/nprocs))
-ALLOCATE (wsgrd(ntimes,nland/nprocs))
-DO kyr_clm = 1901, 1910
+ALLOCATE (tmp(ntimes  ,nland/nprocs,nyr_clm))
+ALLOCATE (pre(ntimes  ,nland/nprocs,nyr_clm))
+ALLOCATE (spfh(ntimes ,nland/nprocs,nyr_clm))
+ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
+ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
+DO kyr_clm = 1901, 1901 + nyr_clm - 1
+ iyr = kyr_clm - 1901 + 1
 
  !---------------------------------------------------------------------!
  var_name = 'tmp'
@@ -74,7 +76,7 @@ DO kyr_clm = 1901, 1910
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, tmp, size, &
+ CALL MPI_File_read(file_handle, tmp(:,:,iyr), size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
@@ -88,7 +90,7 @@ DO kyr_clm = 1901, 1910
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, pre, size, &
+ CALL MPI_File_read(file_handle, pre(:,:,iyr), size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
@@ -102,7 +104,7 @@ DO kyr_clm = 1901, 1910
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, spfh, size, &
+ CALL MPI_File_read(file_handle, spfh(:,:,iyr), size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
@@ -116,7 +118,7 @@ DO kyr_clm = 1901, 1910
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, pres, size, &
+ CALL MPI_File_read(file_handle, pres(:,:,iyr), size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
@@ -130,7 +132,7 @@ DO kyr_clm = 1901, 1910
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
  ! MPI_IO is binary output format.
- CALL MPI_File_read(file_handle, wsgrd, size, &
+ CALL MPI_File_read(file_handle, wsgrd(:,:,iyr), size, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
@@ -143,22 +145,22 @@ DO kyr_clm = 1901, 1910
  WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin
  DO t = 1, ntimes
   DO k = 1, nland_chunk
-   ro = soilW (k) + pre (t,k) / 1.0E3 - swc
+   ro = soilW (k) + pre (t,k,iyr) / 1.0E3 - swc
    ro = MAX (0.0, ro)
-   win = (pre (t,k) / 1.0e3 - ro) / dt
+   win = (pre (t,k,,iyr) / 1.0e3 - ro) / dt
    ! Pa.
-   eas = 611.0 * EXP (17.27 * (tmp (t,k) - 273.15) / &
-         (237.3 + tmp (t,k) - 273.15))
+   eas = 611.0 * EXP (17.27 * (tmp (t,k,iyr) - 273.15) / &
+         (237.3 + tmp (t,k,iyr) - 273.15))
    ! Pa.
-   ea = spfh (t,k) * pres (t,k) * 29.0E-3 / 18.0E-3
+   ea = spfh (t,k,iyr) * pres (t,k,iyr) * 29.0E-3 / 18.0E-3
    ! Potential (aerodynamic) evaporation (m s-1).
    ! http://mgebrekiros.github.io/IntroductoryHydrology/EvaporationAndTranspiration.pdf
    evap = (eas - ea) * 0.622 * 0.4 ** 2 * &
-          (29.0E-3 / (R * tmp (t,k))) * wsgrd (t,k) / &
+          (29.0E-3 / (R * tmp (t,k,iyr))) * wsgrd (t,k,iyr) / &
           (997.0 * (log (2.0 / 0.0003)) ** 2)
    evap = MIN (evap, soilW (k) / dt)
    dsoilW = win - evap
-   Tc = tmp (t,k) - tf
+   Tc = tmp (t,k,iyr) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
    NPP = (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
@@ -257,7 +259,7 @@ CALL MPI_File_write(file_handle, SOM, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
-END DO ! kyr_clm
+END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
