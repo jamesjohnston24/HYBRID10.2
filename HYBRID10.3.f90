@@ -307,7 +307,7 @@ DO kyr_spin = 1, nyr_spin
 END DO ! kyr_spin = 1, nyr_spin
 aNPP = aNPP / REAL (nyr_clm)
 aRh = aRh / REAL (nyr_clm)
-aNPBP = aNBP / REAL (nyr_clm)
+aNBP = aNBP / REAL (nyr_clm)
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
