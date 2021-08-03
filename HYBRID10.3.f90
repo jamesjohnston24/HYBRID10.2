@@ -56,13 +56,11 @@ SOM = 0.0
 !----------------------------------------------------------------------!
 ! Restart from previous run.
 !----------------------------------------------------------------------!
-kyr_clm = 40
+kyr_clm = 20
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
-! Delete existing file.
-CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 WRITE (*,*) 'Reading from ', TRIM(file_name)
 ! Open the file for writing.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
@@ -77,8 +75,6 @@ var_name = 'soilW'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
-! Delete existing file.
-CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 WRITE (*,*) 'Reading from ', TRIM(file_name)
 ! Open the file for writing.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
@@ -93,8 +89,6 @@ var_name = 'SOM'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
-! Delete existing file.
-CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
 WRITE (*,*) 'Reading from ', TRIM(file_name)
 ! Open the file for writing.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
