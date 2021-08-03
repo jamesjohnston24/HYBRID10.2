@@ -12,8 +12,8 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
-INTEGER, PARAMETER :: nyr_clm = 1
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 100
+INTEGER, PARAMETER :: nyr_clm = 20
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
@@ -32,6 +32,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 REAL, ALLOCATABLE, DIMENSION (:) :: SOM
 CHARACTER(LEN=200) :: file_name, var_name
+LOGICAL :: RSF = .FALSE.
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -54,6 +55,8 @@ soilW = 0.0
 SOM = 0.0
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+IF (RSF) THEN
 !----------------------------------------------------------------------!
 ! Restart from previous run.
 !----------------------------------------------------------------------!
@@ -99,6 +102,8 @@ CALL MPI_File_read(file_handle, SOM, size/ntimes, &
  MPI_REAL, MPI_STATUS_IGNORE, error)
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
+!----------------------------------------------------------------------!
+END IF
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
