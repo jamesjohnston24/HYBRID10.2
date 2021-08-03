@@ -45,6 +45,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
+size = ntimes * nland / nprocs
 ALLOCATE (B(nland_chunk))
 ALLOCATE (soilW(nland_chunk))
 ALLOCATE (SOM(nland_chunk))
@@ -62,7 +63,7 @@ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogs
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
-! Open the file for writing.
+! Open the file for reading.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
 ! MPI_IO is binary output format. Write using individual file pointer.
@@ -76,7 +77,7 @@ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogs
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
-! Open the file for writing.
+! Open the file for reading.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
 ! MPI_IO is binary output format. Write using individual file pointer.
@@ -90,7 +91,7 @@ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogs
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
-! Open the file for writing.
+! Open the file for reading.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
   MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
 ! MPI_IO is binary output format. Write using individual file pointer.
@@ -103,7 +104,6 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 ! Read input data for this processor.
 !----------------------------------------------------------------------!
-size = ntimes * nland / nprocs
 ALLOCATE (tmp(ntimes  ,nland/nprocs,nyr_clm))
 ALLOCATE (pre(ntimes  ,nland/nprocs,nyr_clm))
 ALLOCATE (spfh(ntimes ,nland/nprocs,nyr_clm))
