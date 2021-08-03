@@ -12,13 +12,14 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 100
-INTEGER, PARAMETER :: nyr_clm = 20, root = 0
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 1
+INTEGER, PARAMETER :: nyr_clm = 1, root = 0
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
-INTEGER :: kyr_rsf
+INTEGER :: kyr_rsf, file_handle_ann_diag
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
+REAL, DIMENSION (3) :: diag_out
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
 REAL, PARAMETER :: swc = 0.5
@@ -33,7 +34,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 REAL, ALLOCATABLE, DIMENSION (:) :: SOM
 CHARACTER(LEN=200) :: file_name, var_name
-LOGICAL :: RSF = .TRUE.
+LOGICAL :: RSF = .FALSE.
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -192,6 +193,31 @@ DO kyr_clm = 1901, 1901 + nyr_clm - 1
  !---------------------------------------------------------------------!
 END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
 
+!----------------------------------------------------------------------!
+! Set year used for naming output files.
+!----------------------------------------------------------------------!
+IF (RSF) THEN
+ kyr_clm = nyr_spin + kyr_rsf
+ELSE
+ kyr_clm = nyr_spin
+END IF
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Open output file of annual diagnostics.
+!----------------------------------------------------------------------!
+var_name = 'ann_diag'
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
+&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+! Delete existing file.
+CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+WRITE (*,*) 'Writing to ', TRIM(file_name)
+! Open the file for writing.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle_ann_diag, error) 
+!----------------------------------------------------------------------!
+
 iyr = 0
 DO kyr_spin = 1, nyr_spin
  iyr = iyr + 1
@@ -265,14 +291,18 @@ DO kyr_spin = 1, nyr_spin
  WRITE (*,*) 'Bmax = ',Bmax
  WRITE (*,*) 'SOMmax = ',SOMmax
  write (*,*) kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
+ !---------------------------------------------------------------------!
+ ! Annual diagnostics.
+ !---------------------------------------------------------------------!
+ diag_out (1) = NPP
+ diag_out (2) = Rh
+ diag_out (3) = NEE
+ ! MPI_IO is binary output format. Write using individual file pointer.
+ CALL MPI_File_write(file_handle, diag_out, 3, &
+  MPI_REAL, MPI_STATUS_IGNORE, error)
+ !---------------------------------------------------------------------!
 
 END DO ! kyr_spin = 1, nyr_spin
-
-IF (RSF) THEN
- kyr_clm = nyr_spin + kyr_rsf
-ELSE
- kyr_clm = nyr_spin
-END IF
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
@@ -327,6 +357,12 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 IF (myrank == root) WRITE (*,*) 'Written kyr_clm = ',kyr_clm
+
+!----------------------------------------------------------------------!
+! Close output file of annual diagnostics.
+!----------------------------------------------------------------------!
+CALL MPI_File_Close(file_handle_ann_diag, error)
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
