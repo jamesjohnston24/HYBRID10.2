@@ -147,7 +147,7 @@ DO kyr_clm = 1901, 1901 + nyr_clm - 1
   DO k = 1, nland_chunk
    ro = soilW (k) + pre (t,k,iyr) / 1.0E3 - swc
    ro = MAX (0.0, ro)
-   win = (pre (t,k,,iyr) / 1.0e3 - ro) / dt
+   win = (pre (t,k,iyr) / 1.0e3 - ro) / dt
    ! Pa.
    eas = 611.0 * EXP (17.27 * (tmp (t,k,iyr) - 273.15) / &
          (237.3 + tmp (t,k,iyr) - 273.15))
@@ -205,7 +205,7 @@ DO kyr_clm = 1901, 1901 + nyr_clm - 1
  WRITE (*,*) 'Wmax = ',Wmax
  WRITE (*,*) 'Bmax = ',Bmax
  WRITE (*,*) 'SOMmax = ',SOMmax
- write (*,*) kyr_clm, kyr_spin, myrank, tmp (1,1), pre (1,1), B(100)
+ write (*,*) kyr_clm, kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
