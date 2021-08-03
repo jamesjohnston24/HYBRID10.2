@@ -113,7 +113,7 @@ ALLOCATE (i_buffer (nland/nprocs))
 ALLOCATE (j_buffer (nland/nprocs))
 DO kyr_clm = 1911, 1920
 
- var_name = 'tmp' ! change as wish
+ var_name = 'pre' ! change as wish
 
  IF (myrank == root) THEN
 
