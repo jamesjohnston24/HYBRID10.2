@@ -40,7 +40,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
-kyr_clm = 2
+kyr_clm = 1
 ALLOCATE (B_k        (nland_chunk))
 ALLOCATE (B_k_all    (nland))
 ALLOCATE (B_grid     (nlon,nlat))
@@ -214,6 +214,7 @@ WRITE (*,*) 'SOMmax = ', SOMmax
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
+kyr_clm = 1901
 WRITE (char_year, '(I4)') kyr_clm
 file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
