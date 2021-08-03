@@ -281,18 +281,23 @@ CALL CHECK (NF90_DEF_VAR (ncid, "Living_Biomass", nf90_float, &
             dimids_two, varidB))
 CALL CHECK (NF90_DEF_VAR (ncid, "Soil_Organic_Matter", nf90_float, &
             dimids_two, varidSOM))
+CALL CHECK (NF90_DEF_VAR (ncid, "aNPP", nf90_float, &
+            dimids_two, varidaNPP))
 CALL CHECK (NF90_PUT_ATT (ncid, varidW, "units", "m"))
 CALL CHECK (NF90_PUT_ATT (ncid, varidB, "units", "kg[DM] m-2"))
 CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "units", "kg[DM] m-2"))
+CALL CHECK (NF90_PUT_ATT (ncid, varidaNPP, "units", "kg[DM] m-2 yr-1"))
 CALL CHECK (NF90_PUT_ATT (ncid, varidW, "_FillValue", fillvalue))
 CALL CHECK (NF90_PUT_ATT (ncid, varidB, "_FillValue", fillvalue))
 CALL CHECK (NF90_PUT_ATT (ncid, varidSOM, "_FillValue", fillvalue))
+CALL CHECK (NF90_PUT_ATT (ncid, varidaNPP, "_FillValue", fillvalue))
 CALL CHECK (NF90_ENDDEF (ncid))
 CALL CHECK (NF90_PUT_VAR (ncid, lon_varid, lon))
 CALL CHECK (NF90_PUT_VAR (ncid, lat_varid, lat))
 CALL CHECK (NF90_PUT_VAR (ncid,     varidW, soilW_grid))
 CALL CHECK (NF90_PUT_VAR (ncid,     varidB, B_grid))
 CALL CHECK (NF90_PUT_VAR (ncid,     varidSOM, SOM_grid))
+CALL CHECK (NF90_PUT_VAR (ncid,     varidaNPP, aNPP_grid))
 CALL CHECK (NF90_close (ncid))
 !----------------------------------------------------------------------!
 
