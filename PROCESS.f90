@@ -289,8 +289,8 @@ DO k = 1, nland
  Bmax = MAX (B_k_all (k), Bmax)
  SOMmax = MAX (SOM_k_all (k), SOMmax)
  aNPPmax = MAX (aNPP_k_all (k), aNPPmax)
- aRhmax = MAX (aRh_k_all (k), aNPPmax)
- aNBPmax = MAX (aNBP_k_all (k), aNPPmax)
+ aRhmax = MAX (aRh_k_all (k), aRhmax)
+ aNBPmax = MAX (aNBP_k_all (k), aNBPmax)
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 WRITE (*,*) 'Total land area = ',TA
