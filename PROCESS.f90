@@ -40,7 +40,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
-kyr_clm = 1901
+kyr_clm = 1902
 ALLOCATE (B_k        (nland_chunk))
 ALLOCATE (B_k_all    (nland))
 ALLOCATE (B_grid     (nlon,nlat))
