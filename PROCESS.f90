@@ -12,7 +12,7 @@ INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k
-REAL :: TA, TB, TW, TSOM, TaNPP, TaRh, RaNBP
+REAL :: TA, TB, TW, TSOM, TaNPP, TaRh, TaNBP
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW_k, soilW_k_all
@@ -219,7 +219,7 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 write (*,*) myrank, B_k (10), soilW_k (10), SOM_k (10), aNPP_k (10), &
- aRh_k (10, aNBP_k (10), larea_k (10), i_k (10), j_k (10)
+ aRh_k (10), aNBP_k (10), larea_k (10), i_k (10), j_k (10)
 !B_grid = fillvalue
 !DO k = 1, nland_chunk
 ! i = i_k (k)
