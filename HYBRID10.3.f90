@@ -18,7 +18,8 @@ INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
 INTEGER :: kyr_rsf
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
-REAL :: Wmax, Bmax, SOMmax, Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
+REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
+REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NEE
 REAL, DIMENSION (3) :: diag_out
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
@@ -34,6 +35,8 @@ REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 REAL, ALLOCATABLE, DIMENSION (:) :: SOM
 REAL, ALLOCATABLE, DIMENSION (:) :: aNPP ! Annual NPP (kg[DM] m^-1 yr^-1)
+REAL, ALLOCATABLE, DIMENSION (:) :: aRh ! Annual Rh (kg[DM] m^-1 yr^-1)
+REAL, ALLOCATABLE, DIMENSION (:) :: aNBP ! Annual NBP (kg[DM] m^-1 yr^-1)
 CHARACTER(LEN=200) :: file_name, var_name
 LOGICAL :: RSF = .FALSE.
 !----------------------------------------------------------------------!
@@ -54,6 +57,8 @@ ALLOCATE (B(nland_chunk))
 ALLOCATE (soilW(nland_chunk))
 ALLOCATE (SOM(nland_chunk))
 ALLOCATE (aNPP(nland_chunk))
+ALLOCATE (aRh(nland_chunk))
+ALLOCATE (aNBP(nland_chunk))
 B = 0.0
 soilW = 0.0
 SOM = 0.0
@@ -212,7 +217,12 @@ DO kyr_spin = 1, nyr_spin
  Wmax = 0.0
  Bmax = 0.0
  SOMmax = 0.0
+ aNPPmax = 0.0
+ aRhmax = 0.0
+ aNBPmax = 0.0
  aNPP = 0.0
+ aRh = 0.0
+ aNBP = 0.0
 !write(*,*) 'myrank is here',myrank,tmp(1,1),pre(1,1),spfh(1,1),pres(1,1),wsgrd(1,1)
  !DO kyr_spin = 1, nyr_spin
  WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin,iyr
@@ -270,7 +280,12 @@ DO kyr_spin = 1, nyr_spin
    Wmax = MAX (Wmax, soilW (k))
    Bmax = MAX (Bmax, B (k))
    SOMmax = MAX (SOMmax, SOM (k))
+   aNPPmax = MAX (aNPPmax, NPP)
+   aRhmax = MAX (aRhmax, Rh)
+   aNBPmax = MAX (aNBPmax, NBP)
    aNPP (k) = aNPP (k) + dt * NPP
+   aRh (k) = aRh (k) + dt * Rh
+   aNBP (k) = aNBP (k) + dt * NBP
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
  !END DO ! kyr_spin = 1, nyr_spin
@@ -279,6 +294,9 @@ DO kyr_spin = 1, nyr_spin
  WRITE (*,*) 'Wmax = ',Wmax
  WRITE (*,*) 'Bmax = ',Bmax
  WRITE (*,*) 'SOMmax = ',SOMmax
+ WRITE (*,*) 'aNPPmax = ',aNPPmax
+ WRITE (*,*) 'aRhmax = ',aRhmax
+ WRITE (*,*) 'aNBPmax = ',aNBPmax
  write (*,*) kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
 END DO ! kyr_spin = 1, nyr_spin
@@ -350,7 +368,38 @@ CALL MPI_File_write(file_handle, aNPP, size/ntimes, &
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
-
+var_name = 'aRh'
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
+&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+! Delete existing file.
+CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+WRITE (*,*) 'Writing to ', TRIM(file_name)
+! Open the file for writing.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_write(file_handle, aRh, size/ntimes, &
+ MPI_REAL, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
+!----------------------------------------------------------------------!
+var_name = 'aNBP'
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
+&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+! Delete existing file.
+CALL MPI_File_delete(file_name, MPI_INFO_NULL, error)
+WRITE (*,*) 'Writing to ', TRIM(file_name)
+! Open the file for writing.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_WRONLY + MPI_MODE_CREATE, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_write(file_handle, aNBP, size/ntimes, &
+ MPI_REAL, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
+!----------------------------------------------------------------------!
 IF (myrank == root) WRITE (*,*) 'Written kyr_clm = ',kyr_clm
 
 !----------------------------------------------------------------------!
