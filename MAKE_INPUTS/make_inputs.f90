@@ -111,9 +111,9 @@ ALLOCATE (clm_buffer (ntimes,nland/nprocs))
 ALLOCATE (larea_buffer (nland/nprocs))
 ALLOCATE (i_buffer (nland/nprocs))
 ALLOCATE (j_buffer (nland/nprocs))
-DO kyr_clm = 1901, 1910
+DO kyr_clm = 1911, 1920
 
- var_name = 'wsgrd' ! change as wish
+ var_name = 'tmp' ! change as wish
 
  IF (myrank == root) THEN
 
