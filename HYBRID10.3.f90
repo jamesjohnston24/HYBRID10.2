@@ -12,7 +12,7 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 20
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 40
 INTEGER, PARAMETER :: nyr_clm = 20
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
