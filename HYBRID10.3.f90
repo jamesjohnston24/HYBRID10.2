@@ -65,7 +65,7 @@ kyr_rsf = 100
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
-&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+&"CPUs/",TRIM(var_name),kyr_rsf,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
 ! Open the file for reading.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
@@ -79,7 +79,7 @@ CALL MPI_File_Close(file_handle, error)
 var_name = 'soilW'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
-&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+&"CPUs/",TRIM(var_name),kyr_rsf,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
 ! Open the file for reading.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
@@ -93,7 +93,7 @@ CALL MPI_File_Close(file_handle, error)
 var_name = 'SOM'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
-&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+&"CPUs/",TRIM(var_name),kyr_rsf,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
 ! Open the file for reading.
 CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
