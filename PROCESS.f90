@@ -278,6 +278,7 @@ DO k = 1, nland
  SOM_grid (i,j) = SOM_k_all (k)
  aNPP_grid (i,j) = aNPP_k_all (k)
  aRh_grid (i,j) = aRh_k_all (k)
+ aNBP_grid (i,j) = aNBP_k_all (k)
  TA = TA + larea_k_all (k)
  TB = TB + B_k_all (k) * larea_k_all (k)
  TW = TW + soilW_k_all (k) * larea_k_all (k)
