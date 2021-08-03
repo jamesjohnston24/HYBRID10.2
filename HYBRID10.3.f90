@@ -264,7 +264,7 @@ DO kyr_spin = 1, nyr_spin
  WRITE (*,*) 'Wmax = ',Wmax
  WRITE (*,*) 'Bmax = ',Bmax
  WRITE (*,*) 'SOMmax = ',SOMmax
- write (*,*) kyr_clm, kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
+ write (*,*) kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
 END DO ! kyr_spin = 1, nyr_spin
 
