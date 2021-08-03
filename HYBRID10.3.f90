@@ -33,7 +33,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: B
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW
 REAL, ALLOCATABLE, DIMENSION (:) :: SOM
 CHARACTER(LEN=200) :: file_name, var_name
-LOGICAL :: RSF = .TRUE.
+LOGICAL :: RSF = .FALSE.
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
