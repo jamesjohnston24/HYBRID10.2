@@ -326,6 +326,8 @@ CALL MPI_File_write(file_handle, SOM, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
+IF (myrank == root) WRITE (*,*) 'Written kyr_clm = ',kyr_clm
+
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
 !----------------------------------------------------------------------!
