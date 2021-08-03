@@ -297,7 +297,7 @@ DO kyr_spin = 1, nyr_spin
  diag_out (1) = NPP
  diag_out (2) = Rh
  diag_out (3) = NEE
-write(*,*)diag_out
+write(*,*)myrank,diag_out,NPP
  ! MPI_IO is binary output format. Write using individual file pointer.
  CALL MPI_File_write(file_handle, diag_out, 3, &
   MPI_REAL, MPI_STATUS_IGNORE, error)
