@@ -38,7 +38,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: aNPP ! Annual NPP (kg[DM] m^-1 yr^-1)
 REAL, ALLOCATABLE, DIMENSION (:) :: aRh ! Annual Rh (kg[DM] m^-1 yr^-1)
 REAL, ALLOCATABLE, DIMENSION (:) :: aNBP ! Annual NBP (kg[DM] m^-1 yr^-1)
 CHARACTER(LEN=200) :: file_name, var_name
-LOGICAL :: RSF = .FALSE.
+LOGICAL :: RSF = .TRUE.
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
