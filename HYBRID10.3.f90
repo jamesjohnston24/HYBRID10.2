@@ -271,6 +271,7 @@ DO kyr_run = 1, nyr_run
  WRITE (*,*) 'Running kyr_run ', kyr_run, 'of', nyr_run,iyr
  DO t = 1, ntimes
   DO k = 1, nland_chunk
+tmp (t,k,iyr) = 298.0
    ro = soilW (k) + pre (t,k,iyr) / 1.0E3 - swc
    ro = MAX (0.0, ro)
    win = (pre (t,k,iyr) / 1.0e3 - ro) / dt
@@ -315,7 +316,6 @@ DO kyr_run = 1, nyr_run
    EM = MIN (1.0, EM)
    EV = ET_SOIL * EM
    Rh = EV * SOM (k) * (1.0 / (6.25 * 365.0 * 86400.0))
-Rh=0.0
    dSOM = BL - Rh
    NBP = NPP - Rh ! For now!
    soilW (k) = soilW (k) + dt * dsoilW
