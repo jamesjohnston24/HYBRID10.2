@@ -1,2 +1,2 @@
  300 ! nyr_spin
-2100 ! kyr_rsf
+2400 ! kyr_rsf

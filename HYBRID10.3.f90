@@ -16,7 +16,7 @@ INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER, PARAMETER :: nyr_clm = 20, root = 0
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
-INTEGER :: kyr_rsf, nyr_spin
+INTEGER :: kyr_rsf, nyr_spin, nyr_run
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NBP
@@ -220,7 +220,8 @@ aNPP = 0.0
 aRh = 0.0
 aNBP = 0.0
 iyr = 0
-DO kyr_spin = 1, nyr_spin
+nyr_run = nyr_spin
+DO kyr_spin = 1, nyr_run
  iyr = iyr + 1
  if (iyr == 21) THEN
   iyr = 1
@@ -299,7 +300,6 @@ DO kyr_spin = 1, nyr_spin
    aNBP (k) = aNBP (k) + dt * NBP
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
- !END DO ! kyr_spin = 1, nyr_spin
  !---------------------------------------------------------------------!
 
  WRITE (*,*) 'Wmax = ',Wmax
@@ -310,7 +310,7 @@ DO kyr_spin = 1, nyr_spin
  WRITE (*,*) 'aNBPmax = ',aNBPmax
  write (*,*) kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
-END DO ! kyr_spin = 1, nyr_spin
+END DO ! kyr_spin = 1, nyr_run
 aNPP = aNPP / REAL (nyr_clm)
 aRh = aRh / REAL (nyr_clm)
 aNBP = aNBP / REAL (nyr_clm)
