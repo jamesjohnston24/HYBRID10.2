@@ -350,7 +350,7 @@ aNPP = aNPP / REAL (nyr_clm)
 aRh = aRh / REAL (nyr_clm)
 aNBP = aNBP / REAL (nyr_clm)
 
-IF (trans .OR. (kyr_run == nyr_run))
+IF (trans .OR. (kyr_run == nyr_run)) THEN
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
