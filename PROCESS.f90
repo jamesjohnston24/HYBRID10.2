@@ -12,6 +12,7 @@ INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k, nyr_spin, kyr_rsf, syr_trans, nyr_trans, syr, nyr
+INTEGER :: iyr
 REAL :: TA, TB, TW, TSOM, TaNPP, TaRh, TaNBP
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
