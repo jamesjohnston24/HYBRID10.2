@@ -15,8 +15,8 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER, PARAMETER :: nyr_clm = 20, root = 0
 INTEGER :: t, k, nland_chunk, iyr
-INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
-INTEGER :: kyr_rsf, nyr_spin, nyr_run
+INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_run
+INTEGER :: kyr_rsf, nyr_spin, nyr_run, syr_trans, nyr_trans
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NBP
@@ -38,7 +38,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: aNPP ! Annual NPP (kg[DM] m^-1 yr^-1)
 REAL, ALLOCATABLE, DIMENSION (:) :: aRh ! Annual Rh (kg[DM] m^-1 yr^-1)
 REAL, ALLOCATABLE, DIMENSION (:) :: aNBP ! Annual NBP (kg[DM] m^-1 yr^-1)
 CHARACTER(LEN=200) :: file_name, var_name
-LOGICAL :: RSF = .TRUE.
+LOGICAL :: trans, RSF
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -52,8 +52,12 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+READ (10,*) trans
 READ (10,*) nyr_spin
+READ (10,*) RSF
 READ (10,*) kyr_rsf
+READ (10,*) syr_trans
+READ (10,*) nyr_trans
 CLOSe (10)
 !----------------------------------------------------------------------!
 
@@ -129,6 +133,7 @@ ALLOCATE (pre(ntimes  ,nland/nprocs,nyr_clm))
 ALLOCATE (spfh(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
+IF (.NOT. (trans)) THEN
 DO kyr_clm = 1901, 1901 + nyr_clm - 1
  iyr = kyr_clm - 1901 + 1
 
@@ -205,6 +210,7 @@ DO kyr_clm = 1901, 1901 + nyr_clm - 1
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
 END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
+END IF ! .NOT. (trans)
 
 !----------------------------------------------------------------------!
 ! Set year used for naming output files.
@@ -221,7 +227,7 @@ aRh = 0.0
 aNBP = 0.0
 iyr = 0
 nyr_run = nyr_spin
-DO kyr_spin = 1, nyr_run
+DO kyr_run = 1, nyr_run
  iyr = iyr + 1
  if (iyr == 21) THEN
   iyr = 1
@@ -235,9 +241,7 @@ DO kyr_spin = 1, nyr_run
  aNPPmax = 0.0
  aRhmax = 0.0
  aNBPmax = 0.0
-!write(*,*) 'myrank is here',myrank,tmp(1,1),pre(1,1),spfh(1,1),pres(1,1),wsgrd(1,1)
- !DO kyr_spin = 1, nyr_spin
- WRITE (*,*) 'Running kyr_spin ', kyr_spin, 'of', nyr_spin,iyr
+ WRITE (*,*) 'Running kyr_run ', kyr_run, 'of', nyr_run,iyr
  DO t = 1, ntimes
   DO k = 1, nland_chunk
    ro = soilW (k) + pre (t,k,iyr) / 1.0E3 - swc
@@ -308,9 +312,9 @@ DO kyr_spin = 1, nyr_run
  WRITE (*,*) 'aNPPmax = ',aNPPmax
  WRITE (*,*) 'aRhmax = ',aRhmax
  WRITE (*,*) 'aNBPmax = ',aNBPmax
- write (*,*) kyr_spin, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
+ write (*,*) kyr_run, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
-END DO ! kyr_spin = 1, nyr_run
+END DO ! kyr_run = 1, nyr_run
 aNPP = aNPP / REAL (nyr_clm)
 aRh = aRh / REAL (nyr_clm)
 aNBP = aNBP / REAL (nyr_clm)

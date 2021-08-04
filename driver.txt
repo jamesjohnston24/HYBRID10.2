@@ -1,2 +1,6 @@
- 300 ! nyr_spin
-2400 ! kyr_rsf
+.FALSE. ! trans
+    300 ! nyr_spin
+ .TRUE. ! RSF
+   2400 ! kyr_rsf
+   1901 ! syr_trans
+      1 ! nyr_trans
