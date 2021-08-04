@@ -12,11 +12,11 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 300
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
 INTEGER, PARAMETER :: nyr_clm = 20, root = 0
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
-INTEGER :: kyr_rsf
+INTEGER :: kyr_rsf, nyr_spin
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NBP
@@ -52,6 +52,7 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+READ (10,*) nyr_spin
 CLOSe (10)
 !----------------------------------------------------------------------!
 
