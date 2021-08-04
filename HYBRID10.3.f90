@@ -163,7 +163,7 @@ file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/TRENDY2021/&
 &input/CO2field/global_co2_ann_1700_2020.txt'
 OPEN (11,FILE=file_name,STATUS='OLD')
 DO kyr_run = 1700, syr_clm - 1
- READ (22,*) iyr_CO2, CO2_ppm
+ READ (11,*) iyr_CO2, CO2_ppm
 END DO
 kyr_clm = syr_clm - 1
 DO kyr_run = 1, nyr_run
