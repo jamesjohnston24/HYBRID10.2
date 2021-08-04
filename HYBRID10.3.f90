@@ -325,7 +325,7 @@ DO kyr_run = 1, nyr_run
  WRITE (*,*) 'aNBPmax = ',aNBPmax
  write (*,*) kyr_run, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
- IF (trans)
+ IF (trans) THEN
   ! output all vectors for kyr_clm
   ! zero accumulators
  END IF ! trans
