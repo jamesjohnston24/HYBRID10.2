@@ -59,7 +59,11 @@ CLOSe (10)
 
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
-kyr_clm = kyr_rsf + nyr_spin ! Set to year for input file-name.
+IF (trans) THEN
+ kyr_clm = syr_trans
+ELSE
+ kyr_clm = kyr_rsf + nyr_spin ! Set to year for input file-name.
+END IF
 ALLOCATE (B_k        (nland_chunk))
 ALLOCATE (B_k_all    (nland))
 ALLOCATE (B_grid     (nlon,nlat))
