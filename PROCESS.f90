@@ -29,6 +29,8 @@ REAL, ALLOCATABLE, DIMENSION (:,:) :: aNBP_grid
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k, i_k_all, j_k_all
 REAL, DIMENSION (nlon) :: lon
 REAL, DIMENSION (nlat) :: lat
+INTEGER, ALLOCATABLE, DIMENSION :: vyr
+REAL, ALLOCATABLE, DIMENSION :: vNBP
 CHARACTER(LEN=20) :: var_name
 CHARACTER(LEN=200) :: file_name
 INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
@@ -140,6 +142,9 @@ ELSE
  syr = kyr_rsf + nyr_spin ! Set to year for input file-name.
  nyr = 1
 END IF
+
+ALLOCATE (vyr(nyr))
+ALLOCATE (vNBP(nyr))
 
 DO kyr_clm = syr, syr + nyr
 
@@ -328,6 +333,8 @@ WRITE (*,*) 'SOMmax = ', SOMmax
 WRITE (*,*) 'aNPPmax = ', aNPPmax
 WRITE (*,*) 'aRhmax = ', aRhmax
 WRITE (*,*) 'aNBPmax = ', aNBPmax
+vyr (kyr_clm-syr+1) = kyr_clm
+vNBP (kyr_clm-syr+1) = TaNBP/1.0e6
 
 END IF ! myrank == root
 
@@ -400,6 +407,10 @@ CALL CHECK (NF90_PUT_VAR (ncid,     varidaRh, aRh_grid))
 CALL CHECK (NF90_PUT_VAR (ncid,     varidaNBP, aNBP_grid))
 CALL CHECK (NF90_close (ncid))
 !----------------------------------------------------------------------!
+
+DO iyr = 1, nyr
+ WRITE (*,*) vyr(iyr),vNBP(iyr)
+END DO
 
 END IF ! myrank == root
 
