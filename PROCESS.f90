@@ -11,7 +11,7 @@ INTEGER, PARAMETER :: root = 0
 INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
-INTEGER :: i, j, k, nyr_spin, kyr_rsf, syr_trans, nyr_trans
+INTEGER :: i, j, k, nyr_spin, kyr_rsf, syr_trans, nyr_trans, syr, nyr
 REAL :: TA, TB, TW, TSOM, TaNPP, TaRh, TaNBP
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
@@ -59,11 +59,6 @@ CLOSe (10)
 
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
-IF (trans) THEN
- kyr_clm = syr_trans + nyr_trans - 1
-ELSE
- kyr_clm = kyr_rsf + nyr_spin ! Set to year for input file-name.
-END IF
 ALLOCATE (B_k        (nland_chunk))
 ALLOCATE (B_k_all    (nland))
 ALLOCATE (B_grid     (nlon,nlat))
@@ -137,6 +132,16 @@ CALL MPI_File_read(file_handle, j_k, nland_chunk, &
 ! Close the file.
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
+
+IF (trans) THEN
+ syr = syr_trans + nyr_trans - 1
+ nyr = nyr_trans
+ELSE
+ syr = kyr_rsf + nyr_spin ! Set to year for input file-name.
+ nyr = 1
+END IF
+
+DO kyr_clm = syr, syr + nyr
 
 !----------------------------------------------------------------------!
 var_name = 'B'
@@ -323,6 +328,8 @@ WRITE (*,*) 'SOMmax = ', SOMmax
 WRITE (*,*) 'aNPPmax = ', aNPPmax
 WRITE (*,*) 'aRhmax = ', aRhmax
 WRITE (*,*) 'aNBPmax = ', aNBPmax
+
+END DO ! kyr_clm = syr, syr + nyr
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
