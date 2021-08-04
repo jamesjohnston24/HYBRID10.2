@@ -33,8 +33,8 @@ a = 0.5
 #plt.plot(hyr6, a*NEE6, '--')
 #plt.plot(hyr7, a*NEE7, '--')
 #plt.plot(hyr8, a*NEE8, '--')
-#plt.plot(hyr9, a*NEE9, 'y')
-#plt.plot(hyr10, a*NEE10,'y')
+#plt.plot(hyr9, a*NEE9, 'y') done before
+#plt.plot(hyr10, a*NEE10,'y') done before
 #b = 0.03
 #plt.plot(hyr9, a*NEE9 * b * (hyr9-1950), 'r')
 #plt.plot(hyr10, a*NEE10 * b * (hyr10-1950),'r')
