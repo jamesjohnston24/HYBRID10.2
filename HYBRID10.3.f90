@@ -13,10 +13,11 @@ USE mpi
 IMPLICIT NONE
 !----------------------------------------------------------------------!
 INTEGER, PARAMETER :: ntimes = 1460, nland = 67420
-INTEGER, PARAMETER :: nyr_clm = 20, root = 0
+INTEGER, PARAMETER :: root = 0
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_run
-INTEGER :: kyr_rsf, nyr_spin, nyr_run, syr_trans, nyr_trans
+INTEGER :: kyr_rsf, nyr_spin, nyr_run, syr_trans, nyr_trans, nyr_clm
+INTEGER :: syr_clm
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NBP
@@ -133,9 +134,58 @@ ALLOCATE (pre(ntimes  ,nland/nprocs,nyr_clm))
 ALLOCATE (spfh(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
-IF (.NOT. (trans)) THEN
-DO kyr_clm = 1901, 1901 + nyr_clm - 1
- iyr = kyr_clm - 1901 + 1
+
+!----------------------------------------------------------------------!
+aNPP = 0.0
+aRh = 0.0
+aNBP = 0.0
+IF (trans) THEN
+ iyr = 1
+ nyr_run = nyr_trans
+ kyr_clm = syr_trans
+ syr_clm = syr_trans
+ nyr_clm = 1
+ELSE
+ iyr = 0
+ syr_clm = 1901
+ nyr_clm = 20
+ nyr_run = nyr_spin
+ IF (RSF) THEN
+  kyr_clm = nyr_spin + kyr_rsf
+ ELSE
+  kyr_clm = nyr_spin
+ END IF
+END IF
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Read input data for this processor.
+!----------------------------------------------------------------------!
+ALLOCATE (tmp(ntimes  ,nland/nprocs,nyr_clm))
+ALLOCATE (pre(ntimes  ,nland/nprocs,nyr_clm))
+ALLOCATE (spfh(ntimes ,nland/nprocs,nyr_clm))
+ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
+ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
+
+!----------------------------------------------------------------------!
+DO kyr_run = 1, nyr_run
+
+ IF (trans) THEN
+  ! increment kyr_clm if not last year
+ ELSE ! Spin-up run.
+  iyr = iyr + 1
+  if (iyr == 21) THEN
+   iyr = 1
+   aNPP = 0.0
+   aRh = 0.0
+   aNBP = 0.0
+  END IF
+ END IF ! trans
+
+IF (.NOT. (trans) .AND. (kyr_run == 1)) THEN
+DO kyr_clm = syr_clm, syr_clm + nyr_clm - 1
+
+ IF (.NOT. trans) iyr = kyr_clm - syr_clm + 1
 
  !---------------------------------------------------------------------!
  var_name = 'tmp'
@@ -210,42 +260,9 @@ DO kyr_clm = 1901, 1901 + nyr_clm - 1
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
 END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
-END IF ! .NOT. (trans)
+END IF ! .NOT. (trans) .AND. (kyr_run == 1)
 !----------------------------------------------------------------------!
 
-!----------------------------------------------------------------------!
-aNPP = 0.0
-aRh = 0.0
-aNBP = 0.0
-IF (trans) THEN
- iyr = 1
- nyr_run = nyr_trans
- kyr_clm = syr_trans
-ELSE
- iyr = 0
- nyr_run = nyr_spin
- IF (RSF) THEN
-  kyr_clm = nyr_spin + kyr_rsf
- ELSE
-  kyr_clm = nyr_spin
- END IF
-END IF
-!----------------------------------------------------------------------!
-
-!----------------------------------------------------------------------!
-DO kyr_run = 1, nyr_run
- IF (trans) THEN
-  ! read kyr_clm climate into iyr vectors
-  ! increment kyr_clm if not last year
- ELSE ! Spin-up run.
-  iyr = iyr + 1
-  if (iyr == 21) THEN
-   iyr = 1
-   aNPP = 0.0
-   aRh = 0.0
-   aNBP = 0.0
-  END IF
- END IF ! trans
  Wmax = 0.0
  Bmax = 0.0
  SOMmax = 0.0
