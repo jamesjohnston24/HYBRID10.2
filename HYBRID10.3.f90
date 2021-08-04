@@ -197,7 +197,8 @@ DO kyr_run = 1, nyr_run
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
  &"/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
- &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+ !&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+ &"CPUs/",TRIM(var_name),1901,"_",myrank,".bin" !****adf
  ! Open the file for reading.
  write (*,*) 'reading from ',trim(file_name)
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
