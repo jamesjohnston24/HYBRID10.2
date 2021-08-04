@@ -46,7 +46,7 @@ a = 0.5
 
 plt.plot(yr_inv, inv_flux)
 
-plot.plot(vyr, vNBP)
+plt.plot(vyr, vNBP)
 
 #b = 0.03
 #plt.plot(hyr3, a*NEE3 * b * (hyr3-1950), 'r')
