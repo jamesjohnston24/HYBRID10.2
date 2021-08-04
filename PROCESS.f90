@@ -147,7 +147,7 @@ END IF
 ALLOCATE (vyr(nyr))
 ALLOCATE (vNBP(nyr))
 
-DO kyr_clm = syr, syr + nyr
+DO kyr_clm = syr, syr + nyr - 1
 
 !----------------------------------------------------------------------!
 var_name = 'B'
