@@ -173,7 +173,8 @@ DO kyr_run = 1, nyr_run
   END IF
  END IF ! trans
 
-IF (.NOT. (trans) .AND. (kyr_run == 1)) THEN
+!IF (.NOT. (trans) .AND. (kyr_run == 1) .OR. trans) THEN
+IF ((kyr_run == 1) .OR. trans) THEN
 DO kyr_clm = syr_clm, syr_clm + nyr_clm - 1
 
  IF (.NOT. trans) iyr = kyr_clm - syr_clm + 1
