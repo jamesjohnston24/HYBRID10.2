@@ -51,10 +51,8 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-!CALL MPI_FILE_OPEN (MPI_COMM_WORLD, 'driver.txt', &
-! MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
-!CALL MPI_FILE_READ_ALL ()
-!CALL MPI_FILE_CLOSE (file_handle, error)
+OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+CLOSe (10)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
