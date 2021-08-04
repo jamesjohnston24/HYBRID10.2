@@ -298,8 +298,8 @@ DO kyr_run = 1, nyr_run
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
    IF (kyr_clm > 1900.0) THEN
-    beta = 1.0 + 0.45 * log (CO2_ppm / 280.0)
-   ! beta = 1.0 + 0.45 * log (CO2_ppm / 276.59)
+    beta = 1.0 + 0.45 * log (CO2_ppm / 296.57)
+    !beta = 1.0 + 0.45 * log (CO2_ppm / 276.59)
    ELSE
     beta = 1.0
    END IF
