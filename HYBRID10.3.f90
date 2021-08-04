@@ -76,7 +76,7 @@ IF (RSF) THEN
 !----------------------------------------------------------------------!
 ! Restart from previous run.
 !----------------------------------------------------------------------!
-kyr_rsf = 1200
+kyr_rsf = 1500
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
