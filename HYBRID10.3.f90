@@ -297,12 +297,12 @@ DO kyr_run = 1, nyr_run
    Tc = tmp (t,k,iyr) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
-   !IF (kyr_clm > 1960.0) THEN
-   ! beta = 1.0 + 0.45 * log (CO2_ppm / 316.38)
-    beta = 1.0 + 0.45 * log (CO2_ppm / 276.59)
-   !ELSE
-   ! beta = 1.0
-   !END IF
+   IF (kyr_clm > 1900.0) THEN
+    beta = 1.0 + 0.45 * log (CO2_ppm / 280.0)
+   ! beta = 1.0 + 0.45 * log (CO2_ppm / 276.59)
+   ELSE
+    beta = 1.0
+   END IF
    NPP = beta * (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
    BL = B (k) / (12.5 * 365.0 * 86400.0)
    dB = NPP - BL
