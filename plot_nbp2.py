@@ -23,7 +23,7 @@ kyr10, hyr10, NPP10, Rh10, NEE10, B10, SOM10 = np.loadtxt ('/home/adf10/HYBRID10
 vyr, vNBP = np.loadtxt ('output.txt', unpack=True)
 
 plt.xlim(1958, 2026)
-plt.ylim(-4, 4)
+#plt.ylim(-4, 4)
 
 L = FF - ATM - OS
 plt.plot(Year, L)
