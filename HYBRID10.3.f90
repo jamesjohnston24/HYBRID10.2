@@ -346,11 +346,11 @@ DO kyr_run = 1, nyr_run
   ! zero accumulators
  !END IF ! trans
 
-END DO ! kyr_run = 1, nyr_run
-
 aNPP = aNPP / REAL (nyr_clm)
 aRh = aRh / REAL (nyr_clm)
 aNBP = aNBP / REAL (nyr_clm)
+
+IF (trans .OR. (kyr_run == nyr_run))
 
 !----------------------------------------------------------------------!
 ! Write output files for each processor.
@@ -452,6 +452,10 @@ CALL MPI_File_write(file_handle, aNBP, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 IF (myrank == root) WRITE (*,*) 'Written kyr_clm = ',kyr_clm
+
+END IF ! trans .OR. (kyr_run == nyr_run)
+
+END DO ! kyr_run = 1, nyr_run
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
