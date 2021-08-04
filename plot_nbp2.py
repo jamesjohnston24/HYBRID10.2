@@ -20,6 +20,8 @@ kyr8, hyr8, NPP8, Rh8, NEE8, B8, SOM8 = np.loadtxt ('/home/adf10/HYBRID10/RUN2/S
 kyr9, hyr9, NPP9, Rh9, NEE9, B9, SOM9 = np.loadtxt ('/home/adf10/HYBRID10/RUN3/SAVE3/global_means06380.txt', unpack=True, skiprows=1)
 kyr10, hyr10, NPP10, Rh10, NEE10, B10, SOM10 = np.loadtxt ('/home/adf10/HYBRID10/RUN3/SAVE4/global_means06420.txt', unpack=True, skiprows=1)
 
+vyr, vNBP = np.loadtxt ('output.txt', unpack=True)
+
 plt.xlim(1958, 2026)
 
 L = FF - ATM - OS
@@ -43,6 +45,8 @@ a = 0.5
 #plt.plot(hyr5, a*(NPP5-110.0), 'm')
 
 plt.plot(yr_inv, inv_flux)
+
+plot.plot(vyr, vNBP)
 
 #b = 0.03
 #plt.plot(hyr3, a*NEE3 * b * (hyr3-1950), 'r')
