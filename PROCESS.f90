@@ -409,9 +409,11 @@ CALL CHECK (NF90_PUT_VAR (ncid,     varidaNBP, aNBP_grid))
 CALL CHECK (NF90_close (ncid))
 !----------------------------------------------------------------------!
 
+OPEN (10,FILE='output.txt',STATUS='UNKNOWN')
 DO iyr = 1, nyr
- WRITE (*,*) vyr(iyr),vNBP(iyr)
+ WRITE (10,*) vyr(iyr),vNBP(iyr)
 END DO
+CLOSE (10)
 
 END IF ! myrank == root
 
