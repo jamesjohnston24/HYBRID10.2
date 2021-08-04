@@ -48,6 +48,7 @@ plt.plot(hyr10, a*NEE10,'y') #done before
 plt.plot(yr_inv, inv_flux)
 
 offset = vyr * 7 / (2020 - 1975) - 307.0
+offset = 0.0
 plt.plot(vyr, vNBP + offset)
 
 #b = 0.03
