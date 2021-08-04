@@ -237,7 +237,7 @@ DO kyr_run = 1, nyr_run
  IF (trans) THEN
   ! read kyr_clm climate into iyr vectors
   ! increment kyr_clm if not last year
- ELSE
+ ELSE ! Spin-up run.
   iyr = iyr + 1
   if (iyr == 21) THEN
    iyr = 1
