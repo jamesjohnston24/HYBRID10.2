@@ -329,7 +329,11 @@ WRITE (*,*) 'aNPPmax = ', aNPPmax
 WRITE (*,*) 'aRhmax = ', aRhmax
 WRITE (*,*) 'aNBPmax = ', aNBPmax
 
+END IF ! myrank == root
+
 END DO ! kyr_clm = syr, syr + nyr
+
+IF (myrank == root) THEN
 
 !----------------------------------------------------------------------!
 var_name = 'tmp'
