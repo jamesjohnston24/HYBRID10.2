@@ -298,7 +298,7 @@ DO kyr_run = 1, nyr_run
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
    IF (kyr_clm > 1960.0) THEN
-    beta = 1.0 + 0.6 * log (CO2_ppm / 316.38)
+    beta = 1.0 + 0.3 * log (CO2_ppm / 316.38)
    ELSE
     beta = 1.0
    END IF
