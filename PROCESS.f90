@@ -137,7 +137,7 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
 IF (trans) THEN
- syr = syr_trans + nyr_trans - 1
+ syr = syr_trans
  nyr = nyr_trans
 ELSE
  syr = kyr_rsf + nyr_spin ! Set to year for input file-name.
