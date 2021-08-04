@@ -127,15 +127,6 @@ END IF ! RSF
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-! Read input data for this processor.
-!----------------------------------------------------------------------!
-ALLOCATE (tmp(ntimes  ,nland/nprocs,nyr_clm))
-ALLOCATE (pre(ntimes  ,nland/nprocs,nyr_clm))
-ALLOCATE (spfh(ntimes ,nland/nprocs,nyr_clm))
-ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
-ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
-
-!----------------------------------------------------------------------!
 aNPP = 0.0
 aRh = 0.0
 aNBP = 0.0
