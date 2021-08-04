@@ -12,7 +12,7 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 300
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 400
 INTEGER, PARAMETER :: nyr_clm = 20, root = 0
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
@@ -69,7 +69,7 @@ IF (RSF) THEN
 !----------------------------------------------------------------------!
 ! Restart from previous run.
 !----------------------------------------------------------------------!
-kyr_rsf = 900
+kyr_rsf = 1200
 var_name = 'B'
 WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
