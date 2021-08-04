@@ -60,7 +60,7 @@ CLOSe (10)
 !----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
 IF (trans) THEN
- kyr_clm = syr_trans
+ kyr_clm = syr_trans + nyr_trans - 1
 ELSE
  kyr_clm = kyr_rsf + nyr_spin ! Set to year for input file-name.
 END IF
