@@ -159,25 +159,26 @@ ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
 
 !----------------------------------------------------------------------!
+kyr_clm = syr_clm
 DO kyr_run = 1, nyr_run
 
- IF (trans) THEN
+! IF (trans) THEN
   ! increment kyr_clm if not last year
- ELSE ! Spin-up run.
-  iyr = iyr + 1
-  if (iyr == 21) THEN
-   iyr = 1
-   aNPP = 0.0
-   aRh = 0.0
-   aNBP = 0.0
-  END IF
- END IF ! trans
+! ELSE ! Spin-up run.
+!  iyr = iyr + 1
+!  if (iyr == 21) THEN
+!   iyr = 1
+!   aNPP = 0.0
+!   aRh = 0.0
+!   aNBP = 0.0
+!  END IF
+! END IF ! trans
 
 !IF (.NOT. (trans) .AND. (kyr_run == 1) .OR. trans) THEN
-IF ((kyr_run == 1) .OR. trans) THEN
-DO kyr_clm = syr_clm, syr_clm + nyr_clm - 1
+!IF ((kyr_run == 1) .OR. trans) THEN
+!DO kyr_clm = syr_clm, syr_clm + nyr_clm - 1
 
- IF (.NOT. trans) iyr = kyr_clm - syr_clm + 1
+! IF (.NOT. trans) iyr = kyr_clm - syr_clm + 1
 
  !---------------------------------------------------------------------!
  var_name = 'tmp'
@@ -251,8 +252,8 @@ DO kyr_clm = syr_clm, syr_clm + nyr_clm - 1
  ! Close the file.
  CALL MPI_File_Close(file_handle, error)
  !---------------------------------------------------------------------!
-END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
-END IF ! .NOT. (trans) .AND. (kyr_run == 1)
+!END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
+!END IF ! .NOT. (trans) .AND. (kyr_run == 1)
 !----------------------------------------------------------------------!
 
  Wmax = 0.0
