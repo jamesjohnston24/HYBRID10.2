@@ -20,7 +20,7 @@ kyr8, hyr8, NPP8, Rh8, NEE8, B8, SOM8 = np.loadtxt ('/home/adf10/HYBRID10/RUN2/S
 kyr9, hyr9, NPP9, Rh9, NEE9, B9, SOM9 = np.loadtxt ('/home/adf10/HYBRID10/RUN3/SAVE3/global_means06380.txt', unpack=True, skiprows=1)
 kyr10, hyr10, NPP10, Rh10, NEE10, B10, SOM10 = np.loadtxt ('/home/adf10/HYBRID10/RUN3/SAVE4/global_means06420.txt', unpack=True, skiprows=1)
 
-plt.xlim(1958, 2025)
+plt.xlim(1958, 2026)
 
 L = FF - ATM - OS
 plt.plot(Year, L)
