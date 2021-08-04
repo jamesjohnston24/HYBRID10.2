@@ -159,8 +159,20 @@ ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
 
 !----------------------------------------------------------------------!
-kyr_clm = syr_clm
+kyr_clm = syr_clm - 1
 DO kyr_run = 1, nyr_run
+
+ kyr_clm = kyr_clm + 1
+
+ Wmax = 0.0
+ Bmax = 0.0
+ SOMmax = 0.0
+ aNPPmax = 0.0
+ aRhmax = 0.0
+ aNBPmax = 0.0
+ aNPP = 0.0
+ aRh = 0.0 
+ aNBP = 0.0
 
 ! IF (trans) THEN
   ! increment kyr_clm if not last year
@@ -256,12 +268,6 @@ DO kyr_run = 1, nyr_run
 !END IF ! .NOT. (trans) .AND. (kyr_run == 1)
 !----------------------------------------------------------------------!
 
- Wmax = 0.0
- Bmax = 0.0
- SOMmax = 0.0
- aNPPmax = 0.0
- aRhmax = 0.0
- aNBPmax = 0.0
  WRITE (*,*) 'Running kyr_run ', kyr_run, 'of', nyr_run,iyr
  DO t = 1, ntimes
   DO k = 1, nland_chunk
@@ -335,10 +341,10 @@ DO kyr_run = 1, nyr_run
  WRITE (*,*) 'aNBPmax = ',aNBPmax
  write (*,*) kyr_run, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
- IF (trans) THEN
+ !IF (trans) THEN
   ! output all vectors for kyr_clm
   ! zero accumulators
- END IF ! trans
+ !END IF ! trans
 
 END DO ! kyr_run = 1, nyr_run
 
