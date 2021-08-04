@@ -17,10 +17,10 @@ INTEGER, PARAMETER :: root = 0
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_run
 INTEGER :: kyr_rsf, nyr_spin, nyr_run, syr_trans, nyr_trans, nyr_clm
-INTEGER :: syr_clm
+INTEGER :: syr_clm, iyr_CO2
 REAL :: dB, NPP, BL, fT, Tc, ro, win, eas, ea, evap, dsoilW
-REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
-REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NBP
+REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax, beta
+REAL :: Tsoil, ET_SOIL, WFPS, EM, EV, Rh, dSOM, NBP, CO2_ppm
 REAL, DIMENSION (3) :: diag_out
 REAL, PARAMETER :: dt = 21600.0
 REAL, PARAMETER :: tf = 273.15
@@ -159,8 +159,16 @@ ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
 
 !----------------------------------------------------------------------!
+file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/TRENDY2021/&
+&input/CO2field/global_co2_ann_1700_2020.txt'
+OPEN (11,FILE=file_name,STATUS='OLD')
+DO kyr_run = 1700, syr_clm - 1
+ READ (22,*) iyr_CO2, CO2_ppm
+END DO
 kyr_clm = syr_clm - 1
 DO kyr_run = 1, nyr_run
+
+ READ (11,*) iyr_CO2, CO2_ppm
 
  kyr_clm = kyr_clm + 1
 
@@ -197,8 +205,7 @@ DO kyr_run = 1, nyr_run
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
  &"/home/adf10/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
- !&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
- &"CPUs/",TRIM(var_name),1901,"_",myrank,".bin" !****adf
+ &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Open the file for reading.
  write (*,*) 'reading from ',trim(file_name)
  CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
@@ -290,7 +297,12 @@ DO kyr_run = 1, nyr_run
    Tc = tmp (t,k,iyr) - tf
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
-   NPP = (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
+   IF (kyr_clm > 1960.0) THEN
+    beta = 1.0 + 0.6 * log (CO2_ppm / 316.38)
+   ELSE
+    beta = 1.0
+   END IF
+   NPP = beta * (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
    BL = B (k) / (12.5 * 365.0 * 86400.0)
    dB = NPP - BL
    Tsoil = Tc
@@ -457,6 +469,7 @@ IF (myrank == root) WRITE (*,*) 'Written kyr_clm = ',kyr_clm
 END IF ! trans .OR. (kyr_run == nyr_run)
 
 END DO ! kyr_run = 1, nyr_run
+CLOSE (11) ! CO2
 
 !----------------------------------------------------------------------!
 CALL MPI_FINALIZE ( error )
