@@ -12,7 +12,7 @@ USE mpi
 !----------------------------------------------------------------------!
 IMPLICIT NONE
 !----------------------------------------------------------------------!
-INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 400
+INTEGER, PARAMETER :: ntimes = 1460, nland = 67420, nyr_spin = 300
 INTEGER, PARAMETER :: nyr_clm = 20, root = 0
 INTEGER :: t, k, nland_chunk, iyr
 INTEGER :: error, nprocs, myrank, file_handle, size, kyr_clm, kyr_spin
@@ -48,6 +48,13 @@ CALL MPI_INIT ( error )
 !----------------------------------------------------------------------!
 CALL MPI_Comm_size (MPI_COMM_WORLD,nprocs,error)
 CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+CALL MPI_FILE_OPEN (MPI_COMM_WORLD, 'driver.txt', &
+ MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error)
+CALL MPI_FILE_READ_ALL ()
+CALL MPI_FILE_CLOSE (file_handle, error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
