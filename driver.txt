@@ -1,4 +1,4 @@
- .FALSE. ! trans
+ .TRUE. ! trans
     300 ! nyr_spin
  .TRUE. ! RSF
    3000 ! kyr_rsf
