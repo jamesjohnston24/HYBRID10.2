@@ -211,30 +211,41 @@ DO kyr_clm = 1901, 1901 + nyr_clm - 1
  !---------------------------------------------------------------------!
 END DO ! kyr_clm = 1901, 1901 + nyr_clm - 1
 END IF ! .NOT. (trans)
-
-!----------------------------------------------------------------------!
-! Set year used for naming output files.
-!----------------------------------------------------------------------!
-IF (RSF) THEN
- kyr_clm = nyr_spin + kyr_rsf
-ELSE
- kyr_clm = nyr_spin
-END IF
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
 aNPP = 0.0
 aRh = 0.0
 aNBP = 0.0
-iyr = 0
-nyr_run = nyr_spin
-DO kyr_run = 1, nyr_run
- iyr = iyr + 1
- if (iyr == 21) THEN
-  iyr = 1
-  aNPP = 0.0
-  aRh = 0.0
-  aNBP = 0.0
+IF (.trans) THEN
+ iyr = 1
+ nyr_run = nyr_trans
+ kyr_clm = syr_trans
+ELSE
+ iyr = 0
+ nyr_run = nyr_spin
+ IF (RSF) THEN
+  kyr_clm = nyr_spin + kyr_rsf
+ ELSE
+  kyr_clm = nyr_spin
  END IF
+END IF
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+DO kyr_run = 1, nyr_run
+ IF (trans) THEN
+  ! read kyr_clm climate into iyr vectors
+  ! increment kyr_clm if not last year
+ ELSE
+  iyr = iyr + 1
+  if (iyr == 21) THEN
+   iyr = 1
+   aNPP = 0.0
+   aRh = 0.0
+   aNBP = 0.0
+  END IF
+ END IF ! trans
  Wmax = 0.0
  Bmax = 0.0
  SOMmax = 0.0
@@ -314,7 +325,13 @@ DO kyr_run = 1, nyr_run
  WRITE (*,*) 'aNBPmax = ',aNBPmax
  write (*,*) kyr_run, myrank, tmp (1,1,iyr), pre (1,1,iyr), B(100)
 
+ IF (trans)
+  ! output all vectors for kyr_clm
+  ! zero accumulators
+ END IF ! trans
+
 END DO ! kyr_run = 1, nyr_run
+
 aNPP = aNPP / REAL (nyr_clm)
 aRh = aRh / REAL (nyr_clm)
 aNBP = aNBP / REAL (nyr_clm)

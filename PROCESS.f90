@@ -11,7 +11,7 @@ INTEGER, PARAMETER :: root = 0
 INTEGER, PARAMETER :: nland = 67420, nlon = 720, nlat = 360
 REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
-INTEGER :: i, j, k, nyr_spin, kyr_rsf
+INTEGER :: i, j, k, nyr_spin, kyr_rsf, syr_trans, nyr_trans
 REAL :: TA, TB, TW, TSOM, TaNPP, TaRh, TaNBP
 REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
@@ -35,6 +35,7 @@ INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
 INTEGER :: varidW, varidB, varidSOM, varidaNPP, varidaRh, varidaNBP
 INTEGER, DIMENSION (2) :: dimids_two
 CHARACTER(LEN=4) :: char_year
+LOGICAL :: trans, RSF
 
 !----------------------------------------------------------------------!
 CALL MPI_INIT ( error )
@@ -47,8 +48,12 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 
 !----------------------------------------------------------------------!
 OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+READ (10,*) trans
 READ (10,*) nyr_spin
+READ (10,*) RSF
 READ (10,*) kyr_rsf
+READ (10,*) syr_trans
+READ (10,*) nyr_trans
 CLOSe (10)
 !----------------------------------------------------------------------!
 
