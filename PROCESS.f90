@@ -46,8 +46,15 @@ CALL MPI_Comm_rank (MPI_COMM_WORLD,myrank,error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
+OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+READ (10,*) nyr_spin
+READ (10,*) kyr_rsf
+CLOSe (10)
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
 nland_chunk = nland / nprocs
-kyr_clm = 1800 ! Set to year for input file-name.
+kyr_clm = kyr_rsf + nyr_spin ! Set to year for input file-name.
 ALLOCATE (B_k        (nland_chunk))
 ALLOCATE (B_k_all    (nland))
 ALLOCATE (B_grid     (nlon,nlat))
