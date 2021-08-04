@@ -315,6 +315,7 @@ DO kyr_run = 1, nyr_run
    EM = MIN (1.0, EM)
    EV = ET_SOIL * EM
    Rh = EV * SOM (k) * (1.0 / (6.25 * 365.0 * 86400.0))
+Rh=0.0
    dSOM = BL - Rh
    NBP = NPP - Rh ! For now!
    soilW (k) = soilW (k) + dt * dsoilW
