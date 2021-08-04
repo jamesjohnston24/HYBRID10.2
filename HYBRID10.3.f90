@@ -217,7 +217,7 @@ END IF ! .NOT. (trans)
 aNPP = 0.0
 aRh = 0.0
 aNBP = 0.0
-IF (.trans) THEN
+IF (trans) THEN
  iyr = 1
  nyr_run = nyr_trans
  kyr_clm = syr_trans
