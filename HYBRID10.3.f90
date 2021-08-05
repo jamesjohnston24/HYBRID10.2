@@ -302,7 +302,7 @@ DO kyr_run = 1, nyr_run
    ! !beta = 1.0 + 0.45 * log (CO2_ppm / 276.59)
    !ELSE
     beta = 1.0
-   END IF
+   !END IF
    NPP = beta * (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
    BL = B (k) / (12.5 * 365.0 * 86400.0)
    dB = NPP - BL
