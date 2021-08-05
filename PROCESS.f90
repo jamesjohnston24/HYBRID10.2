@@ -326,6 +326,8 @@ aRh_grid = fillvalue
 aNBP_grid = fillvalue
 atmp_grid = fillvalue
 DO k = 1, nland
+write(*,*)myrank,larea_k_all(k)
+stop
  i = i_k_all (k)
  j = j_k_all (k)
  B_grid (i,j) = B_k_all (k)
