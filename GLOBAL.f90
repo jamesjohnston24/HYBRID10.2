@@ -41,7 +41,6 @@ REAL, ALLOCATABLE, DIMENSION (:) :: aNBP ! Annual NBP (kg[DM] m^-1 yr^-1)
 REAL, ALLOCATABLE, DIMENSION (:) :: atmp ! Annual T (K)
 CHARACTER(LEN=200) :: file_name, var_name
 LOGICAL :: trans, RSF
-! why not working
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
