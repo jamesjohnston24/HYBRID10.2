@@ -294,7 +294,7 @@ CALL MPI_Gather (aNBP_k, nland_chunk, MPI_REAL, aNBP_k_all, nland_chunk, MPI_REA
  root, MPI_COMM_WORLD, error)
 CALL MPI_Gather (atmp_k, nland_chunk, MPI_REAL, atmp_k_all, nland_chunk, MPI_REAL, &
  root, MPI_COMM_WORLD, error)
-CALL MPI_Gather (larea_k, nland_chunk, MPI_INTEGER, larea_k_all, nland_chunk, MPI_INTEGER, &
+CALL MPI_Gather (larea_k, nland_chunk, MPI_REAL, larea_k_all, nland_chunk, MPI_REAL, &
  root, MPI_COMM_WORLD, error)
 CALL MPI_Gather (i_k, nland_chunk, MPI_INTEGER, i_k_all, nland_chunk, MPI_INTEGER, &
  root, MPI_COMM_WORLD, error)
@@ -326,8 +326,6 @@ aRh_grid = fillvalue
 aNBP_grid = fillvalue
 atmp_grid = fillvalue
 DO k = 1, nland
-write(*,*)myrank,larea_k_all(k)
-stop
  i = i_k_all (k)
  j = j_k_all (k)
  B_grid (i,j) = B_k_all (k)
