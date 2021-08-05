@@ -38,6 +38,7 @@ REAL, ALLOCATABLE, DIMENSION (:) :: SOM
 REAL, ALLOCATABLE, DIMENSION (:) :: aNPP ! Annual NPP (kg[DM] m^-1 yr^-1)
 REAL, ALLOCATABLE, DIMENSION (:) :: aRh ! Annual Rh (kg[DM] m^-1 yr^-1)
 REAL, ALLOCATABLE, DIMENSION (:) :: aNBP ! Annual NBP (kg[DM] m^-1 yr^-1)
+REAL, ALLOCATABLE, DIMENSION (:) :: atmp ! Annual T (K)
 CHARACTER(LEN=200) :: file_name, var_name
 LOGICAL :: trans, RSF
 !----------------------------------------------------------------------!
@@ -71,6 +72,7 @@ ALLOCATE (SOM(nland_chunk))
 ALLOCATE (aNPP(nland_chunk))
 ALLOCATE (aRh(nland_chunk))
 ALLOCATE (aNBP(nland_chunk))
+ALLOCATE (atmp(nland_chunk))
 B = 0.0
 soilW = 0.0
 SOM = 0.0
@@ -181,6 +183,7 @@ DO kyr_run = 1, nyr_run
  aNPP = 0.0
  aRh = 0.0 
  aNBP = 0.0
+ atmp = 0.0
 
 ! IF (trans) THEN
   ! increment kyr_clm if not last year
@@ -298,10 +301,10 @@ DO kyr_run = 1, nyr_run
    fT = 2.0 ** (0.1 * (Tc - 25.0)) / ((1.0 + EXP (0.3 * (Tc - 36.0))) * &
         (1.0 + EXP (0.3 * (0.0 - Tc))))
    !IF (kyr_clm > 1900.0) THEN ! 1990 = 296.57 ppm
-    beta = 1.0 + 0.45 * log (CO2_ppm / 296.57)
+   ! beta = 1.0 + 0.45 * log (CO2_ppm / 296.57)
    ! !beta = 1.0 + 0.45 * log (CO2_ppm / 276.59)
    !ELSE
-   ! beta = 1.0
+    beta = 1.0
    !END IF
    NPP = beta * (soilW (k) / 0.5) * fT * 3.0 / (1460.0 * dt)
    BL = B (k) / (12.5 * 365.0 * 86400.0)
@@ -343,6 +346,7 @@ DO kyr_run = 1, nyr_run
    aNPP (k) = aNPP (k) + dt * NPP
    aRh (k) = aRh (k) + dt * Rh
    aNBP (k) = aNBP (k) + dt * NBP
+   atmp (k) = atmp (k) + tmp (t,k,iyr)
   END DO ! k = 1, nland_chunk
  END DO ! t = 1, ntimes
  !---------------------------------------------------------------------!
@@ -363,6 +367,7 @@ DO kyr_run = 1, nyr_run
 aNPP = aNPP / REAL (nyr_clm)
 aRh = aRh / REAL (nyr_clm)
 aNBP = aNBP / REAL (nyr_clm)
+atmp = atmp / REAL (nyr_clm*ntimes)
 
 IF (trans .OR. (kyr_run == nyr_run)) THEN
 
