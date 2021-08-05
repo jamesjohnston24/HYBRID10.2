@@ -33,7 +33,7 @@ INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k, i_k_all, j_k_all
 REAL, DIMENSION (nlon) :: lon
 REAL, DIMENSION (nlat) :: lat
 INTEGER, ALLOCATABLE, DIMENSION (:) :: vyr
-REAL, ALLOCATABLE, DIMENSION (:) :: vNBP. vtmp
+REAL, ALLOCATABLE, DIMENSION (:) :: vNBP, vtmp
 CHARACTER(LEN=20) :: var_name
 CHARACTER(LEN=200) :: file_name
 INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
