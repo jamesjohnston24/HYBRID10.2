@@ -13,29 +13,32 @@ REAL, PARAMETER :: fillvalue = 1.0E20
 INTEGER :: nprocs, error, myrank, nland_chunk, file_handle, kyr_clm
 INTEGER :: i, j, k, nyr_spin, kyr_rsf, syr_trans, nyr_trans, syr, nyr
 INTEGER :: iyr
-REAL :: TA, TB, TW, TSOM, TaNPP, TaRh, TaNBP
-REAL :: Wmax, Bmax, SOMmax, aNPPmax, aRhmax, aNBPmax
+REAL :: TA, TB, TW, TSOM, Ttmp, TaNPP, TaRh, TaNBP, Tatmp
+REAL :: Wmax, Bmax, SOMmax, tmpmax, aNPPmax, aRhmax, aNBPmax, atmpmax
 REAL, ALLOCATABLE, DIMENSION (:) :: B_k, larea_k, B_k_all, larea_k_all
 REAL, ALLOCATABLE, DIMENSION (:) :: soilW_k, soilW_k_all
 REAL, ALLOCATABLE, DIMENSION (:) :: SOM_k, SOM_k_all
 REAL, ALLOCATABLE, DIMENSION (:) :: aNPP_k, aNPP_k_all
 REAL, ALLOCATABLE, DIMENSION (:) :: aRh_k, aRh_k_all
 REAL, ALLOCATABLE, DIMENSION (:) :: aNBP_k, aNBP_k_all
+REAL, ALLOCATABLE, DIMENSION (:) :: atmp_k, atmp_k_all
 REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: aNPP_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: aRh_grid
 REAL, ALLOCATABLE, DIMENSION (:,:) :: aNBP_grid
+REAL, ALLOCATABLE, DIMENSION (:,:) :: atmp_grid
 INTEGER, ALLOCATABLE, DIMENSION (:) :: i_k, j_k, i_k_all, j_k_all
 REAL, DIMENSION (nlon) :: lon
 REAL, DIMENSION (nlat) :: lat
 INTEGER, ALLOCATABLE, DIMENSION (:) :: vyr
-REAL, ALLOCATABLE, DIMENSION (:) :: vNBP
+REAL, ALLOCATABLE, DIMENSION (:) :: vNBP. vtmp
 CHARACTER(LEN=20) :: var_name
 CHARACTER(LEN=200) :: file_name
 INTEGER :: lon_dimid, lat_dimid, lon_varid, lat_varid, ncid, varid
 INTEGER :: varidW, varidB, varidSOM, varidaNPP, varidaRh, varidaNBP
+INTEGER :: varidatmp
 INTEGER, DIMENSION (2) :: dimids_two
 CHARACTER(LEN=4) :: char_year
 LOGICAL :: trans, RSF
@@ -80,6 +83,9 @@ ALLOCATE (aRh_grid (nlon,nlat))
 ALLOCATE (aNBP_k    (nland_chunk))
 ALLOCATE (aNBP_k_all(nland))
 ALLOCATE (aNBP_grid (nlon,nlat))
+ALLOCATE (atmp_k    (nland_chunk))
+ALLOCATE (atmp_k_all(nland))
+ALLOCATE (atmp_grid (nlon,nlat))
 ALLOCATE (larea_k    (nland_chunk))
 ALLOCATE (larea_k_all(nland))
 ALLOCATE (i_k_all    (nland))
@@ -146,6 +152,7 @@ END IF
 
 ALLOCATE (vyr(nyr))
 ALLOCATE (vNBP(nyr))
+ALLOCATE (vtmp(nyr))
 
 DO kyr_clm = syr, syr + nyr - 1
 
@@ -245,8 +252,24 @@ CALL MPI_File_read(file_handle, aNBP_k, nland_chunk, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 
+!----------------------------------------------------------------------!
+var_name = 'atmp'
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+&adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
+&"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
+WRITE (*,*) 'Reading from ', TRIM(file_name)
+! Open the file for reading.
+CALL MPI_File_open(MPI_COMM_WORLD, file_name, &
+ MPI_MODE_RDONLY, MPI_INFO_NULL, file_handle, error) 
+! MPI_IO is binary output format. Write using individual file pointer.
+CALL MPI_File_read(file_handle, aymp_k, nland_chunk, &
+ MPI_REAL, MPI_STATUS_IGNORE, error)
+! Close the file.
+CALL MPI_File_Close(file_handle, error)
+!----------------------------------------------------------------------!
+
 write (*,*) myrank, B_k (10), soilW_k (10), SOM_k (10), aNPP_k (10), &
- aRh_k (10), aNBP_k (10), larea_k (10), i_k (10), j_k (10)
+ aRh_k (10), aNBP_k (10), atmp_k (10), larea_k (10), i_k (10), j_k (10)
 !B_grid = fillvalue
 !DO k = 1, nland_chunk
 ! i = i_k (k)
@@ -269,6 +292,8 @@ CALL MPI_Gather (aRh_k, nland_chunk, MPI_REAL, aRh_k_all, nland_chunk, MPI_REAL,
  root, MPI_COMM_WORLD, error)
 CALL MPI_Gather (aNBP_k, nland_chunk, MPI_REAL, aNBP_k_all, nland_chunk, MPI_REAL, &
  root, MPI_COMM_WORLD, error)
+CALL MPI_Gather (atmp_k, nland_chunk, MPI_REAL, atmp_k_all, nland_chunk, MPI_REAL, &
+ root, MPI_COMM_WORLD, error)
 CALL MPI_Gather (larea_k, nland_chunk, MPI_INTEGER, larea_k_all, nland_chunk, MPI_INTEGER, &
  root, MPI_COMM_WORLD, error)
 CALL MPI_Gather (i_k, nland_chunk, MPI_INTEGER, i_k_all, nland_chunk, MPI_INTEGER, &
@@ -285,18 +310,21 @@ TSOM = 0.0
 TaNPP = 0.0
 TaRh = 0.0
 TaNBP = 0.0
+Tatmp = 0.0
 Wmax = 0.0
 Bmax = 0.0
 SOMmax = 0.0
 aNPPmax = 0.0
 aRhmax = 0.0
 aNBPmax = 0.0
+atmpmax = 0.0
 B_grid = fillvalue
 soilW_grid = fillvalue
 SOM_grid = fillvalue
 aNPP_grid = fillvalue
 aRh_grid = fillvalue
 aNBP_grid = fillvalue
+atmp_grid = fillvalue
 DO k = 1, nland
  i = i_k_all (k)
  j = j_k_all (k)
@@ -306,6 +334,7 @@ DO k = 1, nland
  aNPP_grid (i,j) = aNPP_k_all (k)
  aRh_grid (i,j) = aRh_k_all (k)
  aNBP_grid (i,j) = aNBP_k_all (k)
+ atmp_grid (i,j) = atmp_k_all (k)
  TA = TA + larea_k_all (k)
  TB = TB + B_k_all (k) * larea_k_all (k)
  TW = TW + soilW_k_all (k) * larea_k_all (k)
@@ -313,12 +342,14 @@ DO k = 1, nland
  TaNPP = TaNPP + aNPP_k_all (k) * larea_k_all (k)
  TaRh = TaRh + aRh_k_all (k) * larea_k_all (k)
  TaNBP = TaNBP + aNBP_k_all (k) * larea_k_all (k)
+ Tatmp = Tatmp + atmp_k_all (k) * larea_k_all (k)
  Wmax = MAX (soilW_k_all (k), Wmax)
  Bmax = MAX (B_k_all (k), Bmax)
  SOMmax = MAX (SOM_k_all (k), SOMmax)
  aNPPmax = MAX (aNPP_k_all (k), aNPPmax)
  aRhmax = MAX (aRh_k_all (k), aRhmax)
  aNBPmax = MAX (aNBP_k_all (k), aNBPmax)
+ atmpmax = MAX (atmp_k_all (k), atmpmax)
  !write(*,*)i,j,k,B_grid(i,j)
 END DO ! k
 WRITE (*,*) 'Total land area = ',TA
@@ -328,14 +359,17 @@ WRITE (*,*) 'Total SOM = ',TSOM/1.0e6
 WRITE (*,*) 'Total aNPP = ',TaNPP/1.0e6
 WRITE (*,*) 'Total aRh = ',TaRh/1.0e6
 WRITE (*,*) 'Total aNBP = ',TaNBP/1.0e6
+WRITE (*,*) 'Total atmp = ',Tatmp/TA
 WRITE (*,*) 'Wmax = ', Wmax
 WRITE (*,*) 'Bmax = ', Bmax
 WRITE (*,*) 'SOMmax = ', SOMmax
 WRITE (*,*) 'aNPPmax = ', aNPPmax
 WRITE (*,*) 'aRhmax = ', aRhmax
 WRITE (*,*) 'aNBPmax = ', aNBPmax
+WRITE (*,*) 'atmpmax = ', atmpmax
 vyr (kyr_clm-syr+1) = kyr_clm
 vNBP (kyr_clm-syr+1) = TaNBP/1.0e6
+vtmp (kyr_clm-syr+1) = Tatmp/TA
 
 END IF ! myrank == root
 
@@ -411,7 +445,7 @@ CALL CHECK (NF90_close (ncid))
 
 OPEN (10,FILE='output.txt',STATUS='UNKNOWN')
 DO iyr = 1, nyr
- WRITE (10,*) vyr(iyr),vNBP(iyr)
+ WRITE (10,*) vyr(iyr),vNBP(iyr),vtmp(iyr)
 END DO
 CLOSE (10)
 
