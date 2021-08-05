@@ -52,7 +52,7 @@ offset = 0.0
 b = 0.5 # C/DM
 plt.plot(vyr, 0.5 * vNBP + offset)
 
-plt.plot(vyr, vtmp-273.15)
+plt.plot(vyr, vtmp-273.15-14.0)
 
 #b = 0.03
 #plt.plot(hyr3, a*NEE3 * b * (hyr3-1950), 'r')
