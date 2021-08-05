@@ -20,7 +20,7 @@ kyr8, hyr8, NPP8, Rh8, NEE8, B8, SOM8 = np.loadtxt ('/home/adf10/HYBRID10/RUN2/S
 kyr9, hyr9, NPP9, Rh9, NEE9, B9, SOM9 = np.loadtxt ('/home/adf10/HYBRID10/RUN3/SAVE3/global_means06380.txt', unpack=True, skiprows=1)
 kyr10, hyr10, NPP10, Rh10, NEE10, B10, SOM10 = np.loadtxt ('/home/adf10/HYBRID10/RUN3/SAVE4/global_means06420.txt', unpack=True, skiprows=1)
 
-vyr, vNBP = np.loadtxt ('output.txt', unpack=True)
+vyr, vNBP, vtmp = np.loadtxt ('output.txt', unpack=True)
 
 #plt.xlim(1958, 2026)
 #plt.ylim(-4, 4)
@@ -51,6 +51,8 @@ offset = vyr * 7 / (2020 - 1975) - 307.0
 offset = 0.0
 b = 0.5 # C/DM
 plt.plot(vyr, 0.5 * vNBP + offset)
+
+plt.plot(vyr, vtmp-273.15)
 
 #b = 0.03
 #plt.plot(hyr3, a*NEE3 * b * (hyr3-1950), 'r')
