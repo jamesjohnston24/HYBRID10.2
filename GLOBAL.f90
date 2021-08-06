@@ -57,7 +57,7 @@ INTEGER, PARAMETER :: NDIMS = 2
   REAL (KIND=sp) :: data_in_tmp(NX_tmp, NY_tmp, NTIMES)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=dp) :: data_in_carea(NX, NY)
-REAL (KIND=DP) :: sum_carea, tmp_mean, carea_land
+REAL (KIND=DP) :: sum_carea, tmp_mean, tmp_mean_nxt, carea_land, carea_land_nxt
 REAL (KIND=DP) :: carea_tmp (NX_tmp, NY_tmp)
 REAL (KIND=SP), PARAMETER :: tmp_fill = 1.0E+20
 
@@ -191,6 +191,7 @@ DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    carea_land = carea_land + carea_tmp (x,y)
+   if (y > (180*nint(23.5/90.0))) carea_land_nxt + carea_tmp (x,y)
    DO it = 1, NTIMES
     tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
    END DO
@@ -281,14 +282,16 @@ DO y = 1, NY_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    DO it = 1, NTIMES
     tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
+    if (y > (180*nint(23.5/90.0))) tmp_mean_nxt + data_in_tmp (x,y,it) * carea_tmp (x,y)
    END DO
    ntmp = ntmp + 1
   END IF
  END DO
 END DO
 tmp_mean = tmp_mean / (DBLE (NTIMES) * carea_land)
-write(10,*)kyr_clm,tmp_mean-273.15
-write(*,*)kyr_clm,tmp_mean-273.15
+tmp_mean_nxt = tmp_mean_nxt / (DBLE (NTIMES) * carea_land_nxt)
+write(10,*)kyr_clm,tmp_mean-273.15,tmp_mean_nxt-273.25
+write(*,*)kyr_clm,tmp_mean-273.15,tmp_mean_nxt-273.25
 end do
 close (10)
 !----------------------------------------------------------------------!
