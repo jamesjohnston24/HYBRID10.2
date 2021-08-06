@@ -49,8 +49,9 @@ INTEGER, PARAMETER :: NDIMS = 2
   REAL (KIND=sp) :: data_in_tmp(NX_tmp, NY_tmp)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=dp) :: data_in_carea(NX, NY)
-REAL (KIND=DP) :: sum_carea
+REAL (KIND=DP) :: sum_carea, tmp_mean, carea_land
 REAL (KIND=DP) :: carea_tmp (NX_tmp, NY_tmp)
+REAL, PARAMETER :: tmp_fill = 1.e+20f
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
@@ -172,6 +173,15 @@ PRINT *, "Sum of carea_tmp = ", SUM (carea_tmp)
 !----------------------------------------------------------------------!
 ! Compute annual global land temperatures.
 !----------------------------------------------------------------------!
+carea_land = 0.0_DP
+DO y = 1, NY_tmp
+ DO x = 1, NX_tmp
+  IF (data_in_tmp (x,y) /= tmp_fill) THEN
+   carea_land = carea_land + carea_tmp (x,y)
+  END IF
+ END DO
+END DO
+PRINT *, "carea_land = ", carea_land
 !----------------------------------------------------------------------!
 
 contains
