@@ -13,6 +13,7 @@ integer, parameter :: nyr = 2020 - 1901 + 1
 integer :: kyr, iyr
 real, dimension (nyr) :: t
 real :: B, SOM, fT, NPP, BL, dB, dSOM, ET_SOIL, EV, Rh
+real, parameter :: ga = 146376469.551773*1.0e6
 
 open (10,file="tmp_mean.txt",status="old")
 do kyr = 1, nyr
@@ -42,7 +43,7 @@ do kyr = 1, 3000
  write (*,*) kyr,B,SOM,NPP-Rh
 end do
 
-
+open(20,file="transient.txt",status="unknown")
 do iyr = 1, nyr
  fT = 2.0 ** (0.1 * (t (iyr) - 25.0)) / ((1.0 + EXP (0.3 * (t (iyr) - 36.0))) * &
       (1.0 + EXP (0.3 * (0.0 - t (iyr)))))
@@ -57,8 +58,9 @@ do iyr = 1, nyr
  dSOM = BL - Rh
  B = B + dB
  SOM = SOM + dSOM
- write (*,*) kyr,B,SOM,NPP-Rh
+ write (*,*) iyr,B*ga,SOM*ga,(NPP-Rh)*ga
 end do
+close (20)
 
 !----------------------------------------------------------------------!
 END PROGRAM NBP
