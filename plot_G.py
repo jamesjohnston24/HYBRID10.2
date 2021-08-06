@@ -16,6 +16,6 @@ b = 0.5
 y = y + 1900
 plt.plot (y, b*nbp)
 plt.plot(yr_inv, inv_flux)
-plt.plot(hyr10, a*NEE10,'y')
+plt.plot(hyr10, b*NEE10,'y')
 
 plt.show( )
