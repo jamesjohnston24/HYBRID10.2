@@ -99,8 +99,8 @@ PRINT *, "Sum of carea = ", sum_carea
   dimids =  (/ x_dimid, y_dimid /)
 
   ! Define the variables.
-  call check( nf90_def_var(ncid, "lon", NF90_DOUBLE_PRECISION, dimid_lon, varid_lon) )
-  call check( nf90_def_var(ncid, "lat", NF90_DOUBLE_PRECISION, dimid_lat, varid_lat) )
+  call check( nf90_def_var(ncid, "lon", NF90_DOUBLE, dimid_lon, varid_lon) )
+  call check( nf90_def_var(ncid, "lat", NF90_DOUBLE, dimid_lat, varid_lat) )
   call check( nf90_def_var(ncid, "ptbio", NF90_FLOAT, dimids, varid_ptbio) )
 
   ! End define mode. This tells netCDF we are done defining metadata.
