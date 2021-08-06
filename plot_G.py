@@ -13,7 +13,7 @@ plt.xlim(1958, 2025)
 #print (s, e, base)
 
 #plt.plot(y,t)
-a = 1.0
+a = 0.0
 b = 0.5
 y = y + 1900
 plt.plot (y, a+b*nbp)
