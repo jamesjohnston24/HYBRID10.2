@@ -71,7 +71,7 @@ INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
   ! Close the file, freeing all resources.
   call check( nf90_close(ncid) )
 
-  print *,"*** SUCCESS reading example file ", FILE_NAME, "! "
+  print *,"*** SUCCESS reading file ", FILE_NAME, "! "
 
 !----------------------------------------------------------------------!
 ! Total area seems to take into account bulge.
@@ -115,7 +115,10 @@ PRINT *, "Sum of carea = ", sum_carea
   ! associated with the file, and flushes any buffers.
   call check( nf90_close(ncid) )
 
-  print *, "*** SUCCESS writing example file simple_xy.nc! "
+  print *,"*** SUCCESS writing file ", FILE_NAME, "! "
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
 !----------------------------------------------------------------------!
 
 ! Creat file of HD areas in same format as the climate data.
