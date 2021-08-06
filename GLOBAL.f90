@@ -147,6 +147,8 @@ PRINT *, "Sum of carea = ", sum_carea
 
   print *,"*** SUCCESS reading file ", FILE_NAME_tmp, "! "
 !----------------------------------------------------------------------!
+WRITE (*,*) data_in_lon_tmp (1)
+WRITE (*,*) data_in_lat_tmp (1)
 
 ! Creat file of HD areas in same format as the climate data.
 
