@@ -30,11 +30,13 @@ IMPLICIT NONE
   character (len = *), parameter :: FILE_NAME = "/home/adf10/rds/&
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/LUH2_GCB_2021/&
   &staticData_quarterdeg.nc"
+character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 
 INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
 INTEGER, PARAMETER :: sp = KIND (1E0)
 
-  ! We are reading 2D data, a 1440 x 720 grid. 
+  ! We are reading 2D data, a 1440 x 720 grid.
+INTEGER, PARAMETER :: NDIMS = 2
   integer, parameter :: NX = 1440, NY = 720
   REAL (KIND=dp) :: data_in_lon (NX)
   REAL (KIND=dp) :: data_in_lat (NY)
@@ -44,6 +46,7 @@ REAL (KIND=DP) :: sum_carea
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
+INTEGER :: x_dimid, y_dimid, dimids (NDIMS)
 
   ! Loop indexes, and error handling.
   integer :: x, y
@@ -71,14 +74,44 @@ REAL (KIND=DP) :: sum_carea
   print *,"*** SUCCESS reading example file ", FILE_NAME, "! "
 
 !----------------------------------------------------------------------!
+! Total area seems to take into account bulge.
 sum_carea = SUM (data_in_carea)
 PRINT *, "Sum of carea = ", sum_carea
-PRINT *, 4.0 * 3.14159 * 6350.0 ** 2
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 ! Write potential vegetation carbon for looking at map.
 !----------------------------------------------------------------------!
+
+  ! Create the netCDF file. The nf90_clobber parameter tells netCDF to
+  ! overwrite this file, if it already exists.
+  call check( nf90_create(FILE_NAME_ptbio, NF90_CLOBBER, ncid) )
+
+  ! Define the dimensions. NetCDF will hand back an ID for each. 
+  call check( nf90_def_dim(ncid, "x", NX, x_dimid) )
+  call check( nf90_def_dim(ncid, "y", NY, y_dimid) )
+
+  ! The dimids array is used to pass the IDs of the dimensions of
+  ! the variables. Note that in fortran arrays are stored in
+  ! column-major format.
+  dimids =  (/ y_dimid, x_dimid /)
+
+  ! Define the variable.
+  call check( nf90_def_var(ncid, "ptbio", NF90_FLOAT, dimids, varid_ptbio) )
+
+  ! End define mode. This tells netCDF we are done defining metadata.
+  call check( nf90_enddef(ncid) )
+
+  ! Write the pretend data to the file. Although netCDF supports
+  ! reading and writing subsets of data, in this case we write all the
+  ! data in one operation.
+  call check( nf90_put_var(ncid, varid_ptbio, data_in_ptbio) )
+
+  ! Close the file. This frees up any internal netCDF resources
+  ! associated with the file, and flushes any buffers.
+  call check( nf90_close(ncid) )
+
+  print *, "*** SUCCESS writing example file simple_xy.nc! "
 !----------------------------------------------------------------------!
 
 contains
