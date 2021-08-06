@@ -37,6 +37,7 @@ character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 character (len = *), parameter :: FILE_NAME_tmp_out = "tmp_out.nc"
 CHARACTER (LEN=*) :: filen
 CHARACTER (LEN=4) :: char_year
+CHARACTER(LEN=20) :: var_name
 
 INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
 INTEGER, PARAMETER :: sp = KIND (1E0)
@@ -247,7 +248,7 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
 var_name = 'tmp'
 kyr_clm = 1901
 WRITE (char_year, '(I4)') kyr_clm
-file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+filen = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
  &char_year//'.365d.noc.nc'
 !----------------------------------------------------------------------!
