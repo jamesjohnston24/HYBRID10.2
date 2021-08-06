@@ -41,12 +41,12 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   ! We are reading 2D data, a 1440 x 720 grid.
 INTEGER, PARAMETER :: NDIMS = 2
   integer, parameter :: NX = 1440, NY = 720
-  integer, parameter :: NX_tmp = 720, NY_tmp = 360
+  integer, parameter :: NX_tmp = 720, NY_tmp = 360, NTIMES = 1460
   REAL (KIND=dp) :: data_in_lon (NX)
   REAL (KIND=dp) :: data_in_lat (NY)
   REAL (KIND=sp) :: data_in_lon_tmp (NX_tmp)
   REAL (KIND=sp) :: data_in_lat_tmp (NY_tmp)
-  REAL (KIND=sp) :: data_in_tmp(NX_tmp, NY_tmp)
+  REAL (KIND=sp) :: data_in_tmp(NX_tmp, NY_tmp, NTIMES)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=dp) :: data_in_carea(NX, NY)
 REAL (KIND=DP) :: sum_carea, tmp_mean, carea_land
@@ -60,7 +60,7 @@ INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
 
   ! Loop indexes, and error handling.
   integer :: x, y, i, j
-INTEGER :: ntmp
+INTEGER :: ntmp, it
 
   ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to
   ! the file.
@@ -177,11 +177,12 @@ PRINT *, "Sum of carea_tmp = ", SUM (carea_tmp)
 carea_land = 0.0_DP
 tmp_mean = 0.0_DP
 ntmp = 0
+it = 1
 DO y = 1, NY_tmp
  DO x = 1, NX_tmp
-  IF (data_in_tmp (x,y) /= tmp_fill) THEN
+  IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    carea_land = carea_land + carea_tmp (x,y)
-   tmp_mean = tmp_mean + data_in_tmp (x,y)
+   tmp_mean = tmp_mean + data_in_tmp (x,y,it)
    ntmp = ntmp + 1
   END IF
  END DO
