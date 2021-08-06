@@ -51,7 +51,7 @@ IMPLICIT NONE
   ! Read the data.
   call check( nf90_get_var(ncid, varid, data_in) )
 
-PRINT *, data_in (1,1:360)
+PRINT *, data_in (1,1:361)
 
   ! Check the data.
   do x = 1, NX
