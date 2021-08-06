@@ -57,7 +57,7 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   ! Read the data.
   call check( nf90_get_var(ncid, varid_ptbio, data_in_ptbio) )
 
-PRINT *, data_in_ptbio (1,1:363)
+PRINT *, data_in_ptbio (1,1:2)
 
   ! Close the file, freeing all resources.
   call check( nf90_close(ncid) )
