@@ -249,7 +249,7 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
 !----------------------------------------------------------------------!
 ! Annual means.
 !----------------------------------------------------------------------!
-open(10,file='tmp_mean.txt',status='old')
+open(10,file='tmp_mean.txt',status='unknown')
 var_name = 'tmp'
 do kyr_clm = 1901, 2020
 WRITE (char_year, '(I4)') kyr_clm
