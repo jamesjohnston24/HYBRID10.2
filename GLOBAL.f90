@@ -184,6 +184,7 @@ PRINT *, "Sum of carea_tmp = ", SUM (carea_tmp)
 ! Compute annual global land temperatures.
 !----------------------------------------------------------------------!
 carea_land = 0.0_DP
+carea_land_nxt = 0.0_DP
 tmp_mean = 0.0_DP
 ntmp = 0
 it = 1
@@ -191,7 +192,7 @@ DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    carea_land = carea_land + carea_tmp (x,y)
-   if (y > (180*nint(23.5/90.0))) carea_land_nxt + carea_tmp (x,y)
+   if (y > (180*nint(23.5/90.0))) carea_land_nxt = carea_land_nxt + carea_tmp (x,y)
    DO it = 1, NTIMES
     tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
    END DO
@@ -277,12 +278,14 @@ filen = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
 
   print *,"*** SUCCESS reading file ", FILE_NAME_tmp, "! "
 tmp_mean = 0.0_DP
+tmp_mean_nxt = 0.0_DP
 DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    DO it = 1, NTIMES
     tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
-    if (y > (180*nint(23.5/90.0))) tmp_mean_nxt + data_in_tmp (x,y,it) * carea_tmp (x,y)
+    if (y > (180*nint(23.5/90.0))) tmp_mean_nxt = tmp_mean_nxt + &
+     data_in_tmp (x,y,it) * carea_tmp (x,y)
    END DO
    ntmp = ntmp + 1
   END IF
