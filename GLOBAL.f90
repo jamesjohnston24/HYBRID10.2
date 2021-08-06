@@ -154,7 +154,7 @@ PRINT *, "Sum of carea = ", sum_carea
 !----------------------------------------------------------------------!
 carea_tmp = 0.0
 ! Aggregate QD areas to HD, check sum to same.
-j = 1440
+j = 720
 DO y = 1, NY_tmp
  i = 1
  DO x = 1, NX_tmp
@@ -166,6 +166,7 @@ DO y = 1, NY_tmp
  END DO
  j = j - 2
 END DO
+PRINT *, "Sum of carea_tmp = ", SUM (sum_carea_tmp)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
