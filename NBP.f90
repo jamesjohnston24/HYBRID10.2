@@ -13,7 +13,7 @@ integer, parameter :: nyr = 2020 - 1901 + 1
 integer :: kyr, iyr
 real, dimension (nyr) :: t
 real :: B, SOM, fT, NPP, BL, dB, dSOM, ET_SOIL, EV, Rh
-real, parameter :: ga = 146376469.551773*1.0e6
+real, parameter :: ga = 146376469.551773*1.0e9/1.0e15
 
 open (10,file="tmp_mean.txt",status="old")
 do kyr = 1, nyr
