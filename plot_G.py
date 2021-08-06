@@ -16,7 +16,7 @@ plt.xlim(1958, 2025)
 a = 0.0
 b = 0.5
 y = y + 1900
-plt.plot (y, a+b*nbp)
+plt.plot (y, b*nbp)
 plt.plot(yr_inv, inv_flux)
 plt.plot(hyr10, b*NEE10,'y')
 
