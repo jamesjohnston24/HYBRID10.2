@@ -39,7 +39,7 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   REAL (KIND=dp) :: data_in_lon (NX)
   REAL (KIND=dp) :: data_in_lat (NY)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
-REAL (KIND=sp)., DIMENSION (2) :: data_in_lat_bounds
+REAL (KIND=sp), DIMENSION (2) :: data_in_lat_bounds
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_ptbio, varid_lon, varid_lat, varid_lat_bounds
