@@ -60,6 +60,7 @@ INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
 
   ! Loop indexes, and error handling.
   integer :: x, y, i, j
+INTEGER :: ntmp
 
   ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to
   ! the file.
@@ -174,14 +175,20 @@ PRINT *, "Sum of carea_tmp = ", SUM (carea_tmp)
 ! Compute annual global land temperatures.
 !----------------------------------------------------------------------!
 carea_land = 0.0_DP
+tmp_mean = 0.0_DP
+ntmp = 0
 DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   IF (data_in_tmp (x,y) /= tmp_fill) THEN
    carea_land = carea_land + carea_tmp (x,y)
+   tmp_mean = tmp_mean + data_in_tmp (x,y)
+   ntmp = ntmp + 1
   END IF
  END DO
 END DO
+tmp_mean = tmp_mean / DBLE (ntmp)
 PRINT *, "carea_land = ", carea_land, carea_land/SUM (carea_tmp)
+PRINT *, "mean tmp = ", tmp_mean, ntmp
 !----------------------------------------------------------------------!
 
 contains
