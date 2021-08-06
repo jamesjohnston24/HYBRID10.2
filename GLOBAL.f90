@@ -30,9 +30,14 @@ IMPLICIT NONE
   character (len = *), parameter :: FILE_NAME = "/home/adf10/rds/&
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/LUH2_GCB_2021/&
   &staticData_quarterdeg.nc"
-  character (len = *), parameter :: FILE_NAME_tmp = "/home/adf10/rds/&
-  &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
-  &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
+!  character (len = *), parameter :: FILE_NAME_tmp = "/home/adf10/rds/&
+!  &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
+!  &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
+
+
+ character (len = *), parameter :: FILE_NAME_tmp = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
+  &CRUJRA_2.1/CRUJRA2020/tmpcrujra.v2.1.5d.tmp.2009.365d.noc.nc'
+
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 character (len = *), parameter :: FILE_NAME_tmp_out = "tmp_out.nc"
 CHARACTER (LEN=200) :: filen
@@ -205,30 +210,30 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
 !----------------------------------------------------------------------!
   ! Create the netCDF file. The nf90_clobber parameter tells netCDF to
   ! overwrite this file, if it already exists.
-  call check( nf90_create(FILE_NAME_tmp_out, NF90_CLOBBER, ncid) )
+!  call check( nf90_create(FILE_NAME_tmp_out, NF90_CLOBBER, ncid) )
 
   ! Define the dimensions. NetCDF will hand back an ID for each. 
-  call check( nf90_def_dim(ncid, "lon", NX_tmp, x_dimid) )
-  call check( nf90_def_dim(ncid, "lat", NY_tmp, y_dimid) )
-  call check( nf90_def_dim(ncid, "time", NTIMES, t_dimid) )
+!  call check( nf90_def_dim(ncid, "lon", NX_tmp, x_dimid) )
+!  call check( nf90_def_dim(ncid, "lat", NY_tmp, y_dimid) )
+!  call check( nf90_def_dim(ncid, "time", NTIMES, t_dimid) )
 
   ! The dimids array is used to pass the IDs of the dimensions of
   ! the variables. Note that in fortran arrays are stored in
   ! column-major format.
-  dimid_lon = x_dimid
-  dimid_lat = y_dimid
-  dimids_three =  (/ x_dimid, y_dimid, t_dimid /)
+!  dimid_lon = x_dimid
+!  dimid_lat = y_dimid
+!  dimids_three =  (/ x_dimid, y_dimid, t_dimid /)
 
   ! Define the variables.
-  call check( nf90_def_var(ncid, "lon", NF90_DOUBLE, dimid_lon, varid_lon) )
-  call check( nf90_def_var(ncid, "lat", NF90_DOUBLE, dimid_lat, varid_lat) )
-  call check( nf90_def_var(ncid, "time", NF90_INT, dimids_three, varid_t) )
-  call check( nf90_def_var(ncid, "tmp", NF90_FLOAT, dimids, varid_tmp) )
+!  call check( nf90_def_var(ncid, "lon", NF90_DOUBLE, dimid_lon, varid_lon) )
+!  call check( nf90_def_var(ncid, "lat", NF90_DOUBLE, dimid_lat, varid_lat) )
+!  call check( nf90_def_var(ncid, "time", NF90_INT, dimids_three, varid_t) )
+!  call check( nf90_def_var(ncid, "tmp", NF90_FLOAT, dimids, varid_tmp) )
 
-  call check (nf90_put_att(ncid, varid_tmp, "_FillValue", tmp_fill) )
+!  call check (nf90_put_att(ncid, varid_tmp, "_FillValue", tmp_fill) )
 
   ! End define mode. This tells netCDF we are done defining metadata.
-  call check( nf90_enddef(ncid) )
+!  call check( nf90_enddef(ncid) )
 
   ! Write the data to the file.
 !  call check( nf90_put_var(ncid, varid_lon, data_in_lon_tmp) )
@@ -237,9 +242,9 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
 
   ! Close the file. This frees up any internal netCDF resources
   ! associated with the file, and flushes any buffers.
-  call check( nf90_close(ncid) )
+!  call check( nf90_close(ncid) )
 
-  print *,"*** SUCCESS writing file ", FILE_NAME_tmp_out, "! "
+!  print *,"*** SUCCESS writing file ", FILE_NAME_tmp_out, "! "
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
