@@ -50,7 +50,7 @@ INTEGER, PARAMETER :: NDIMS = 2
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=sp) :: data_in_carea(NX, NY)
 REAL (KIND=SP) :: sum_carea
-READ (KIND=SP) :: carea_tmp (NX_tmp, NY_tmp)
+REAL (KIND=SP) :: carea_tmp (NX_tmp, NY_tmp)
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
