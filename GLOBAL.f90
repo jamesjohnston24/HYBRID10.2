@@ -35,7 +35,7 @@ IMPLICIT NONE
   &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 character (len = *), parameter :: FILE_NAME_tmp_out = "tmp_out.nc"
-CHARACTER (LEN=*) :: filen
+CHARACTER (LEN=200) :: filen
 CHARACTER (LEN=4) :: char_year
 CHARACTER(LEN=20) :: var_name
 
