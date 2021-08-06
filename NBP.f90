@@ -23,7 +23,7 @@ close (10)
 B = 0.0
 SOM = 0.0
 iyr = 1
-do kyr = 1, 100
+do kyr = 1, 3000
  iyr = iyr + 1
  if (iyr > 20) iyr = 1
  fT = 2.0 ** (0.1 * (t (iyr) - 25.0)) / ((1.0 + EXP (0.3 * (t (iyr) - 36.0))) * &
