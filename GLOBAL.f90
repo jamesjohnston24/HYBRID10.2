@@ -94,7 +94,7 @@ PRINT *, "Sum of carea = ", sum_carea
   ! The dimids array is used to pass the IDs of the dimensions of
   ! the variables. Note that in fortran arrays are stored in
   ! column-major format.
-  dimids =  (/ y_dimid, x_dimid /)
+  dimids =  (/ x_dimid, y_dimid /)
 
   ! Define the variable.
   call check( nf90_def_var(ncid, "ptbio", NF90_FLOAT, dimids, varid_ptbio) )
