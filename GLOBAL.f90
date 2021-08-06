@@ -51,7 +51,7 @@ INTEGER, PARAMETER :: NDIMS = 2
   REAL (KIND=dp) :: data_in_carea(NX, NY)
 REAL (KIND=DP) :: sum_carea, tmp_mean, carea_land
 REAL (KIND=DP) :: carea_tmp (NX_tmp, NY_tmp)
-REAL (KIND=SP), PARAMETER :: tmp_fill = 1.e+20
+REAL (KIND=SP), PARAMETER :: tmp_fill = 1.0E+20
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
@@ -181,7 +181,7 @@ DO y = 1, NY_tmp
   END IF
  END DO
 END DO
-PRINT *, "carea_land = ", carea_land
+PRINT *, "carea_land = ", carea_land, carea_land/SUM (carea_tmp)
 !----------------------------------------------------------------------!
 
 contains
