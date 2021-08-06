@@ -59,6 +59,7 @@ do iyr = 1, nyr
  B = B + dB
  SOM = SOM + dSOM
  write (*,*) iyr,B*ga,SOM*ga,(NPP-Rh)*ga
+ write (20,*) iyr,B*ga,SOM*ga,(NPP-Rh)*ga
 end do
 close (20)
 
