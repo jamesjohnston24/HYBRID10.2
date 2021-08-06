@@ -25,10 +25,12 @@ do kyr = 1700, 2020
   read (10,*)
  else
   read (10,*)iyr,CO2(iyr)
+write(*,*)iyr,CO2(iyr)
   iyr = iyr + 1
  end if
 end do
 close (10)
+stop
 
 open (10,file="tmp_mean.txt",status="old")
 do kyr = 1, nyr
