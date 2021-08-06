@@ -43,7 +43,7 @@ do kyr = 1, 3000
  if (iyr > 20) iyr = 1
  fT = 2.0 ** (0.1 * (t (iyr) - 25.0)) / ((1.0 + EXP (0.3 * (t (iyr) - 36.0))) * &
       (1.0 + EXP (0.3 * (0.0 - t (iyr)))))
- NPP = fT * 3.0 * 0.8 * CO2 (iyr) / (40.0 + CO2 (iyr))
+ NPP = fT * 3.0 * CO2 (iyr) / (40.0 + CO2 (iyr))
  BL = B / 12.5
  dB = NPP - BL
  ET_SOIL = 0.0326 + 0.00351 * t (iyr) ** 1.652 - (0.023953 * t (iyr)) ** 7.19
@@ -61,7 +61,7 @@ open(20,file="transient.txt",status="unknown")
 do iyr = 1, nyr
  fT = 2.0 ** (0.1 * (t (iyr) - 25.0)) / ((1.0 + EXP (0.3 * (t (iyr) - 36.0))) * &
       (1.0 + EXP (0.3 * (0.0 - t (iyr)))))
- NPP = fT * 3.0 * 0.8  * CO2 (iyr) / (40.0 + CO2 (iyr))
+ NPP = fT * 3.0 * CO2 (iyr) / (40.0 + CO2 (iyr))
  BL = B / 12.5
  dB = NPP - BL
  ET_SOIL = 0.0326 + 0.00351 * t (iyr) ** 1.652 - (0.023953 * t (iyr)) ** 7.19
