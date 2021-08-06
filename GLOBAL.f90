@@ -33,10 +33,12 @@ IMPLICIT NONE
 
   ! We are reading 2D data, a 1440 x 720 grid. 
   integer, parameter :: NX = 1440, NY = 720
-  real :: data_in(NX, NY)
+  double :: data_in_lon (NX)
+  double :: data_in_lat (NY)
+  real :: data_in_ptbio(NX, NY)
 
   ! This will be the netCDF ID for the file and data variable.
-  integer :: ncid, varid
+  integer :: ncid, varid_ptbio
 
   ! Loop indexes, and error handling.
   integer :: x, y
@@ -46,27 +48,23 @@ IMPLICIT NONE
   call check( nf90_open(FILE_NAME, NF90_NOWRITE, ncid) )
 
   ! Get the varid of the data variable, based on its name.
-  call check( nf90_inq_varid(ncid, "carea", varid) )
+  ! Data starts at 
+  call check( nf90_inq_varid(ncid, "ptbio", varid_ptbio) )
 
   ! Read the data.
-  call check( nf90_get_var(ncid, varid, data_in) )
+  call check( nf90_get_var(ncid, varid_ptbio, data_in_ptbio) )
 
-PRINT *, data_in (1,1:363)
-
-  ! Check the data.
-  do x = 1, NX
-     do y = 1, NY
-        if (data_in(y, x) /= (x - 1) * NY + (y - 1)) then
-           print *, "data_in(", y, ", ", x, ") = ", data_in(y, x)
-           stop "Stopped"
-        end if
-     end do
-  end do
+PRINT *, data_in_ptbio (1,1:363)
 
   ! Close the file, freeing all resources.
   call check( nf90_close(ncid) )
 
   print *,"*** SUCCESS reading example file ", FILE_NAME, "! "
+
+!----------------------------------------------------------------------!
+! Write potential vegetation carbon for looking at map.
+!----------------------------------------------------------------------!
+!----------------------------------------------------------------------!
 
 contains
   subroutine check(status)
