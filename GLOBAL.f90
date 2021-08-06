@@ -34,6 +34,7 @@ IMPLICIT NONE
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
   &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
+character (len = *), parameter :: FILE_NAME_tmp_out = "tmp_out.nc"
 
 INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
 INTEGER, PARAMETER :: sp = KIND (1E0)
@@ -193,6 +194,44 @@ tmp_mean = tmp_mean / (DBLE (NTIMES) * carea_land)
 PRINT *, "carea_land = ", carea_land, carea_land/SUM (carea_tmp)
 PRINT *, "mean tmp = ", tmp_mean, ntmp
 PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Write tmp for looking at map.
+!----------------------------------------------------------------------!
+  ! Create the netCDF file. The nf90_clobber parameter tells netCDF to
+  ! overwrite this file, if it already exists.
+  call check( nf90_create(FILE_NAME_tmp_out, NF90_CLOBBER, ncid) )
+
+  ! Define the dimensions. NetCDF will hand back an ID for each. 
+  call check( nf90_def_dim(ncid, "lon", NX_tmp, x_dimid) )
+  call check( nf90_def_dim(ncid, "lat", NY_tmp, y_dimid) )
+
+  ! The dimids array is used to pass the IDs of the dimensions of
+  ! the variables. Note that in fortran arrays are stored in
+  ! column-major format.
+  dimid_lon = x_dimid
+  dimid_lat = y_dimid
+  dimids =  (/ x_dimid, y_dimid /)
+
+  ! Define the variables.
+  call check( nf90_def_var(ncid, "lon", NF90_DOUBLE, dimid_lon, varid_lon) )
+  call check( nf90_def_var(ncid, "lat", NF90_DOUBLE, dimid_lat, varid_lat) )
+  call check( nf90_def_var(ncid, "tmp", NF90_FLOAT, dimids, varid_tmp) )
+
+  ! End define mode. This tells netCDF we are done defining metadata.
+  call check( nf90_enddef(ncid) )
+
+  ! Write the data to the file.
+  call check( nf90_put_var(ncid, varid_lon, data_in_lon_tmp) )
+  call check( nf90_put_var(ncid, varid_lat, data_in_lat_tmp) )
+  call check( nf90_put_var(ncid, varid_ptbio, data_in_tmp) )
+
+  ! Close the file. This frees up any internal netCDF resources
+  ! associated with the file, and flushes any buffers.
+  call check( nf90_close(ncid) )
+
+  print *,"*** SUCCESS writing file ", FILE_NAME_tmp_out, "! "
 !----------------------------------------------------------------------!
 
 contains
