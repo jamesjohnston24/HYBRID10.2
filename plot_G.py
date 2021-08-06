@@ -23,5 +23,6 @@ plt.plot(Year, L, 'g')
 plt.plot (y, a+ b*nbp, 'r')
 plt.plot(yr_inv, inv_flux, 'b')
 plt.plot(hyr10, 0.5*NEE10,'y')
+plt.plot(Year, LS, 'o'
 
 plt.show( )
