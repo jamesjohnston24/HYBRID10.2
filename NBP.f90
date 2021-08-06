@@ -12,7 +12,7 @@ implicit none
 integer, parameter :: nyr = 2020 - 1901 + 1
 integer :: kyr, iyr
 real, dimension (nyr) :: t
-real :: B, SOM, fT
+real :: B, SOM, fT, NPP, BL
 
 open (10,file="tmp_mean.txt",status="old")
 do kyr = 1, nyr
@@ -28,7 +28,11 @@ do kyr = 1, 100
  if (iyr > 20) iyr = 1
  fT = 2.0 ** (0.1 * (t (iyr) - 25.0)) / ((1.0 + EXP (0.3 * (t (iyr) - 36.0))) * &
       (1.0 + EXP (0.3 * (0.0 - t (iyr)))))
- write (*,*) iyr,t(iyr),fT
+ NPP = fT * 3.0
+ BL = B / 12.5
+ dB = NPP - BL
+ B = B + dB
+ write (*,*) kyr,B
 end do
 
 !----------------------------------------------------------------------!
