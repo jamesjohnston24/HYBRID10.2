@@ -30,6 +30,9 @@ IMPLICIT NONE
   character (len = *), parameter :: FILE_NAME = "/home/adf10/rds/&
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/LUH2_GCB_2021/&
   &staticData_quarterdeg.nc"
+  character (len = *), parameter :: FILE_NAME_tmp = "/home/adf10/rds/&
+  &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
+  &crujra.v2.2.5d.tmp.1901.365d.noc.nc"
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 
 INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
@@ -38,14 +41,19 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   ! We are reading 2D data, a 1440 x 720 grid.
 INTEGER, PARAMETER :: NDIMS = 2
   integer, parameter :: NX = 1440, NY = 720
+  integer, parameter :: NX_tmp = 720, NY_tmp = 360
   REAL (KIND=dp) :: data_in_lon (NX)
   REAL (KIND=dp) :: data_in_lat (NY)
+  REAL (KIND=sp) :: data_in_lon_tmp (NX_tmp)
+  REAL (KIND=sp) :: data_in_lat_tmp (NY_tmp)
+  REAL (KIND=sp) :: data_in_tmp(NX_tmp, NY_tmp)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=sp) :: data_in_carea(NX, NY)
 REAL (KIND=DP) :: sum_carea
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
+INTEGER :: varid_tmp
 INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
 
   ! Loop indexes, and error handling.
@@ -115,10 +123,29 @@ PRINT *, "Sum of carea = ", sum_carea
   ! associated with the file, and flushes any buffers.
   call check( nf90_close(ncid) )
 
-  print *,"*** SUCCESS writing file ", FILE_NAME, "! "
+  print *,"*** SUCCESS writing file ", FILE_NAME_ptbio, "! "
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
+  ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to
+  ! the file.
+  call check( nf90_open(FILE_NAME_tmp, NF90_NOWRITE, ncid) )
+
+  ! Get the varid of the data variable, based on its name.
+  ! Data starts at (-179.875; 89.875).
+  call check( nf90_inq_varid(ncid, "lon", varid_lon) )
+  call check( nf90_inq_varid(ncid, "lat", varid_lat) )
+  call check( nf90_inq_varid(ncid, "tmp", varid_tmp) )
+
+  ! Read the data.
+  call check( nf90_get_var(ncid, varid_lon, data_in_lon_tmp) )
+  call check( nf90_get_var(ncid, varid_lat, data_in_lat_tmp) )
+  call check( nf90_get_var(ncid, varid_tmp, data_in_tmp) )
+
+  ! Close the file, freeing all resources.
+  call check( nf90_close(ncid) )
+
+  print *,"*** SUCCESS reading file ", FILE_NAME_tmp, "! "
 !----------------------------------------------------------------------!
 
 ! Creat file of HD areas in same format as the climate data.
