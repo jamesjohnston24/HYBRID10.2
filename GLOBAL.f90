@@ -35,6 +35,8 @@ IMPLICIT NONE
   &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 character (len = *), parameter :: FILE_NAME_tmp_out = "tmp_out.nc"
+CHARACTER (LEN=*) :: filen
+CHARACTER (LEN=4) :: char_year
 
 INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
 INTEGER, PARAMETER :: sp = KIND (1E0)
@@ -58,7 +60,7 @@ REAL (KIND=SP), PARAMETER :: tmp_fill = 1.0E+20
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
 INTEGER :: varid_tmp, varid_t
 INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
-INTEGER :: t_dimid, dimids_three (3)
+INTEGER :: t_dimid, dimids_three (3), kyr_clm
 
   ! Loop indexes, and error handling.
   integer :: x, y, i, j
@@ -228,15 +230,26 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
   call check( nf90_enddef(ncid) )
 
   ! Write the data to the file.
-  call check( nf90_put_var(ncid, varid_lon, data_in_lon_tmp) )
-  call check( nf90_put_var(ncid, varid_lat, data_in_lat_tmp) )
-  call check( nf90_put_var(ncid, varid_tmp, data_in_tmp) )
+!  call check( nf90_put_var(ncid, varid_lon, data_in_lon_tmp) )
+!  call check( nf90_put_var(ncid, varid_lat, data_in_lat_tmp) )
+!  call check( nf90_put_var(ncid, varid_tmp, data_in_tmp) )
 
   ! Close the file. This frees up any internal netCDF resources
   ! associated with the file, and flushes any buffers.
   call check( nf90_close(ncid) )
 
   print *,"*** SUCCESS writing file ", FILE_NAME_tmp_out, "! "
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Annual means.
+!----------------------------------------------------------------------!
+var_name = 'tmp'
+kyr_clm = 1901
+WRITE (char_year, '(I4)') kyr_clm
+file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
+ &char_year//'.365d.noc.nc'
 !----------------------------------------------------------------------!
 
 contains
