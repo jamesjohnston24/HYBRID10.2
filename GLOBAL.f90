@@ -219,7 +219,7 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
   call check( nf90_def_var(ncid, "lat", NF90_DOUBLE, dimid_lat, varid_lat) )
   call check( nf90_def_var(ncid, "tmp", NF90_FLOAT, dimids, varid_tmp) )
 
-  call check (nf90_put_att(ncid, varid_tmp, "_FillValue", tmp_fill
+  call check (nf90_put_att(ncid, varid_tmp, "_FillValue", tmp_fill) )
 
   ! End define mode. This tells netCDF we are done defining metadata.
   call check( nf90_enddef(ncid) )
