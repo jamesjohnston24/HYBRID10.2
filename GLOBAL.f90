@@ -36,12 +36,12 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
 
   ! We are reading 2D data, a 1440 x 720 grid. 
   integer, parameter :: NX = 1440, NY = 720
-  REAL (KIND=sp) :: data_in_lon (NX)
+  REAL (KIND=dp) :: data_in_lon (NX)
   REAL (KIND=dp) :: data_in_lat (NY)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
 
   ! This will be the netCDF ID for the file and data variable.
-  integer :: ncid, varid_ptbio, varid_lon
+  integer :: ncid, varid_ptbio, varid_lon, varid_lat
 
   ! Loop indexes, and error handling.
   integer :: x, y
@@ -52,14 +52,16 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
 
   ! Get the varid of the data variable, based on its name.
   ! Data starts at (-179.875; ).
-  call check( nf90_inq_varid(ncid, "ptbio", varid_ptbio) )
   call check( nf90_inq_varid(ncid, "lon", varid_lon) )
+  call check( nf90_inq_varid(ncid, "lat", varid_lat) )
+  call check( nf90_inq_varid(ncid, "ptbio", varid_ptbio) )
 
   ! Read the data.
-  call check( nf90_get_var(ncid, varid_ptbio, data_in_ptbio) )
   call check( nf90_get_var(ncid, varid_lon, data_in_lon) )
+  call check( nf90_get_var(ncid, varid_lat, data_in_lat) )
+  call check( nf90_get_var(ncid, varid_ptbio, data_in_ptbio) )
 
-PRINT *, data_in_lon (1:2)
+PRINT *, data_in_lat (1:2)
 
   ! Close the file, freeing all resources.
   call check( nf90_close(ncid) )
