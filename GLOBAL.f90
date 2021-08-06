@@ -94,8 +94,8 @@ PRINT *, "Sum of carea = ", sum_carea
   ! The dimids array is used to pass the IDs of the dimensions of
   ! the variables. Note that in fortran arrays are stored in
   ! column-major format.
-  dimid_lon = (/ x_dimid /)
-  dimid_lat = (/ y_dimid /)
+  dimid_lon = x_dimid
+  dimid_lat = y_dimid
   dimids =  (/ x_dimid, y_dimid /)
 
   ! Define the variables.
