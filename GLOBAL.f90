@@ -33,7 +33,7 @@ IMPLICIT NONE
 
   ! We are reading 2D data, a 1440 x 720 grid. 
   integer, parameter :: NX = 1440, NY = 720
-  integer :: data_in(NY, NX)
+  real :: data_in(NY, NX)
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid
