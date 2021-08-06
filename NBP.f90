@@ -39,7 +39,25 @@ do kyr = 1, 3000
  dSOM = BL - Rh
  B = B + dB
  SOM = SOM + dSOM
- write (*,*) kyr,B,SOM
+ write (*,*) kyr,B,SOM,NPP-Rh
+end do
+
+
+do iyr = 1, nyr
+ fT = 2.0 ** (0.1 * (t (iyr) - 25.0)) / ((1.0 + EXP (0.3 * (t (iyr) - 36.0))) * &
+      (1.0 + EXP (0.3 * (0.0 - t (iyr)))))
+ NPP = fT * 3.0
+ BL = B / 12.5
+ dB = NPP - BL
+ ET_SOIL = 0.0326 + 0.00351 * t (iyr) ** 1.652 - (0.023953 * t (iyr)) ** 7.19
+ ET_SOIL = MAX (0.0, ET_SOIL)
+ ET_SOIL = MIN (1.0, ET_SOIL)
+ EV = ET_SOIL
+ Rh = EV * SOM / 6.25
+ dSOM = BL - Rh
+ B = B + dB
+ SOM = SOM + dSOM
+ write (*,*) kyr,B,SOM,NPP-Rh
 end do
 
 !----------------------------------------------------------------------!
