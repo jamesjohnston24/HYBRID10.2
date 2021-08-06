@@ -32,7 +32,7 @@ IMPLICIT NONE
   &staticData_quarterdeg.nc"
   character (len = *), parameter :: FILE_NAME_tmp = "/home/adf10/rds/&
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
-  &crujra.v2.2.5d.tmp.1901.365d.noc.nc"
+  &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 
 INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
