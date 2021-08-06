@@ -36,7 +36,7 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
 
   ! We are reading 2D data, a 1440 x 720 grid. 
   integer, parameter :: NX = 1440, NY = 720
-  REAL (KIND=dp) :: data_in_lon (NX)
+  REAL (KIND=sp) :: data_in_lon (NX)
   REAL (KIND=dp) :: data_in_lat (NY)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
 
@@ -51,7 +51,7 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   call check( nf90_open(FILE_NAME, NF90_NOWRITE, ncid) )
 
   ! Get the varid of the data variable, based on its name.
-  ! Data starts at 
+  ! Data starts at (-179.875; ).
   call check( nf90_inq_varid(ncid, "ptbio", varid_ptbio) )
   call check( nf90_inq_varid(ncid, "lon", varid_lon) )
 
