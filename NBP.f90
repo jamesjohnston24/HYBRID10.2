@@ -10,7 +10,7 @@ PROGRAM NBP
 
 implicit none
 integer, parameter :: nyr = 2020 - 1901 + 1
-integer :: kyr, iyr
+integer :: kyr, iyr, jyr
 real, dimension (nyr) :: t, CO2
 real :: B, SOM, fT, NPP, BL, dB, dSOM, ET_SOIL, EV, Rh
 real, parameter :: ga = 146376469.551773*1.0e9/1.0e15
@@ -24,13 +24,10 @@ do kyr = 1700, 2020
  if (kyr<1901) then
   read (10,*)
  else
-  read (10,*)iyr,CO2(iyr)
-write(*,*)iyr,CO2(iyr)
+  read (10,*)jyr,CO2(iyr)
   iyr = iyr + 1
  end if
 end do
-close (10)
-stop
 
 open (10,file="tmp_mean.txt",status="old")
 do kyr = 1, nyr
