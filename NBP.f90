@@ -25,7 +25,7 @@ SOM = 0.0
 iyr = 1
 do kyr = 1, 100
  iyr = iyr + 1
- if (iyr > 20) kyr = 1
+ if (iyr > 20) iyr = 1
  fT = 2.0 ** (0.1 * (t (iyr) - 25.0)) / ((1.0 + EXP (0.3 * (t (iyr) - 36.0))) * &
       (1.0 + EXP (0.3 * (0.0 - t (iyr)))))
  write (*,*) iyr,t(iyr),fT
