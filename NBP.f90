@@ -12,7 +12,7 @@ implicit none
 integer, parameter :: nyr = 2020 - 1901 + 1
 integer :: kyr, iyr
 real, dimension (nyr) :: t, CO2
-real :: B, SOM, fT, NPP, BL, dB, dSOM, ET_SOIL, EV, Rh, CO2
+real :: B, SOM, fT, NPP, BL, dB, dSOM, ET_SOIL, EV, Rh
 real, parameter :: ga = 146376469.551773*1.0e9/1.0e15
 character(len=200) :: file_name
 
