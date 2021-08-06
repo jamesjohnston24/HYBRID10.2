@@ -14,7 +14,7 @@ plt.xlim(1958, 2025)
 
 #plt.plot(y,t)
 a = 0.0
-b = 0.5
+b = 1.0
 y = y + 1900
 plt.plot (y, b*nbp)
 plt.plot(yr_inv, inv_flux)
