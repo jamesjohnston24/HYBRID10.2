@@ -38,7 +38,7 @@ close (10)
 
 B = 0.0
 SOM = 0.0
-iyr = 1
+iyr = 0
 do kyr = 1, 3000
  iyr = iyr + 1
  if (iyr > 20) iyr = 1
@@ -78,6 +78,7 @@ do iyr = 1, nyr
 end do
 close (20)
 write (*,*)NPP*ga
+write (*,*)CO2
 
 !----------------------------------------------------------------------!
 END PROGRAM NBP
