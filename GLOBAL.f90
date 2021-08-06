@@ -153,7 +153,7 @@ PRINT *, "Sum of carea = ", sum_carea
 ! Create file of HD areas in same format as the climate data.
 !----------------------------------------------------------------------!
 carea_tmp = 0.0
-! Aggregate QD areas to HD, check sum to same.
+! Aggregate QD areas to HD, check sum to same. ß
 j = 720
 DO y = 1, NY_tmp
  i = 1
