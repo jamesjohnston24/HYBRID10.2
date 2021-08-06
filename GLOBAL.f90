@@ -58,6 +58,7 @@ REAL (KIND=SP), PARAMETER :: tmp_fill = 1.0E+20
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
 INTEGER :: varid_tmp
 INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
+INTEGER :: t_dimid, dimids_three (3)
 
   ! Loop indexes, and error handling.
   integer :: x, y, i, j
@@ -206,17 +207,19 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
   ! Define the dimensions. NetCDF will hand back an ID for each. 
   call check( nf90_def_dim(ncid, "lon", NX_tmp, x_dimid) )
   call check( nf90_def_dim(ncid, "lat", NY_tmp, y_dimid) )
+  call check( nf90_def_dim(ncid, "time", NTIMES, t_dimid) )
 
   ! The dimids array is used to pass the IDs of the dimensions of
   ! the variables. Note that in fortran arrays are stored in
   ! column-major format.
   dimid_lon = x_dimid
   dimid_lat = y_dimid
-  dimids =  (/ x_dimid, y_dimid /)
+  dimids_three =  (/ x_dimid, y_dimid, t_dimid /)
 
   ! Define the variables.
   call check( nf90_def_var(ncid, "lon", NF90_DOUBLE, dimid_lon, varid_lon) )
   call check( nf90_def_var(ncid, "lat", NF90_DOUBLE, dimid_lat, varid_lat) )
+  call check( nf90_def_var(ncid, "time", NF90_INTEGER, dimid_three, varid_t) )
   call check( nf90_def_var(ncid, "tmp", NF90_FLOAT, dimids, varid_tmp) )
 
   call check (nf90_put_att(ncid, varid_tmp, "_FillValue", tmp_fill) )
@@ -227,7 +230,7 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
   ! Write the data to the file.
   call check( nf90_put_var(ncid, varid_lon, data_in_lon_tmp) )
   call check( nf90_put_var(ncid, varid_lat, data_in_lat_tmp) )
-  call check( nf90_put_var(ncid, varid_ptbio, data_in_tmp) )
+  call check( nf90_put_var(ncid, varid_tmp, data_in_tmp) )
 
   ! Close the file. This frees up any internal netCDF resources
   ! associated with the file, and flushes any buffers.
