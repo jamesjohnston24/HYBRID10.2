@@ -8,6 +8,6 @@ e = 1990-1901+1-1
 base = sum (t[s:e]) / 30.0
 print (s, e, base)
 
-plt.plot(y,t-base)
+plt.plot(y,t)
 
 plt.show( )
