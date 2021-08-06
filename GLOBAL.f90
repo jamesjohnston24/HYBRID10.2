@@ -190,6 +190,7 @@ END DO
 tmp_mean = tmp_mean / DBLE (ntmp*NTIMES)
 PRINT *, "carea_land = ", carea_land, carea_land/SUM (carea_tmp)
 PRINT *, "mean tmp = ", tmp_mean, ntmp
+PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
 !----------------------------------------------------------------------!
 
 contains
