@@ -31,11 +31,14 @@ IMPLICIT NONE
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/LUH2_GCB_2021/&
   &staticData_quarterdeg.nc"
 
+INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(12)
+INTEGER, PARAMETER :: sp = KIND (1E0)
+
   ! We are reading 2D data, a 1440 x 720 grid. 
   integer, parameter :: NX = 1440, NY = 720
-  double :: data_in_lon (NX)
-  double :: data_in_lat (NY)
-  real :: data_in_ptbio(NX, NY)
+  REAL (KIND=dp) :: data_in_lon (NX)
+  REAL (KIND=dp) :: data_in_lat (NY)
+  REAL (KIND=sp) :: data_in_ptbio(NX, NY)
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_ptbio
