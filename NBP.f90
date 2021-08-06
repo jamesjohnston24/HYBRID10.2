@@ -20,7 +20,7 @@ file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/TRENDY2021/&
 &input/CO2field/global_co2_ann_1700_2020.txt'
 open (10,file=file_name,status="old")
 iyr = 1
-do kyr = 1700, 1900
+do kyr = 1700, 2020
  if (kyr<1901) then
   read (10,*)
  else
