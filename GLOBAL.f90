@@ -36,7 +36,7 @@ IMPLICIT NONE
 
 
  character (len = *), parameter :: FILE_NAME_tmp = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
-  &CRUJRA_2.1/CRUJRA2020/tmpcrujra.v2.1.5d.tmp.2009.365d.noc.nc'
+  &CRUJRA_2.1/CRUJRA2020/tmp/crujra.v2.1.5d.tmp.2009.365d.noc.nc'
 
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 character (len = *), parameter :: FILE_NAME_tmp_out = "tmp_out.nc"
