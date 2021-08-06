@@ -46,7 +46,7 @@ IMPLICIT NONE
   call check( nf90_open(FILE_NAME, NF90_NOWRITE, ncid) )
 
   ! Get the varid of the data variable, based on its name.
-  call check( nf90_inq_varid(ncid, "vegetation_carbon_content", varid) )
+  call check( nf90_inq_varid(ncid, "ptbio", varid) )
 
   ! Read the data.
   call check( nf90_get_var(ncid, varid, data_in) )
