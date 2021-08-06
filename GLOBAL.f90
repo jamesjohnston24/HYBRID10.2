@@ -182,12 +182,12 @@ DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    carea_land = carea_land + carea_tmp (x,y)
-   tmp_mean = tmp_mean + data_in_tmp (x,y,it)
+   tmp_mean = tmp_mean + SUM (data_in_tmp (x,y,1:NTIMES))
    ntmp = ntmp + 1
   END IF
  END DO
 END DO
-tmp_mean = tmp_mean / DBLE (ntmp)
+tmp_mean = tmp_mean / DBLE (ntmp*NTIMES)
 PRINT *, "carea_land = ", carea_land, carea_land/SUM (carea_tmp)
 PRINT *, "mean tmp = ", tmp_mean, ntmp
 !----------------------------------------------------------------------!
