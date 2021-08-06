@@ -40,6 +40,7 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   REAL (KIND=dp) :: data_in_lat (NY)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=sp) :: data_in_carea(NX, NY)
+READ (KIND=SP) :: sum_carea
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
@@ -64,12 +65,15 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   call check( nf90_get_var(ncid, varid_ptbio, data_in_ptbio) )
   call check( nf90_get_var(ncid, varid_carea, data_in_carea) )
 
-PRINT *, data_in_carea
-
   ! Close the file, freeing all resources.
   call check( nf90_close(ncid) )
 
   print *,"*** SUCCESS reading example file ", FILE_NAME, "! "
+
+!----------------------------------------------------------------------!
+sum_carea = SUM (data_in_carea)
+PRINT *, "Sum of carea = ", sum_carea
+!----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
 ! Write potential vegetation carbon for looking at map.
