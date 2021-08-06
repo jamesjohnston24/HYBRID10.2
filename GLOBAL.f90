@@ -39,9 +39,10 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   REAL (KIND=dp) :: data_in_lon (NX)
   REAL (KIND=dp) :: data_in_lat (NY)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
+REAL (KIND=sp)., DIMENSION (2) :: data_in_lat_bounds
 
   ! This will be the netCDF ID for the file and data variable.
-  integer :: ncid, varid_ptbio, varid_lon, varid_lat
+  integer :: ncid, varid_ptbio, varid_lon, varid_lat, varid_lat_bounds
 
   ! Loop indexes, and error handling.
   integer :: x, y
@@ -51,17 +52,19 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   call check( nf90_open(FILE_NAME, NF90_NOWRITE, ncid) )
 
   ! Get the varid of the data variable, based on its name.
-  ! Data starts at (-179.875; ).
+  ! Data starts at (-179.875; 89.875).
   call check( nf90_inq_varid(ncid, "lon", varid_lon) )
   call check( nf90_inq_varid(ncid, "lat", varid_lat) )
   call check( nf90_inq_varid(ncid, "ptbio", varid_ptbio) )
+  call check( nf90_inq_varid(ncid, "lat_bounds", varid_lat_bounds) )
 
   ! Read the data.
   call check( nf90_get_var(ncid, varid_lon, data_in_lon) )
   call check( nf90_get_var(ncid, varid_lat, data_in_lat) )
   call check( nf90_get_var(ncid, varid_ptbio, data_in_ptbio) )
+  call check( nf90_get_var(ncid, varid_lat_bounds, data_in_lat_bounds) )
 
-PRINT *, data_in_lat (1:2)
+PRINT *, data_in_lat_bounds
 
   ! Close the file, freeing all resources.
   call check( nf90_close(ncid) )
