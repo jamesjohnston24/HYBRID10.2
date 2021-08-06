@@ -12,7 +12,7 @@ implicit none
 integer, parameter :: nyr = 2020 - 1901 + 1
 integer :: kyr, iyr
 real, dimension (nyr) :: t
-real :: B, SOM, fT, NPP, BL
+real :: B, SOM, fT, NPP, BL, dB
 
 open (10,file="tmp_mean.txt",status="old")
 do kyr = 1, nyr
