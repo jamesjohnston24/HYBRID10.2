@@ -40,7 +40,7 @@ INTEGER, PARAMETER :: sp = KIND (1E0)
   REAL (KIND=dp) :: data_in_lat (NY)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=sp) :: data_in_carea(NX, NY)
-READ (KIND=SP) :: sum_carea
+REAL (KIND=SP) :: sum_carea
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
