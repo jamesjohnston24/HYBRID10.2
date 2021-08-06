@@ -48,9 +48,9 @@ INTEGER, PARAMETER :: NDIMS = 2
   REAL (KIND=sp) :: data_in_lat_tmp (NY_tmp)
   REAL (KIND=sp) :: data_in_tmp(NX_tmp, NY_tmp)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
-  REAL (KIND=sp) :: data_in_carea(NX, NY)
-REAL (KIND=SP) :: sum_carea
-REAL (KIND=SP) :: carea_tmp (NX_tmp, NY_tmp)
+  REAL (KIND=dp) :: data_in_carea(NX, NY)
+REAL (KIND=DP) :: sum_carea
+REAL (KIND=DP) :: carea_tmp (NX_tmp, NY_tmp)
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
@@ -153,7 +153,7 @@ PRINT *, "Sum of carea = ", sum_carea
 ! Create file of HD areas in same format as the climate data.
 !----------------------------------------------------------------------!
 carea_tmp = 0.0
-! Aggregate QD areas to HD, check sum to same. ß
+! Aggregate QD areas to HD, check sum to same.
 j = 720
 DO y = 1, NY_tmp
  i = 1
