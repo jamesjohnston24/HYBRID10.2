@@ -12,7 +12,7 @@ implicit none
 integer, parameter :: nyr = 2020 - 1901 + 1
 integer :: kyr, iyr
 real, dimension (nyr) :: t
-real :: B, SOM, fT, NPP, BL, dB
+real :: B, SOM, fT, NPP, BL, dB, dSOM, ET_SOIL, EV, Rh
 
 open (10,file="tmp_mean.txt",status="old")
 do kyr = 1, nyr
@@ -31,8 +31,15 @@ do kyr = 1, 100
  NPP = fT * 3.0
  BL = B / 12.5
  dB = NPP - BL
+ ET_SOIL = 0.0326 + 0.00351 * t (iyr) ** 1.652 - (0.023953 * t (iyr)) ** 7.19
+ ET_SOIL = MAX (0.0, ET_SOIL)
+ ET_SOIL = MIN (1.0, ET_SOIL)
+ EV = ET_SOIL
+ Rh = EV * SOM (k) / (6.25
+ dSOM = BL - Rh
  B = B + dB
- write (*,*) kyr,B
+ SOM = SOM + dSOM
+ write (*,*) kyr,B,SOM
 end do
 
 !----------------------------------------------------------------------!
