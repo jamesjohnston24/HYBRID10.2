@@ -30,13 +30,12 @@ IMPLICIT NONE
   character (len = *), parameter :: FILE_NAME = "/home/adf10/rds/&
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/LUH2_GCB_2021/&
   &staticData_quarterdeg.nc"
-!  character (len = *), parameter :: FILE_NAME_tmp = "/home/adf10/rds/&
-!  &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
-!  &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
+  character (len = *), parameter :: FILE_NAME_tmp = "/home/adf10/rds/&
+  &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
+  &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
 
-
- character (len = *), parameter :: FILE_NAME_tmp = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
-  &CRUJRA_2.1/CRUJRA2020/tmp/crujra.v2.1.5d.tmp.2009.365d.noc.nc'
+! character (len = *), parameter :: FILE_NAME_tmp = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
+!  &CRUJRA_2.1/CRUJRA2020/tmp/crujra.v2.1.5d.tmp.2009.365d.noc.nc'
 
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
 character (len = *), parameter :: FILE_NAME_tmp_out = "tmp_out.nc"
@@ -250,12 +249,48 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
 !----------------------------------------------------------------------!
 ! Annual means.
 !----------------------------------------------------------------------!
+open(10,file='tmp_mean.txt',status='old')
 var_name = 'tmp'
-kyr_clm = 1901
+do kyr_clm = 1901, 2020
 WRITE (char_year, '(I4)') kyr_clm
 filen = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
  &char_year//'.365d.noc.nc'
+  ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to
+  ! the file.
+  call check( nf90_open(filen, NF90_NOWRITE, ncid) )
+
+  ! Get the varid of the data variable, based on its name.
+  ! Data starts at (-179.75; -89.75).
+  call check( nf90_inq_varid(ncid, "lon", varid_lon) )
+  call check( nf90_inq_varid(ncid, "lat", varid_lat) )
+  call check( nf90_inq_varid(ncid, "tmp", varid_tmp) )
+
+  ! Read the data.
+  call check( nf90_get_var(ncid, varid_lon, data_in_lon_tmp) )
+  call check( nf90_get_var(ncid, varid_lat, data_in_lat_tmp) )
+  call check( nf90_get_var(ncid, varid_tmp, data_in_tmp) )
+
+  ! Close the file, freeing all resources.
+  call check( nf90_close(ncid) )
+
+  print *,"*** SUCCESS reading file ", FILE_NAME_tmp, "! "
+tmp_mean = 0.0_DP
+DO y = 1, NY_tmp
+ DO x = 1, NX_tmp
+  IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
+   DO it = 1, NTIMES
+    tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
+   END DO
+   ntmp = ntmp + 1
+  END IF
+ END DO
+END DO
+tmp_mean = tmp_mean / (DBLE (NTIMES) * carea_land)
+write(10,*)kyr_clm,tmp_mean-273.15
+write(*,*)kyr_clm,tmp_mean-273.15
+end do
+close (10)
 !----------------------------------------------------------------------!
 
 contains
