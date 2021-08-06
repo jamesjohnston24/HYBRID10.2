@@ -219,7 +219,7 @@ PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
   ! Define the variables.
   call check( nf90_def_var(ncid, "lon", NF90_DOUBLE, dimid_lon, varid_lon) )
   call check( nf90_def_var(ncid, "lat", NF90_DOUBLE, dimid_lat, varid_lat) )
-  call check( nf90_def_var(ncid, "time", NF90_INTEGER, dimids_three, varid_t) )
+  call check( nf90_def_var(ncid, "time", NF90_INT, dimids_three, varid_t) )
   call check( nf90_def_var(ncid, "tmp", NF90_FLOAT, dimids, varid_tmp) )
 
   call check (nf90_put_att(ncid, varid_tmp, "_FillValue", tmp_fill) )
