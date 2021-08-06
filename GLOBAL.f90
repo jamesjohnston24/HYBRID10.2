@@ -189,7 +189,7 @@ DO y = 1, NY_tmp
   END IF
  END DO
 END DO
-tmp_mean = tmp_mean / (DBLE (ntmp*NTIMES) * carea_land)
+tmp_mean = tmp_mean / (DBLE (NTIMES) * carea_land)
 PRINT *, "carea_land = ", carea_land, carea_land/SUM (carea_tmp)
 PRINT *, "mean tmp = ", tmp_mean, ntmp
 PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
