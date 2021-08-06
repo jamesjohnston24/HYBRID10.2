@@ -182,7 +182,9 @@ DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    carea_land = carea_land + carea_tmp (x,y)
-   tmp_mean = tmp_mean + SUM (data_in_tmp (x,y,1:NTIMES)) * carea_tmp (x,y)
+   DO it = 1, NTIMES
+    tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
+   END DO
    ntmp = ntmp + 1
   END IF
  END DO
