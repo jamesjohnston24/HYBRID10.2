@@ -56,7 +56,7 @@ REAL (KIND=SP), PARAMETER :: tmp_fill = 1.0E+20
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
-INTEGER :: varid_tmp
+INTEGER :: varid_tmp, varid_t
 INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
 INTEGER :: t_dimid, dimids_three (3)
 
