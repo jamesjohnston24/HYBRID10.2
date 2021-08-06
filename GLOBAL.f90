@@ -160,8 +160,8 @@ DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i,j)
   carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i+1,j)
-  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i,j+1)
-  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i+1,j+1)
+  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i,j-1)
+  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i+1,j-1)
   i = i + 2
  END DO
  j = j - 2
