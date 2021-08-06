@@ -58,7 +58,7 @@ INTEGER :: varid_tmp
 INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
 
   ! Loop indexes, and error handling.
-  integer :: x, y, i, y
+  integer :: x, y, i, j
 
   ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to
   ! the file.
