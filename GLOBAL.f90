@@ -49,7 +49,8 @@ INTEGER, PARAMETER :: NDIMS = 2
   REAL (KIND=sp) :: data_in_tmp(NX_tmp, NY_tmp)
   REAL (KIND=sp) :: data_in_ptbio(NX, NY)
   REAL (KIND=sp) :: data_in_carea(NX, NY)
-REAL (KIND=DP) :: sum_carea
+REAL (KIND=SP) :: sum_carea
+READ (KIND=SP) :: carea_tmp (NX_tmp, NY_tmp)
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
@@ -57,7 +58,7 @@ INTEGER :: varid_tmp
 INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
 
   ! Loop indexes, and error handling.
-  integer :: x, y
+  integer :: x, y, i, y
 
   ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to
   ! the file.
@@ -132,7 +133,7 @@ PRINT *, "Sum of carea = ", sum_carea
   call check( nf90_open(FILE_NAME_tmp, NF90_NOWRITE, ncid) )
 
   ! Get the varid of the data variable, based on its name.
-  ! Data starts at (-179.875; 89.875).
+  ! Data starts at (-179.75; -89.75).
   call check( nf90_inq_varid(ncid, "lon", varid_lon) )
   call check( nf90_inq_varid(ncid, "lat", varid_lat) )
   call check( nf90_inq_varid(ncid, "tmp", varid_tmp) )
@@ -147,10 +148,30 @@ PRINT *, "Sum of carea = ", sum_carea
 
   print *,"*** SUCCESS reading file ", FILE_NAME_tmp, "! "
 !----------------------------------------------------------------------!
-WRITE (*,*) data_in_lon_tmp (1)
-WRITE (*,*) data_in_lat_tmp (1)
 
-! Creat file of HD areas in same format as the climate data.
+!----------------------------------------------------------------------!
+! Create file of HD areas in same format as the climate data.
+!----------------------------------------------------------------------!
+carea_tmp = 0.0
+! Aggregate QD areas to HD, check sum to same.
+j = 1440
+DO y = 1, NY_tmp
+ i = 1
+ DO x = 1, NX_tmp
+  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i,j)
+  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i+1,j)
+  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i,j+1)
+  carea_tmp (x,y) = carea_tmp (x,y) + data_in_carea (i+1,j+1)
+  i = i + 2
+ END DO
+ j = j - 2
+END DO
+!----------------------------------------------------------------------!
+
+!----------------------------------------------------------------------!
+! Compute annual global land temperatures.
+!----------------------------------------------------------------------!
+!----------------------------------------------------------------------!
 
 contains
   subroutine check(status)
