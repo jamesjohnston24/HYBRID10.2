@@ -46,7 +46,7 @@ REAL (KIND=DP) :: sum_carea
 
   ! This will be the netCDF ID for the file and data variable.
   integer :: ncid, varid_lon, varid_lat, varid_ptbio, varid_carea
-INTEGER :: x_dimid, y_dimid, dimids (NDIMS)
+INTEGER :: x_dimid, y_dimid, dimids (NDIMS), dimid_lon, dimid_lat
 
   ! Loop indexes, and error handling.
   integer :: x, y
@@ -88,23 +88,27 @@ PRINT *, "Sum of carea = ", sum_carea
   call check( nf90_create(FILE_NAME_ptbio, NF90_CLOBBER, ncid) )
 
   ! Define the dimensions. NetCDF will hand back an ID for each. 
-  call check( nf90_def_dim(ncid, "x", NX, x_dimid) )
-  call check( nf90_def_dim(ncid, "y", NY, y_dimid) )
+  call check( nf90_def_dim(ncid, "lon", NX, x_dimid) )
+  call check( nf90_def_dim(ncid, "lat", NY, y_dimid) )
 
   ! The dimids array is used to pass the IDs of the dimensions of
   ! the variables. Note that in fortran arrays are stored in
   ! column-major format.
+  dimid_lon = (/ x_dimid /)
+  dimid_lat = (/ y_dimid /)
   dimids =  (/ x_dimid, y_dimid /)
 
-  ! Define the variable.
+  ! Define the variables.
+  call check( nf90_def_var(ncid, "lon", NF90_DOUBLE_PRECISION, dimid_lon, varid_lon) )
+  call check( nf90_def_var(ncid, "lat", NF90_DOUBLE_PRECISION, dimid_lat, varid_lat) )
   call check( nf90_def_var(ncid, "ptbio", NF90_FLOAT, dimids, varid_ptbio) )
 
   ! End define mode. This tells netCDF we are done defining metadata.
   call check( nf90_enddef(ncid) )
 
-  ! Write the pretend data to the file. Although netCDF supports
-  ! reading and writing subsets of data, in this case we write all the
-  ! data in one operation.
+  ! Write the data to the file.
+  call check( nf90_put_var(ncid, varid_lon, data_in_lon) )
+  call check( nf90_put_var(ncid, varid_lat, data_in_lat) )
   call check( nf90_put_var(ncid, varid_ptbio, data_in_ptbio) )
 
   ! Close the file. This frees up any internal netCDF resources
@@ -113,6 +117,8 @@ PRINT *, "Sum of carea = ", sum_carea
 
   print *, "*** SUCCESS writing example file simple_xy.nc! "
 !----------------------------------------------------------------------!
+
+! Creat file of HD areas in same format as the climate data.
 
 contains
   subroutine check(status)
