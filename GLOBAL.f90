@@ -192,7 +192,7 @@ DO y = 1, NY_tmp
  DO x = 1, NX_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    carea_land = carea_land + carea_tmp (x,y)
-   if (y > (180*nint(23.5/90.0))) carea_land_nxt = carea_land_nxt + carea_tmp (x,y)
+   if (y < (180*nint(23.5/90.0))) carea_land_nxt = carea_land_nxt + carea_tmp (x,y)
    DO it = 1, NTIMES
     tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
    END DO
@@ -202,6 +202,7 @@ DO y = 1, NY_tmp
 END DO
 tmp_mean = tmp_mean / (DBLE (NTIMES) * carea_land)
 PRINT *, "carea_land = ", carea_land, carea_land/SUM (carea_tmp)
+PRINT *, "carea_land_nxt = ", carea_land_nxt, carea_land_nxt/SUM(carea_tmp)
 PRINT *, "mean tmp = ", tmp_mean, ntmp
 PRINT *, "mean tmp = ", tmp_mean-273.15, ntmp
 !----------------------------------------------------------------------!
@@ -284,7 +285,7 @@ DO y = 1, NY_tmp
   IF (data_in_tmp (x,y,1) /= tmp_fill) THEN
    DO it = 1, NTIMES
     tmp_mean = tmp_mean + data_in_tmp (x,y,it) * carea_tmp (x,y)
-    if (y > (180*nint(23.5/90.0))) tmp_mean_nxt = tmp_mean_nxt + &
+    if (y < (180*nint(23.5/90.0))) tmp_mean_nxt = tmp_mean_nxt + &
      data_in_tmp (x,y,it) * carea_tmp (x,y)
    END DO
    ntmp = ntmp + 1
