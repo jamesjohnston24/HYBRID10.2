@@ -17,8 +17,6 @@ DO k = 1, nland_chunk
  NPP_gbox (k) = NPP_gbox (k) / FLOAT (nplots)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  tmp_gbox (k) = tmp_gbox (k) / FLOAT (nplots)
-write(*,*)k,tmp_gbox(k)
-stop
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  Rh_gbox (k) = Rh_gbox (k) / FLOAT (nplots)
  NEE_gbox (k) = NEE_gbox (k) / FLOAT (nplots)
@@ -58,6 +56,8 @@ IF (myrank == root) THEN
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
   tmp_total = tmp_total + source_larea (k) * tmp_fin (k)
   TA = TA + source_larea (k)
+write(*,*)tmp_total,source_larea(k),tmp_fin(k),TA
+stop
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
   Rh_total = Rh_total + source_larea (k) * Rh_fin (k)
   NEE_total = NEE_total + source_larea (k) * NEE_fin(k)
