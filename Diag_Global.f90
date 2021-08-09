@@ -54,9 +54,9 @@ IF (myrank == root) THEN
  DO k = 1, nland
   NPP_total = NPP_total + source_larea (k) * NPP_fin (k)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+if((k>8426).and.(k<8430))write(*,*)myrank,k,tmp_total,source_larea(k),tmp_fin(k)
   tmp_total = tmp_total + source_larea (k) * tmp_fin (k)
   TA = TA + source_larea (k)
-if((k>8426).and.(k<8430))write(*,*)myrank,k,tmp_total,source_larea(k),tmp_fin(k)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
   Rh_total = Rh_total + source_larea (k) * Rh_fin (k)
   NEE_total = NEE_total + source_larea (k) * NEE_fin(k)
