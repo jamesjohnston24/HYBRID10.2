@@ -286,10 +286,10 @@ END IF ! root
 !----------------------------------------------------------------------!
 ! Scatter lon and lat to all processors.
 !----------------------------------------------------------------------!
-CALL MPI_Scatter (source_lon,nland_chunk,MPIREAL, &
-               lon_chunk,nland_chunk,MPIREAL,root,MPI_COMM_WORLD,error)
-CALL MPI_Scatter (source_lat,nland_chunk,MPIREAL, &
-               lat_chunk,nland_chunk,MPIREAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Scatter (source_lon,nland_chunk,MPI_REAL, &
+               lon_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Scatter (source_lat,nland_chunk,MPI_REAL, &
+               lat_chunk,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -462,12 +462,12 @@ END DO
 ! Gather together all mean grid-box state variables from the
 ! processors into global land vectors.
 !----------------------------------------------------------------------!
-CALL MPI_Gather(soilW_gbox,nland_chunk,MPIREAL, &
-                soilW_fin,nland_chunk,MPIREAL,root,MPI_COMM_WORLD,error)
-CALL MPI_Gather(B_gbox,nland_chunk,MPIREAL, &
-                B_fin,nland_chunk,MPIREAL,root,MPI_COMM_WORLD,error)
-CALL MPI_Gather(SOM_gbox,nland_chunk,MPIREAL, &
-                SOM_fin,nland_chunk,MPIREAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Gather(soilW_gbox,nland_chunk,MPI_REAL, &
+                soilW_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Gather(B_gbox,nland_chunk,MPI_REAL, &
+                B_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
+                SOM_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
