@@ -14,20 +14,21 @@ REAL (KIND=DP) :: B_total
 REAL (KIND=DP) :: SOM_total
 
 DO k = 1, nland_chunk
- NPP_gbox (k) = NPP_gbox (k) / FLOAT (nplots)
+ NPP_gbox (k) = NPP_gbox (k) / REAL (nplots)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- tmp_gbox (k) = tmp_gbox (k) / FLOAT (nplots)
+ tmp_gbox (k) = tmp_gbox (k) / REAL (nplots)
 if (tmp_gbox(k)<0.0)then
  write (*,*)myrank,k,tmp_gbox(k)
  stop
 end if
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- Rh_gbox (k) = Rh_gbox (k) / FLOAT (nplots)
- NEE_gbox (k) = NEE_gbox (k) / FLOAT (nplots)
+ Rh_gbox (k) = Rh_gbox (k) / REAL (nplots)
+ NPP_gbox (k) = NPP_gbox (k) / REAL (nplots)
+ NEE_gbox (k) = NEE_gbox (k) / REAL (nplots)
  ! Mean biomasss of each grid-box over plots (kg[DM] m-2).
- B_gbox (k) = SUM ( B_plot(:,k) ) / FLOAT (nplots)
+ B_gbox (k) = SUM ( B_plot(:,k) ) / REAL (nplots)
  ! Mean SOM of each grid-box over plots (kg[DM] m-2).
- SOM_gbox (k) = SUM ( SOM_plot(:,k) ) / FLOAT (nplots)
+ SOM_gbox (k) = SUM ( SOM_plot(:,k) ) / REAL (nplots)
 END DO ! k = 1, nland_chunk
 CALL MPI_Gather(NPP_gbox,nland_chunk,MPI_REAL, &
                 NPP_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
