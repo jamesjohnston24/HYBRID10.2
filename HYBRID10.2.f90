@@ -50,7 +50,7 @@ REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: trans
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-OPEN (10, FILE = 'driver.txt', STATUS = 'OLD')
+OPEN (10, FILE = 'driver_10.2.txt', STATUS = 'OLD')
 READ (10,*) RSF_Out      ! Output to restart files?
 READ (10,*) RSF_Out_file_name
 READ (10,*) RSF_In       ! Input from restart files?
