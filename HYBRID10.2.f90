@@ -167,6 +167,9 @@ ALLOCATE (soilW_gbox(nland_chunk)) ! Soil water                      (m)
 ALLOCATE (B_gbox    (nland_chunk)) ! Biomass                (kg[DM] m-2)
 ALLOCATE (SOM_gbox  (nland_chunk)) ! SOM                    (kg[DM] m-2)
 ALLOCATE (NPP_gbox  (nland_chunk)) ! NPP               (kg[DM] m-2 yr-1)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+ALLOCATE (tmp_gbox  (nland_chunk)) ! tmp                             (K)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
 ALLOCATE (Rh_gbox   (nland_chunk)) ! Rh                (kg[DM] m-2 yr-1)
 ALLOCATE (NEE_gbox  (nland_chunk)) ! NEE               (kg[DM] m-2 yr-1)
 !----------------------------------------------------------------------!
@@ -178,6 +181,9 @@ ALLOCATE (soilW_fin(nland)) ! Soil water                             (m)
 ALLOCATE (B_fin    (nland)) ! Biomass                       (kg[DM] m-2)
 ALLOCATE (SOM_fin  (nland)) ! SOM                           (kg[DM] m-2)
 ALLOCATE (NPP_fin  (nland)) ! NPP                      (kg[DM] m-2 yr-1)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+ALLOCATE (tmp_fin  (nland)) ! tmp                                    (K)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
 ALLOCATE (Rh_fin   (nland)) ! Rh                       (kg[DM] m-2 yr-1)
 ALLOCATE (NEE_fin  (nland)) ! NEE                      (kg[DM] m-2 yr-1)
 !----------------------------------------------------------------------!
@@ -378,6 +384,9 @@ kyr = 1
 kyr_clm = syr
 DO kyr_spin = 1, nyr_spin
  NPP_gbox = 0.0_DP
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+ tmp_gbox = 0.0_DP
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  Rh_gbox  = 0.0_DP
  NEE_gbox = 0.0_DP
  !---------------------------------------------------------------------!
@@ -416,6 +425,9 @@ END DO ! kyr_spin
 kyr = 1
 DO kyr_clm = syr_trans, eyr_trans
  NPP_gbox = 0.0_DP
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+ tmp_gbox = 0.0_DP
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  Rh_gbox  = 0.0_DP
  NEE_gbox = 0.0_DP
  !---------------------------------------------------------------------!

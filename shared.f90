@@ -41,6 +41,10 @@ REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: SOM_plot
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: soilW_plot
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: NPP_gbox
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: NPP_fin
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: tmp_gbox
+REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: tmp_fin
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: Rh_gbox
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: Rh_fin
 REAL (KIND=DP), ALLOCATABLE, DIMENSION (:) :: NEE_gbox

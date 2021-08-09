@@ -5,6 +5,9 @@ USE shared
 IMPLICIT NONE
 INTEGER :: k, kyr, kyr_clm
 REAL (KIND=DP) :: NPP_total
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+REAL (KIND=DP) :: tmp_total, TA
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
 REAL (KIND=DP) :: Rh_total
 REAL (KIND=DP) :: NEE_total
 REAL (KIND=DP) :: B_total
@@ -12,6 +15,9 @@ REAL (KIND=DP) :: SOM_total
 
 DO k = 1, nland_chunk
  NPP_gbox (k) = NPP_gbox (k) / FLOAT (nplots)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+ tmp_gbox (k) = tmp_gbox (k) / FLOAT (nplots)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  Rh_gbox (k) = Rh_gbox (k) / FLOAT (nplots)
  NEE_gbox (k) = NEE_gbox (k) / FLOAT (nplots)
  ! Mean biomasss of each grid-box over plots (kg[DM] m-2).
@@ -21,6 +27,10 @@ DO k = 1, nland_chunk
 END DO ! k = 1, nland_chunk
 CALL MPI_Gather(NPP_gbox,nland_chunk,MPI_REAL, &
                 NPP_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+CALL MPI_Gather(tmp_gbox,nland_chunk,MPI_REAL, &
+                tmp_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
 CALL MPI_Gather(Rh_gbox,nland_chunk,MPI_REAL, &
                 Rh_fin,nland_chunk,MPI_REAL,root,MPI_COMM_WORLD,error)
 CALL MPI_Gather(NEE_gbox,nland_chunk,MPI_REAL, &
@@ -33,12 +43,20 @@ CALL MPI_Barrier ( MPI_COMM_WORLD, error )
 
 IF (myrank == root) THEN
  NPP_total = 0.0_DP
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+ tmp_total = 0.0_DP
+ TA = 0.0_DP
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  Rh_total = 0.0_DP
  NEE_total = 0.0_DP
  B_total = 0.0_DP
  SOM_total = 0.0_DP
  DO k = 1, nland
   NPP_total = NPP_total + source_larea (k) * NPP_fin (k)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+  tmp_total = tmp_total + source_larea (k) * tmp_fin (k)
+  TA = TA + source_larea (k)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
   Rh_total = Rh_total + source_larea (k) * Rh_fin (k)
   NEE_total = NEE_total + source_larea (k) * NEE_fin(k)
 !if(B_fin(k) /= 0.0_DP) write(*,*)k,source_larea(k),B_fin(k)
@@ -50,6 +68,9 @@ IF (myrank == root) THEN
  IF (ntasks == 4) &
   WRITE (*,"(2(I0,' '), 5(F0.5,' '))") kyr, kyr_clm, NPP_total / 1.0D6, &
   Rh_total / 1.0D6, NEE_total / 1.0D6, B_total / 1.0D6, SOM_total / 1.0D6
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+WRITE (*,*) 'Global mean land tmp = ', tmp_total / (TA * REAL (ntimes))
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
 END IF
 
 END SUBROUTINE Diag_Global

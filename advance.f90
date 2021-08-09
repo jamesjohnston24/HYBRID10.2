@@ -81,6 +81,9 @@ DO t = 1, ntimes
    B_plot (kp,k) = B_plot (kp,k) + dt * dB
    SOM_plot (kp,k) = SOM_plot (kp,k) + dt * dSOM
    NPP_gbox (k) = NPP_gbox (k) + dt * NPP
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+   tmp_gbox (k) = tmp_gbox (k) + tmp (t,kyr,k)
+!""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
    Rh_gbox (k) = Rh_gbox (k) + dt * Rh
    NEE_gbox (k) = NEE_gbox (k) + dt * NEE
   END DO ! nplots
