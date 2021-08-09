@@ -4,14 +4,14 @@ USE mpi
 USE shared
 IMPLICIT NONE
 INTEGER :: k, kyr, kyr_clm
-REAL (KIND=DP) :: NPP_total
+REAL :: NPP_total
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
-REAL (KIND=DP) :: tmp_total, TA
+REAL :: tmp_total, TA
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
-REAL (KIND=DP) :: Rh_total
-REAL (KIND=DP) :: NEE_total
-REAL (KIND=DP) :: B_total
-REAL (KIND=DP) :: SOM_total
+REAL :: Rh_total
+REAL :: NEE_total
+REAL :: B_total
+REAL :: SOM_total
 
 DO k = 1, nland_chunk
  NPP_gbox (k) = NPP_gbox (k) / REAL (nplots)
@@ -47,15 +47,15 @@ CALL MPI_Gather(SOM_gbox,nland_chunk,MPI_REAL, &
 CALL MPI_Barrier ( MPI_COMM_WORLD, error )
 
 IF (myrank == root) THEN
- NPP_total = 0.0_DP
+ NPP_total = 0.0
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- tmp_total = 0.0_DP
- TA = 0.0_DP
+ tmp_total = 0.0
+ TA = 0.0
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- Rh_total = 0.0_DP
- NEE_total = 0.0_DP
- B_total = 0.0_DP
- SOM_total = 0.0_DP
+ Rh_total = 0.0
+ NEE_total = 0.0
+ B_total = 0.0
+ SOM_total = 0.0
  DO k = 1, nland
   NPP_total = NPP_total + source_larea (k) * NPP_fin (k)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
@@ -65,7 +65,7 @@ if((k>8426).and.(k<8430))write(*,*)myrank,k,tmp_total,source_larea(k),tmp_fin(k)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
   Rh_total = Rh_total + source_larea (k) * Rh_fin (k)
   NEE_total = NEE_total + source_larea (k) * NEE_fin(k)
-!if(B_fin(k) /= 0.0_DP) write(*,*)k,source_larea(k),B_fin(k)
+!if(B_fin(k) /= 0.0) write(*,*)k,source_larea(k),B_fin(k)
   B_total = B_total + source_larea (k) * B_fin (k)
   SOM_total = SOM_total + source_larea (k) * SOM_fin (k)
  END DO ! k = 1, nland
