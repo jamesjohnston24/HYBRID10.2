@@ -27,26 +27,26 @@ CHARACTER(LEN=MPI_MAX_PROCESSOR_NAME) :: procname
 CHARACTER(LEN=200) :: file_name
 CHARACTER(LEN=4) :: char_year
 CHARACTER(LEN=30) :: var_name
-REAL(KIND=DP) :: before_all, after_all, before_in, after_in
-REAL(KIND=DP) :: before_scatter, after_scatter
+REAL :: before_all, after_all, before_in, after_in
+REAL :: before_scatter, after_scatter
 REAL(KIND=SP), PARAMETER :: fillvalue = 1.0E20
-REAL(KIND=DP), DIMENSION (nlon) :: lon
-REAL(KIND=DP), DIMENSION (nlat) :: lat
-REAL(KIND=DP), DIMENSION (nland) :: source_lon !
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:) :: soilW_gbox
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:) :: soilW_fin
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: B_grid
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: land
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: icwtr_qd
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: larea_qd
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: icwtr
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: larea
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: fcover_in
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: fcover
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:) :: trans_in
-REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: trans
+REAL, DIMENSION (nlon) :: lon
+REAL, DIMENSION (nlat) :: lat
+REAL, DIMENSION (nland) :: source_lon !
+REAL, ALLOCATABLE, DIMENSION (:) :: soilW_gbox
+REAL, ALLOCATABLE, DIMENSION (:) :: soilW_fin
+REAL, ALLOCATABLE, DIMENSION (:,:) :: soilW_grid
+REAL, ALLOCATABLE, DIMENSION (:,:) :: B_grid
+REAL, ALLOCATABLE, DIMENSION (:,:) :: SOM_grid
+REAL, ALLOCATABLE, DIMENSION (:,:) :: land
+REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr_qd
+REAL, ALLOCATABLE, DIMENSION (:,:) :: larea_qd
+REAL, ALLOCATABLE, DIMENSION (:,:) :: icwtr
+REAL, ALLOCATABLE, DIMENSION (:,:) :: larea
+REAL, ALLOCATABLE, DIMENSION (:,:) :: fcover_in
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: fcover
+REAL, ALLOCATABLE, DIMENSION (:,:) :: trans_in
+REAL, ALLOCATABLE, DIMENSION (:,:,:) :: trans
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -79,10 +79,10 @@ IF (.NOT. (RSF_In)) kyr_off = 0
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
-source = 0.0_DP
-result = 0.0_DP
-source_lat = 0.0_DP
-source_larea = 0.0_DP
+source = 0.0
+result = 0.0
+source_lat = 0.0
+source_larea = 0.0
 !----------------------------------------------------------------------!
 
 !----------------------------------------------------------------------!
@@ -120,7 +120,7 @@ IF (myrank == root) THEN
  do j = 1, nlat
   ii = 1
   do i = 1, nlon
-   icwtr (i, nlat-j+1) = sum (icwtr_qd (ii:ii+1, jj:jj+1)) / 4.0_DP
+   icwtr (i, nlat-j+1) = sum (icwtr_qd (ii:ii+1, jj:jj+1)) / 4.0
    larea (i, nlat-j+1) = sum (larea_qd (ii:ii+1, jj:jj+1))
    ii = ii + 2
   end do
@@ -242,7 +242,7 @@ END IF
 ! Could perhaps get these from files above?
 !----------------------------------------------------------------------!
 IF (myrank == root) THEN
- clm_in = 0.0_DP
+ clm_in = 0.0
  kyr_clm = 1901
  var_name = 'tmp'
  WRITE (char_year, '(I4)') kyr_clm
@@ -262,9 +262,9 @@ IF (myrank == root) THEN
  DO j = 1, nlat
   DO i = 1, nlon
    IF (clm_in (i,j,1) /= fillvalue) THEN
-    land (i,j) = 1.0_DP
+    land (i,j) = 1.0
    ELSE
-    land (i,j) = 0.0_DP
+    land (i,j) = 0.0
    ENDIF
   END DO
  END DO
@@ -299,9 +299,9 @@ CALL MPI_Scatter (source_lat,nland_chunk,MPI_DOUBLE_PRECISION, &
 IF (RSF_In) THEN
  CALL Get_RSF
 ELSE
- soilW_plot = 0.0_DP
- B_plot     = 0.0_DP
- SOM_plot   = 0.0_DP
+ soilW_plot = 0.0
+ B_plot     = 0.0
+ SOM_plot   = 0.0
 END IF
 !----------------------------------------------------------------------!
 
@@ -383,12 +383,12 @@ WRITE (*,"('All took ',F0.4,' seconds on ',I0)") &
 kyr = 1
 kyr_clm = syr
 DO kyr_spin = 1, nyr_spin
- NPP_gbox = 0.0_DP
+ NPP_gbox = 0.0
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- tmp_gbox = 0.0_DP
+ tmp_gbox = 0.0
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- Rh_gbox  = 0.0_DP
- NEE_gbox = 0.0_DP
+ Rh_gbox  = 0.0
+ NEE_gbox = 0.0
  !---------------------------------------------------------------------!
  IF (ntasks == 4) THEN
   WRITE (*,"('Running ',I0,' of ',I0,' spin-up years on processor ', &
@@ -424,12 +424,12 @@ END DO ! kyr_spin
 !----------------------------------------------------------------------!
 kyr = 1
 DO kyr_clm = syr_trans, eyr_trans
- NPP_gbox = 0.0_DP
+ NPP_gbox = 0.0
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- tmp_gbox = 0.0_DP
+ tmp_gbox = 0.0
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
- Rh_gbox  = 0.0_DP
- NEE_gbox = 0.0_DP
+ Rh_gbox  = 0.0
+ NEE_gbox = 0.0
  !---------------------------------------------------------------------!
  ! Read climate if required.
  !---------------------------------------------------------------------!
@@ -498,10 +498,10 @@ IF (myrank == root) THEN
  k = 1
  DO j = 1, nlat
   DO i = 1, nlon
-   IF (land (i,j) > 0.0_DP) THEN
-    soilW_grid (i,j) = (1.0_DP - icwtr (i,j)) * soilW_fin (k)
-    B_grid (i,j) = (1.0_DP - icwtr (i,j)) * B_fin (k)
-    SOM_grid (i,j) = (1.0_DP - icwtr (i,j)) * SOM_fin (k)
+   IF (land (i,j) > 0.0) THEN
+    soilW_grid (i,j) = (1.0 - icwtr (i,j)) * soilW_fin (k)
+    B_grid (i,j) = (1.0 - icwtr (i,j)) * B_fin (k)
+    SOM_grid (i,j) = (1.0 - icwtr (i,j)) * SOM_fin (k)
     k = k + 1
    ELSE
     soilW_grid (i,j) = fillvalue
