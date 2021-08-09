@@ -83,8 +83,6 @@ DO t = 1, ntimes
    NPP_gbox (k) = NPP_gbox (k) + dt * NPP
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
    tmp_gbox (k) = tmp_gbox (k) + tmp (t,kyr,k)
-write (*,*)t,kyr,k,tmp(t,kyr,k)
-stop
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
    Rh_gbox (k) = Rh_gbox (k) + dt * Rh
    NEE_gbox (k) = NEE_gbox (k) + dt * NEE

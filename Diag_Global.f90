@@ -17,6 +17,8 @@ DO k = 1, nland_chunk
  NPP_gbox (k) = NPP_gbox (k) / FLOAT (nplots)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  tmp_gbox (k) = tmp_gbox (k) / FLOAT (nplots)
+write(*,*)k,tmp_gbox(k)
+stop
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  Rh_gbox (k) = Rh_gbox (k) / FLOAT (nplots)
  NEE_gbox (k) = NEE_gbox (k) / FLOAT (nplots)
