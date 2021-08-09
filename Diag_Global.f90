@@ -56,8 +56,6 @@ IF (myrank == root) THEN
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
   tmp_total = tmp_total + source_larea (k) * tmp_fin (k)
   TA = TA + source_larea (k)
-write(*,*)tmp_total,source_larea(k),tmp_fin(k),TA
-stop
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
   Rh_total = Rh_total + source_larea (k) * Rh_fin (k)
   NEE_total = NEE_total + source_larea (k) * NEE_fin(k)
@@ -71,6 +69,8 @@ stop
   WRITE (*,"(2(I0,' '), 5(F0.5,' '))") kyr, kyr_clm, NPP_total / 1.0D6, &
   Rh_total / 1.0D6, NEE_total / 1.0D6, B_total / 1.0D6, SOM_total / 1.0D6
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
+write(*,*)tmp_total,TA,ntimes
+stop
 WRITE (*,*) 'Global mean land tmp = ', tmp_total / (TA * REAL (ntimes))
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
 END IF
