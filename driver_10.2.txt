@@ -1,6 +1,6 @@
 .FALSE.     ! RSF_Out      ! Output to restart files?
 "RSF_plots" ! RSF_Out_file_name
-.TRUE.      ! RSF_In       ! Input from restart files?
+.FALSE.      ! RSF_In       ! Input from restart files?
 "RSF_plots" ! RSF_In_file_name
 0           ! nyr_spin_clm ! No. years of spin-up climate.
 0           ! nyr_spin

@@ -88,7 +88,6 @@ source_larea = 0.0_DP
 !----------------------------------------------------------------------!
 CALL MPI_Init ( error )
 CALL MPI_Comm_size(MPI_COMM_WORLD,nprocs,error)
-write (*,*)nprocs
 !before_all = MPI_Wtime()
 IF (size*nprocs /= ntimes*nland) THEN
  PRINT *, 'Invalid number of processors',nprocs,size*nprocs,nland
