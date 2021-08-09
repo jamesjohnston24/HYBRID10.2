@@ -35,6 +35,9 @@ do kyr = 1, nyr
 end do
 close (10)
 
+write (*,*)t(1)
+stop
+
 B = 0.0
 SOM = 0.0
 iyr = 0
