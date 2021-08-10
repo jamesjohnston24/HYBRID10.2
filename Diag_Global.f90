@@ -17,10 +17,10 @@ DO k = 1, nland_chunk
  NPP_gbox (k) = NPP_gbox (k) / REAL (nplots)
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  tmp_gbox (k) = tmp_gbox (k) / REAL (nplots)
-if (tmp_gbox(k)<0.0)then
- write (*,*)myrank,k,tmp_gbox(k)
- stop
-end if
+!if (tmp_gbox(k)<0.0)then
+! write (*,*)myrank,k,tmp_gbox(k)
+! stop
+!end if
 !""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""!
  Rh_gbox (k) = Rh_gbox (k) / REAL (nplots)
  NPP_gbox (k) = NPP_gbox (k) / REAL (nplots)
