@@ -27,14 +27,14 @@ IMPLICIT NONE
 !----------------------------------------------------------------------!
 
 ! This is the name of the data file we will read. 
-  character (len = *), parameter :: FILE_NAME = "/home/adf10/rds/&
+  character (len = *), parameter :: FILE_NAME = "/home/jhj34/rds/&
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/LUH2_GCB_2021/&
   &staticData_quarterdeg.nc"
-  character (len = *), parameter :: FILE_NAME_tmp = "/home/adf10/rds/&
+  character (len = *), parameter :: FILE_NAME_tmp = "/home/jhj34/rds/&
   &rds-mb425-geogscratch/adf10/TRENDY2021/input/CRUJRA2021/&
   &crujra.v2.2.5d.tmp.2009.365d.noc.nc"
 
-! character (len = *), parameter :: FILE_NAME_tmp = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
+! character (len = *), parameter :: FILE_NAME_tmp = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/FORCINGS/&
 !  &CRUJRA_2.1/CRUJRA2020/tmp/crujra.v2.1.5d.tmp.2009.365d.noc.nc'
 
 character (len = *), parameter :: FILE_NAME_ptbio = "ptbio.nc"
@@ -256,7 +256,7 @@ open(10,file='tmp_mean.txt',status='unknown')
 var_name = 'tmp'
 do kyr_clm = 1901, 2020
 WRITE (char_year, '(I4)') kyr_clm
-filen = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+filen = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
  &char_year//'.365d.noc.nc'
   ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to

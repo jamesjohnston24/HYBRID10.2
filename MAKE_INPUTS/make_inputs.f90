@@ -80,7 +80,7 @@ END IF ! myrank == root
 !----------------------------------------------------------------------!
  ALLOCATE (carea (2*nlon, 2*nlat)) ! Reverse order from net CDF file
  ALLOCATE (icwtr (2*nlon, 2*nlat)) ! Reverse order from net CDF file
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
  CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
  varid = 5 ! QD area, km^2
@@ -118,7 +118,7 @@ DO kyr_clm = 1911, 1920
  IF (myrank == root) THEN
 
   WRITE (char_year, '(I4)') kyr_clm
-  file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+  file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
    &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
    &char_year//'.365d.noc.nc'
   WRITE (*,*) 'Opening file: ',file_name
@@ -203,7 +203,7 @@ DO kyr_clm = 1911, 1920
  WRITE (char_nprocs, '(I4)') nprocs
  WRITE (char_myrank, '(I4)') myrank
  ! Climate
- WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+ WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Delete existing file.
@@ -250,7 +250,7 @@ END IF ! myrank
 !----------------------------------------------------------------------!
 ! larea
 var_name = 'larea'
-WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
 &"CPUs/",TRIM(var_name),"_",myrank,".bin"
 ! Delete existing file.
@@ -267,7 +267,7 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 ! i
 var_name = 'i'
-WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
 &"CPUs/",TRIM(var_name),"_",myrank,".bin"
 ! Delete existing file.
@@ -284,7 +284,7 @@ CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 ! j
 var_name = 'j'
-WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
 &"CPUs/",TRIM(var_name),"_",myrank,".bin"
 ! Delete existing file.

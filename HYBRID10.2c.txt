@@ -102,7 +102,7 @@ CALL MPI_Get_processor_name(procname,namelen,error)
 IF (myrank == root) THEN
  allocate (icwtr_qd (2*nlon,2*nlat)) ! QD ice/water           (fraction)
  allocate (larea_qd (2*nlon,2*nlat)) ! QD grid-box area            (km2)
- file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
+ file_name = '/home/jhj34/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
  &LUH2_new/staticData_quarterdeg.nc'
  CALL CHECK (nf90_open (trim (file_name), nf90_nowrite, ncid))
  varid = 7
@@ -185,7 +185,7 @@ ALLOCATE (NEE_fin  (nland)) ! NEE                      (kg[DM] m-2 yr-1)
 IF (myrank == root) THEN
  ALLOCATE (fcover_in(nlon,nlat))
  ALLOCATE (fcover(14,nlon,nlat))
- file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
+ file_name = '/home/jhj34/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
              &LUH2_new/states_half.nc'
  CALL CHECK(NF90_OPEN (TRIM(file_name), NF90_NOWRITE, ncid))
  DO z = 1, 14
@@ -203,7 +203,7 @@ IF (myrank == root) THEN
  CALL CHECK(NF90_close(ncid))
  ALLOCATE (trans_in(nlon,nlat))
  ALLOCATE (trans(118,nlon,nlat))
- file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
+ file_name = '/home/jhj34/rds/rds-mb425-geogscratch/adf10/FORCINGS/&
              &LUH2_new/transitions_half.nc'
  CALL CHECK(NF90_OPEN (TRIM(file_name), NF90_NOWRITE, ncid))
  DO zt = 1, 118
@@ -236,7 +236,7 @@ IF (myrank == root) THEN
  kyr_clm = 1901
  var_name = 'tmp'
  WRITE (char_year, '(I4)') kyr_clm
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/FORCINGS/&
   &CRUJRA_2.1/CRUJRA2020/'//TRIM(var_name)//'/crujra.v2.1.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
 ! WRITE (*,"('Reading from file ',A)") TRIM(file_name)

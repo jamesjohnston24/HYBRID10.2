@@ -16,7 +16,7 @@ real :: B, SOM, fT, NPP, BL, dB, dSOM, ET_SOIL, EV, Rh
 real, parameter :: ga = 146376469.551773*1.0e9/1.0e15
 character(len=200) :: file_name
 
-file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/TRENDY2021/&
+file_name = '/home/jhj34/rds/rds-mb425-geogscratch/adf10/TRENDY2021/&
 &input/CO2field/global_co2_ann_1700_2020.txt'
 open (10,file=file_name,status="old")
 iyr = 1

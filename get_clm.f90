@@ -26,7 +26,7 @@ DO l = 1, 9
   IF (l == 9) var_name = 'wsgrd'
   WRITE (char_year, '(I4)') kyr_clm
   IF (ntasks == 4) WRITE (*,"('Reading ',I5,' ',A)") kyr_clm, TRIM(var_name)
-  file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/FORCINGS/&
+  file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/FORCINGS/&
    &CRUJRA_2.1/CRUJRA2020/'//TRIM(var_name)//'/crujra.v2.1.5d.'&
    &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
   CALL CHECK ( NF90_OPEN (trim (file_name), NF90_NOWRITE, ncid ))

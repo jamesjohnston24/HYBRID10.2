@@ -84,7 +84,7 @@ IF (RSF) THEN
 ! Restart from previous run.
 !----------------------------------------------------------------------!
 var_name = 'B'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_rsf,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
@@ -98,7 +98,7 @@ CALL MPI_File_read(file_handle, B, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'soilW'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_rsf,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
@@ -112,7 +112,7 @@ CALL MPI_File_read(file_handle, soilW, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'SOM'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_rsf,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
@@ -161,7 +161,7 @@ ALLOCATE (pres(ntimes ,nland/nprocs,nyr_clm))
 ALLOCATE (wsgrd(ntimes,nland/nprocs,nyr_clm))
 
 !----------------------------------------------------------------------!
-file_name = '/home/adf10/rds/rds-mb425-geogscratch/adf10/TRENDY2021/&
+file_name = '/home/jhj34/rds/rds-mb425-geogscratch/adf10/TRENDY2021/&
 &input/CO2field/global_co2_ann_1700_2020.txt'
 OPEN (11,FILE=file_name,STATUS='OLD')
 DO kyr_run = 1700, syr_clm - 1
@@ -206,7 +206,7 @@ DO kyr_run = 1, nyr_run
  !---------------------------------------------------------------------!
  var_name = 'tmp'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
- &"/home/adf10/rds/rds-mb425-geogscratch/&
+ &"/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Open the file for reading.
@@ -221,7 +221,7 @@ DO kyr_run = 1, nyr_run
  !---------------------------------------------------------------------!
  var_name = 'pre'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
- &"/home/adf10/rds/rds-mb425-geogscratch/&
+ &"/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Open the file for reading.
@@ -235,7 +235,7 @@ DO kyr_run = 1, nyr_run
  !---------------------------------------------------------------------!
  var_name = 'spfh'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
- &"/home/adf10/rds/rds-mb425-geogscratch/&
+ &"/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Open the file for reading.
@@ -249,7 +249,7 @@ DO kyr_run = 1, nyr_run
  !---------------------------------------------------------------------!
  var_name = 'pres'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
- &"/home/adf10/rds/rds-mb425-geogscratch/&
+ &"/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Open the file for reading.
@@ -263,7 +263,7 @@ DO kyr_run = 1, nyr_run
  !---------------------------------------------------------------------!
  var_name = 'wsgrd'
  WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") &
- &"/home/adf10/rds/rds-mb425-geogscratch/&
+ &"/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/CRUJRA2021/CRUJRA2021_",nprocs,&
  &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
  ! Open the file for reading.
@@ -375,7 +375,7 @@ IF (trans .OR. (kyr_run == nyr_run)) THEN
 ! Write output files for each processor.
 !----------------------------------------------------------------------!
 var_name = 'B'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.
@@ -391,7 +391,7 @@ CALL MPI_File_write(file_handle, B, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'soilW'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.
@@ -407,7 +407,7 @@ CALL MPI_File_write(file_handle, soilW, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'SOM'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.
@@ -423,7 +423,7 @@ CALL MPI_File_write(file_handle, SOM, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'aNPP'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.
@@ -439,7 +439,7 @@ CALL MPI_File_write(file_handle, aNPP, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'aRh'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.
@@ -455,7 +455,7 @@ CALL MPI_File_write(file_handle, aRh, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'aNBP'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.
@@ -471,7 +471,7 @@ CALL MPI_File_write(file_handle, aNBP, size/ntimes, &
 CALL MPI_File_Close(file_handle, error)
 !----------------------------------------------------------------------!
 var_name = 'atmp'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 ! Delete existing file.

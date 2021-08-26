@@ -43,7 +43,7 @@ DO kyr = syr, syr+nyr-1
 
  WRITE (char_year, '(I4)') kyr
  var_name = 'ugrd'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
  WRITE (*,"('Reading from file ',A)") TRIM(file_name)
@@ -59,7 +59,7 @@ DO kyr = syr, syr+nyr-1
  END IF
  CALL CHECK ( NF90_CLOSE ( ncid ))
  var_name = 'vgrd'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
  WRITE (*,"('Reading from file ',A)") TRIM(file_name)
@@ -80,7 +80,7 @@ DO kyr = syr, syr+nyr-1
  END DO
  
  var_name = 'wsgrd'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'&
   &//TRIM(var_name)//'.'//char_year//'.365d.noc.nc'
  WRITE (*,"('Writing to file ',A)") TRIM(file_name)

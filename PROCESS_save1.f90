@@ -15,7 +15,7 @@ nprocs = 4
 myrank = 0
 nland_chunk = nland / nprocs
 ALLOCATE (larea_k (nland_chunk))
-WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),"_",myrank,".bin"
 OPEN (10,FILE=file_name,STATUS='OLD',FORM='UNFORMATTED')
@@ -39,7 +39,7 @@ size = nland / nprocs
 kyr_clm = 1901
 
 var_name = 'larea'
- WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+ WRITE (file_name, "(A,I0.4,A,A,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
  &adf10/TRENDY2021/input/LUH2_GCB_2021/static_",nprocs,&
  &"CPUs/",TRIM(var_name),"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
@@ -57,7 +57,7 @@ WRITE (*,*) 'TLA = ',TLA
 
 ALLOCATE (B_k(nland_chunk))
 var_name = 'B'
-WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/adf10/rds/rds-mb425-geogscratch/&
+WRITE (file_name, "(A,I0.4,A,A,I0.4,A,I0.4,A)") "/home/jhj34/rds/rds-mb425-geogscratch/&
 &adf10/TRENDY2021/output/HYBRID10.3_",nprocs,&
 &"CPUs/",TRIM(var_name),kyr_clm,"_",myrank,".bin"
 WRITE (*,*) 'Reading from ', TRIM(file_name)
